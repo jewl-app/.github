@@ -1,0 +1,48 @@
+{
+  "name": "jewl",
+  "short_name": "jewl",
+  "start_url": "/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/api/logo/72/circle",
+      "type": "image/png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/api/logo/96/circle",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/api/logo/128/circle",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/api/logo/144/circle",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/api/logo/152/circle",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "/api/logo/192/circle",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/api/logo/384/circle",
+      "type": "image/png",
+      "sizes": "384x384"
+    },
+    {
+      "src": "/api/logo/512/circle",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

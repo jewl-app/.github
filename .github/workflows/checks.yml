@@ -1,0 +1,32 @@
+name: Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Run Lint
+      uses: ./.github/actions/anchor
+      with:
+        run: |
+          yarn build
+          yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Run Tests
+      uses: ./.github/actions/anchor
+      with:
+        run: |
+          export RUST_LOG=
+          yarn build
+          yarn test

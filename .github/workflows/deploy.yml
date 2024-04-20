@@ -1,0 +1,59 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+
+  vercel:
+    runs-on: ubuntu-latest
+    environment:
+      name: vercel
+      url: https://jewl.app/
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Deploy Vercel
+        uses: ./.github/actions/anchor
+        with:
+          run: |
+            export VERCEL_ORG_ID=${{ secrets.VERCEL_ORG_ID }}
+            export VERCEL_PROJECT_ID=${{ secrets.VERCEL_PROJECT_ID }}
+            yarn vercel pull --yes --environment production --token ${{ secrets.VERCEL_TOKEN }}
+            yarn vercel build --prod --token ${{ secrets.VERCEL_TOKEN }}
+            yarn vercel deploy --prod --prebuilt --token ${{ secrets.VERCEL_TOKEN }}
+
+  solana:
+    runs-on: ubuntu-latest
+    environment:
+      name: solana
+      url: https://solscan.io/account/JEWLJJ9c9dsrrCuq6gKvkiBsp74Sn4N9VdR68LY1X7x?cluster=devnet
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Deploy Solana
+        uses: ./.github/actions/anchor
+        with:
+          solana-key: ${{ secrets.SOLANA_WALLET }}
+          run: |
+            anchor build -- --features debug
+            anchor upgrade target/deploy/jewl.so --program-id JEWLJJ9c9dsrrCuq6gKvkiBsp74Sn4N9VdR68LY1X7x --provider.cluster devnet
+            anchor idl upgrade JEWLJJ9c9dsrrCuq6gKvkiBsp74Sn4N9VdR68LY1X7x --filepath target/idl/jewl.json --provider.cluster devnet
+
+  status:
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+    needs: [vercel, solana]
+    steps:
+      - name: Report Status to Discord
+        uses: sarisia/actions-status-discord@v1
+        with:
+          title: "Deployment failed"
+          description: |
+            Please check the status [here](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+          color: 0xff4041
+          nodetail: true
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+
+

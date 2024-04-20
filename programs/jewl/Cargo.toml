@@ -1,0 +1,19 @@
+[package]
+name = "jewl"
+version = "0.0.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+no-entrypoint = []
+cpi = ["no-entrypoint"]
+debug = []
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+[dependencies]
+anchor-lang = { version = "^0.30.0", features = ["init-if-needed"] }
+anchor-spl = { version = "^0.30.0" }
+solana-security-txt = { version = "^1.1.1" }
