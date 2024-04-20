@@ -32,7 +32,7 @@ runs:
       shell: bash
     - name: Install Dependencies
       run: |
-        echo "npm ci" >> run
+        echo "yarn" >> run
       shell: bash
     - name: Configure Solana
       run: |

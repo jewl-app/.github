@@ -19,7 +19,7 @@ export default async function deploySolanaProgram (): Promise<void> {
     await execute("anchor", "upgrade", "target/deploy/jewl.so", "--program-id", jewlProgramId.toBase58(), "--provider.cluster", cluster);
   } else {
     const keyfile = await promptText("What is the keyfile for the jewl program?");
-    await execute("anchor", "deploy", "--program-keypair", keyfile, "--program-name", "jewl", "--provider.cluster", cluster);
+    await execute("anchor", "deploy", "--program-keypair", `"${keyfile}"`, "--program-name", "jewl", "--provider.cluster", cluster);
   }
 
   const idlOwner = PublicKey.findProgramAddressSync([], jewlProgramId)[0];
