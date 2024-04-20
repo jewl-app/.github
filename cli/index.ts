@@ -3,7 +3,7 @@ import { promptChoice } from "@/core/prompt";
 
 type Handler = () => Promise<void>;
 
-function handler (file: string): Handler {
+function handler(file: string): Handler {
   return async () => {
     const command = await import(file) as { default: Handler };
     await command.default();
@@ -12,6 +12,7 @@ function handler (file: string): Handler {
 
 const commands: Array<Choice<Handler>> = [
   { title: "deploy", description: "Deploy Solana program.", value: handler("@/cli/deploy") },
+  { title: "initialize", description: "Initialize/update the jewl fee config", value: handler("@/cli/initialize") },
   { title: "token", description: "Create a new jewl non-fungible token", value: handler("@/cli/token") },
   { title: "keypair", description: "Keypair utilities.", value: handler("@/cli/keypair") },
   { title: "address", description: "Get account data at address.", value: handler("@/cli/address") },

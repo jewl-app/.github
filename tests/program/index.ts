@@ -11,7 +11,7 @@ let context: ProgramTestContext = { } as ProgramTestContext;
 const testSigner = Keypair.generate();
 export const signerAddress = testSigner.publicKey;
 
-export async function closeAccount (address: PublicKey): Promise<void> {
+export async function closeAccount(address: PublicKey): Promise<void> {
   context.setAccount(address, {
     executable: false,
     owner: systemProgramId,
@@ -37,7 +37,7 @@ const mintTlvData = Buffer.from([
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]);
 
-export async function setTokenMint (props: TokenMintProps): Promise<void> {
+export async function setTokenMint(props: TokenMintProps): Promise<void> {
   const tokenProgram = props.programId ?? tokenProgramId;
   const hasTlvData = props.mintCloseAuthority != null && props.programId === tokenExtensionsProgramId;
   const tlvData = hasTlvData ? mintTlvData : Buffer.alloc(0);
@@ -76,7 +76,7 @@ interface TokenAccountProps {
   programId?: PublicKey;
 }
 
-export async function setTokenAccount (props: TokenAccountProps): Promise<void> {
+export async function setTokenAccount(props: TokenAccountProps): Promise<void> {
   const tokenProgram = props.programId ?? tokenProgramId;
   const buffer = Buffer.alloc(ACCOUNT_SIZE);
   AccountLayout.encode({
@@ -108,7 +108,7 @@ interface FeeConfigAccountProps {
   feeBps?: number;
 }
 
-export async function setFeeConfig (props: FeeConfigAccountProps): Promise<void> {
+export async function setFeeConfig(props: FeeConfigAccountProps): Promise<void> {
   const buffer = await packFeeConfig({
     initialized: props.initialized ?? true,
     feeAuthority: props.feeAuthority ?? signerAddress,
@@ -136,7 +136,7 @@ interface AllocationAccountProps {
   thirdTokenAmount?: bigint;
 }
 
-export async function setAllocation (props: AllocationAccountProps): Promise<void> {
+export async function setAllocation(props: AllocationAccountProps): Promise<void> {
   const address = allocationAddress(props.nftMint);
   const buffer = await packAllocation({
     initialized: props.initialized ?? true,
@@ -157,7 +157,7 @@ export async function setAllocation (props: AllocationAccountProps): Promise<voi
   });
 }
 
-export async function setClock (timestamp: number): Promise<void> {
+export async function setClock(timestamp: number): Promise<void> {
   const currentClock = await context.banksClient.getClock();
   context.setClock(
     new Clock(
@@ -170,34 +170,34 @@ export async function setClock (timestamp: number): Promise<void> {
   );
 }
 
-export async function getAccount (address: PublicKey): Promise<AccountInfo<Buffer>> {
+export async function getAccount(address: PublicKey): Promise<AccountInfo<Buffer>> {
   const account = await context.banksClient.getAccount(address);
   if (account == null) { throw new Error(`Account ${address.toBase58()} not found`); }
   const info = { ...account, data: Buffer.from(account.data) };
   return info;
 }
 
-export async function getTokenMint (address: PublicKey, programId = tokenProgramId): Promise<Mint> {
+export async function getTokenMint(address: PublicKey, programId = tokenProgramId): Promise<Mint> {
   const account = await getAccount(address);
   return unpackMint(address, account, programId);
 }
 
-export async function getTokenAccount (address: PublicKey, programId = tokenProgramId): Promise<Account> {
+export async function getTokenAccount(address: PublicKey, programId = tokenProgramId): Promise<Account> {
   const account = await getAccount(address);
   return unpackAccount(address, account, programId);
 }
 
-export async function getFeeConfig (): Promise<FeeConfigAccount> {
+export async function getFeeConfig(): Promise<FeeConfigAccount> {
   const account = await getAccount(feeConfigAddress);
   return unpackFeeConfig(feeConfigAddress, account);
 }
 
-export async function getAllocation (address: PublicKey): Promise<AllocationAccount> {
+export async function getAllocation(address: PublicKey): Promise<AllocationAccount> {
   const account = await getAccount(address);
   return unpackAllocation(address, account);
 }
 
-export async function testTransaction (txOrIxs: Transaction | VersionedTransaction | Array<TransactionInstruction>, ...signers: Array<Signer>): Promise<BanksTransactionMeta> {
+export async function testTransaction(txOrIxs: Transaction | VersionedTransaction | Array<TransactionInstruction>, ...signers: Array<Signer>): Promise<BanksTransactionMeta> {
   let tx: Transaction | VersionedTransaction;
   if (Array.isArray(txOrIxs)) {
     const block = await context.banksClient.getLatestBlockhash();
@@ -220,7 +220,7 @@ export async function testTransaction (txOrIxs: Transaction | VersionedTransacti
   return await context.banksClient.processTransaction(tx);
 }
 
-export async function startTestRunner (): Promise<void> {
+export async function startTestRunner(): Promise<void> {
   const programs = [{ name: "jewl", programId: jewlProgramId }];
   context = await startAnchor(".", programs, [], 1000000n);
   context.setAccount(signerAddress, {

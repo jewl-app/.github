@@ -6,7 +6,7 @@ import { useAnalytics } from "@/app/hooks/analytics";
 import Image from "next/image";
 import clsx from "clsx";
 
-export default function Connect (): ReactElement {
+export default function Connect(): ReactElement {
   const { wallets, connect, disconnect } = useWallet();
   const { logEvent, logError } = useAnalytics();
 

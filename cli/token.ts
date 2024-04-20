@@ -1,11 +1,10 @@
-import { feeConfigAddress } from "@/core/address";
 import { linkAccount, linkTransaction } from "@/core/ansi";
 import { rpcUrl, signer } from "@/core/env";
 import { createNftMintInstructions } from "@/core/nft";
 import { sendAndConfirmTransaction } from "@/core/transaction";
-import { Connection, Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { Connection, Keypair } from "@solana/web3.js";
 
-export default async function createNonFungibleToken (): Promise<void> {
+export default async function createNonFungibleToken(): Promise<void> {
   const connection = new Connection(rpcUrl);
   const keypair = Keypair.generate();
 

@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 
-export default function Header (): ReactElement {
+export default function Header(): ReactElement {
   const { publicKey } = useWallet();
   const { balance } = useBalance();
   const { cluster } = useCluster();

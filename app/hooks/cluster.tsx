@@ -12,11 +12,11 @@ const ClusterContext = createContext<UseCluster>({
   cluster: null,
 });
 
-export function useCluster (): UseCluster {
+export function useCluster(): UseCluster {
   return useContext(ClusterContext);
 }
 
-export default function ClusterProvider (props: PropsWithChildren): ReactElement {
+export default function ClusterProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const [cluster, setCluster] = useState<string | null>(null);
   const { logError } = useAnalytics();

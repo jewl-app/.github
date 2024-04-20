@@ -3,7 +3,7 @@ import { Connection, Keypair, PublicKey, SystemProgram, TransactionInstruction }
 import { feeConfigAddress, tokenExtensionsProgramId } from "@/core/address";
 import { TokenMetadata, createInitializeInstruction, createUpdateAuthorityInstruction, createUpdateFieldInstruction, pack } from "@solana/spl-token-metadata";
 
-export async function createNftMintInstructions (connection: Connection, mint: Keypair, payer: PublicKey): Promise<Array<TransactionInstruction>> {
+export async function createNftMintInstructions(connection: Connection, mint: Keypair, payer: PublicKey): Promise<Array<TransactionInstruction>> {
   const metadata: TokenMetadata = {
     mint: mint.publicKey,
     updateAuthority: feeConfigAddress,

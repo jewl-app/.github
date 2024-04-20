@@ -14,13 +14,13 @@ export const BalanceContext = createContext<UseBalance>({
   balance: 0,
 });
 
-export function useBalance (): UseBalance {
+export function useBalance(): UseBalance {
   return useContext(BalanceContext);
 }
 
 const refreshInterval = 1000 * 30;
 
-export default function BalanceProvider (props: PropsWithChildren): ReactElement {
+export default function BalanceProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
   const { logError } = useAnalytics();

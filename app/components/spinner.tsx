@@ -8,7 +8,7 @@ interface SpinnerProps {
   readonly className?: string;
 }
 
-export default function Spinner (props: SpinnerProps): ReactElement {
+export default function Spinner(props: SpinnerProps): ReactElement {
 
   const size = useMemo(() => {
     switch (props.size) {

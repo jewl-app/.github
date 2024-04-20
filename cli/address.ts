@@ -3,7 +3,7 @@ import { rpcUrl } from "@/core/env";
 import { promptText } from "@/core/prompt";
 import { Connection, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 
-export default async function getAccountData (): Promise<void> {
+export default async function getAccountData(): Promise<void> {
   const connection = new Connection(rpcUrl);
   const retrieveAddress = await promptText("What is the address that you want to retrieve?");
   const address = new PublicKey(retrieveAddress);

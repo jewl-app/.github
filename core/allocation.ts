@@ -6,7 +6,7 @@ import { getMultipleAccountsBatched } from "@/core/account";
 
 export type Allocation = AllocationAccount & TokenAccount;
 
-export async function getAllocation (connection: Connection, nftMint: PublicKey): Promise<Allocation | null> {
+export async function getAllocation(connection: Connection, nftMint: PublicKey): Promise<Allocation | null> {
   const address = allocationAddress(nftMint);
   const [tokenAccount, allocationInfo] = await Promise.all([
     getTokenAccount(connection, nftMint, tokenExtensionsProgramId),
@@ -18,7 +18,7 @@ export async function getAllocation (connection: Connection, nftMint: PublicKey)
   return { ...tokenAccount, ...allocation };
 }
 
-export async function getAllocations (connection: Connection, walletAddress: PublicKey): Promise<Array<Allocation>> {
+export async function getAllocations(connection: Connection, walletAddress: PublicKey): Promise<Array<Allocation>> {
   const tokenAccounts = await getNonFungibleTokenAccounts(connection, walletAddress, tokenExtensionsProgramId);
   const allocationAddresses = tokenAccounts.map(x => allocationAddress(x.mint));
   const allocationInfos = await getMultipleAccountsBatched(connection, allocationAddresses);

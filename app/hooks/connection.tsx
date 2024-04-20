@@ -12,11 +12,11 @@ export const ConnectionContext = createContext<UseConnection>({
   connection: new Connection(fallbackUrl, "confirmed"),
 });
 
-export function useConnection (): UseConnection {
+export function useConnection(): UseConnection {
   return useContext(ConnectionContext);
 }
 
-export default function ConnectionProvider (props: PropsWithChildren): ReactElement {
+export default function ConnectionProvider(props: PropsWithChildren): ReactElement {
   const rpcUrl = useMemo(() => {
     if (!Object.hasOwn(global, "document")) { return fallbackUrl; }
     if (document == null) { return fallbackUrl; }

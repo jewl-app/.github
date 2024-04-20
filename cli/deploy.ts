@@ -6,7 +6,7 @@ import { execute } from "@/core/execute";
 import { promptText } from "@/core/prompt";
 import { Connection, PublicKey } from "@solana/web3.js";
 
-export default async function deploySolanaProgram (): Promise<void> {
+export default async function deploySolanaProgram(): Promise<void> {
   const connection = new Connection(rpcUrl);
   const cluster = await getCluster(connection);
 

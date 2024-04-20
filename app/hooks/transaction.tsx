@@ -22,11 +22,11 @@ export const TransactionContext = createContext<UseTransaction>({
   sendTransaction: async () => Promise.reject(new Error("No provider")),
 });
 
-export function useTransaction (): UseTransaction {
+export function useTransaction(): UseTransaction {
   return useContext(TransactionContext);
 }
 
-export default function TransactionProvider (props: PropsWithChildren): ReactElement {
+export default function TransactionProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const { wallet, account } = useWallet();
   const [transactionState, setTransactionState] = useState<TransactionState>({ step: "ready", expiry: 0 });

@@ -25,7 +25,7 @@ export const WalletContext = createContext<UseWallet>({
   disconnect: async () => Promise.reject(new Error("No provider")),
 });
 
-export function useWallet (): UseWallet {
+export function useWallet(): UseWallet {
   return useContext(WalletContext);
 }
 
@@ -37,7 +37,7 @@ const filterSupportedWallets = (wallets: ReadonlyArray<Wallet>): Array<Supported
 
 const { on, get } = getWallets();
 
-export default function WalletProvider (props: PropsWithChildren): ReactElement {
+export default function WalletProvider(props: PropsWithChildren): ReactElement {
   const [selectedWallet, setSelectedWallet] = useState<SupportedWallet | null>(null);
   const [supportedWallets, setSupportedWallets] = useState(filterSupportedWallets(get()));
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useWindowMode } from "@/app/hooks/mode";
 import Image from "next/image";
 
-export default function Front (): ReactElement | null {
+export default function Front(): ReactElement | null {
   const [link, setLink] = useState<string>();
   const { mode } = useWindowMode();
 

@@ -2,7 +2,7 @@ import { rpcUrl } from "@/core/env";
 import { promptText } from "@/core/prompt";
 import { Connection } from "@solana/web3.js";
 
-export default async function getSignatureData (): Promise<void> {
+export default async function getSignatureData(): Promise<void> {
   const connection = new Connection(rpcUrl);
   const signature = await promptText("What is the signature that you want to retrieve?");
 

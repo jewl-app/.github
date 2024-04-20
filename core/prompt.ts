@@ -1,6 +1,6 @@
 import prompt from "prompts";
 
-export async function promptText (message: string, initial?: string): Promise<string> {
+export async function promptText(message: string, initial?: string): Promise<string> {
   const response = await prompt({
     type: "text",
     name: "text",
@@ -13,7 +13,7 @@ export async function promptText (message: string, initial?: string): Promise<st
   return result;
 }
 
-export async function promptNumber (message: string, initial?: number): Promise<number> {
+export async function promptNumber(message: string, initial?: number): Promise<number> {
   const response = await prompt({
     type: "number",
     name: "number",
@@ -31,7 +31,7 @@ export interface Choice<T> {
   readonly value: T;
 }
 
-export async function promptChoice<T> (message: string, choices: Array<Choice<T>>): Promise<T> {
+export async function promptChoice<T>(message: string, choices: Array<Choice<T>>): Promise<T> {
   const response = await prompt({
     type: "select",
     name: "choice",
@@ -42,7 +42,7 @@ export async function promptChoice<T> (message: string, choices: Array<Choice<T>
   return response.choice;
 }
 
-export async function promptConfirm (message: string): Promise<boolean> {
+export async function promptConfirm(message: string): Promise<boolean> {
   const choices = [
     { title: "Yes", value: true },
     { title: "No", value: false },

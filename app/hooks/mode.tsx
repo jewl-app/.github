@@ -6,7 +6,7 @@ export interface UseWindowMode {
   readonly mode: WindowMode;
 }
 
-export function useWindowMode (): UseWindowMode {
+export function useWindowMode(): UseWindowMode {
   const [mode, setMode] = useState<WindowMode>("light");
 
   useEffect(() => {

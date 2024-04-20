@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import React, { useCallback, useMemo } from "react";
 import { useWindowSize } from "@/app/hooks/size";
 
-export default function Footer (): ReactElement {
+export default function Footer(): ReactElement {
   const { width } = useWindowSize();
 
   const isPhone = useMemo(() => width < 768, [width]);

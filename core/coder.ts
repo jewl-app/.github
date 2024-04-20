@@ -21,7 +21,7 @@ type BorshAllocationAccount = IdlAccounts<Jewl>["allocationAccount"];
 export type FeeConfigAccount = AsBigInt<BorshFeeConfigAccount>;
 export type AllocationAccount = AsBigInt<BorshAllocationAccount>;
 
-export function convertToBigInt<T extends object> (object: T): AsBigInt<T> {
+export function convertToBigInt<T extends object>(object: T): AsBigInt<T> {
   const result: Record<string, unknown> = {};
   for (const key in object) {
     const value = object[key] as unknown;
@@ -34,7 +34,7 @@ export function convertToBigInt<T extends object> (object: T): AsBigInt<T> {
   return result as AsBigInt<T>;
 }
 
-export function convertFromBigInt<T extends object> (object: T): AsBN<T> {
+export function convertFromBigInt<T extends object>(object: T): AsBN<T> {
   const result: Record<string, unknown> = {};
   for (const key in object) {
     const value = object[key] as unknown;
@@ -47,7 +47,7 @@ export function convertFromBigInt<T extends object> (object: T): AsBN<T> {
   return result as AsBN<T>;
 }
 
-export function unpackFeeConfig (address: PublicKey, accountInfo: AccountInfo<Buffer | Uint8Array>, programId = jewlProgramId): WithAddress<FeeConfigAccount> {
+export function unpackFeeConfig(address: PublicKey, accountInfo: AccountInfo<Buffer | Uint8Array>, programId = jewlProgramId): WithAddress<FeeConfigAccount> {
   if (!accountInfo.owner.equals(programId)) {
     throw new Error("Invalid owner");
   }
@@ -56,7 +56,7 @@ export function unpackFeeConfig (address: PublicKey, accountInfo: AccountInfo<Bu
   return convertToBigInt({ address, ...decoded });
 }
 
-export function unpackAllocation (address: PublicKey, accountInfo: AccountInfo<Buffer | Uint8Array>, programId = jewlProgramId): WithAddress<AllocationAccount> {
+export function unpackAllocation(address: PublicKey, accountInfo: AccountInfo<Buffer | Uint8Array>, programId = jewlProgramId): WithAddress<AllocationAccount> {
   if (!accountInfo.owner.equals(programId)) {
     throw new Error("Invalid owner");
   }
@@ -65,12 +65,12 @@ export function unpackAllocation (address: PublicKey, accountInfo: AccountInfo<B
   return convertToBigInt({ address, ...decoded });
 }
 
-export function packFeeConfig (state: FeeConfigAccount): Promise<Buffer> {
+export function packFeeConfig(state: FeeConfigAccount): Promise<Buffer> {
   const stateBN = convertFromBigInt(state);
   return coder.encode("feeConfigAccount", stateBN);
 }
 
-export function packAllocation (state: AllocationAccount): Promise<Buffer> {
+export function packAllocation(state: AllocationAccount): Promise<Buffer> {
   const stateBN = convertFromBigInt(state);
   return coder.encode("allocationAccount", stateBN);
 }

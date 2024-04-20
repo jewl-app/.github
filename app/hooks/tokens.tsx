@@ -14,13 +14,13 @@ export const TokensContext = createContext<UseTokens>({
   tokenAccounts: [],
 });
 
-export function useTokens (): UseTokens {
+export function useTokens(): UseTokens {
   return useContext(TokensContext);
 }
 
 const refreshInterval = 1000 * 30;
 
-export default function TokensProvider (props: PropsWithChildren): ReactElement {
+export default function TokensProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
   const { logError } = useAnalytics();

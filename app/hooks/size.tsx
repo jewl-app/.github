@@ -5,7 +5,7 @@ export interface UseWindowSize {
   readonly height: number;
 }
 
-export function useWindowSize (): UseWindowSize {
+export function useWindowSize(): UseWindowSize {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 

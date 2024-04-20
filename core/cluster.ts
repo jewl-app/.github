@@ -8,7 +8,7 @@ const genesisMap = new Map([
   ["5eykt4UsFv8P8NJdTREpY1vzqKqZKvdpKuc147dw2N9d", "mainnet-beta"],
 ]);
 
-export async function getCluster (connection: Connection): Promise<string> {
+export async function getCluster(connection: Connection): Promise<string> {
   const cachedCluster = clusters.get(connection.rpcEndpoint);
   if (cachedCluster != null) { return cachedCluster; }
   const genesisHash = await connection.getGenesisHash();

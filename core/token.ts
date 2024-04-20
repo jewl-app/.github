@@ -5,7 +5,7 @@ import { tokenProgramId } from "@/core/address";
 
 export type TokenAccount = Account & Mint;
 
-export async function getTokenAccount (connection: Connection, accountAddress: PublicKey, programId = tokenProgramId): Promise<TokenAccount | null> {
+export async function getTokenAccount(connection: Connection, accountAddress: PublicKey, programId = tokenProgramId): Promise<TokenAccount | null> {
   const accountInfo = await connection.getAccountInfo(accountAddress);
   if (accountInfo == null) { return null; }
   const account = unpackAccount(accountAddress, accountInfo, programId);
@@ -15,7 +15,7 @@ export async function getTokenAccount (connection: Connection, accountAddress: P
   return { ...account, ...mint };
 }
 
-export async function getTokenAccounts (connection: Connection, walletAddress: PublicKey, programId = tokenProgramId): Promise<Array<TokenAccount>> {
+export async function getTokenAccounts(connection: Connection, walletAddress: PublicKey, programId = tokenProgramId): Promise<Array<TokenAccount>> {
   const accountInfos = await connection.getTokenAccountsByOwner(walletAddress, { programId });
   const tokenAccounts = accountInfos.value.map(x => unpackAccount(x.pubkey, x.account, programId));
   const mints = await getMultipleAccountsBatched(connection, tokenAccounts.map(x => x.mint));
@@ -29,12 +29,12 @@ export async function getTokenAccounts (connection: Connection, walletAddress: P
   return accounts;
 }
 
-export async function getFungibleTokenAccounts (connection: Connection, walletAddress: PublicKey, programId = tokenProgramId): Promise<Array<TokenAccount>> {
+export async function getFungibleTokenAccounts(connection: Connection, walletAddress: PublicKey, programId = tokenProgramId): Promise<Array<TokenAccount>> {
   const tokenAccounts = await getTokenAccounts(connection, walletAddress, programId);
   return tokenAccounts.filter(x => x.supply > 1n);
 }
 
-export async function getNonFungibleTokenAccounts (connection: Connection, walletAddress: PublicKey, programId = tokenProgramId): Promise<Array<TokenAccount>> {
+export async function getNonFungibleTokenAccounts(connection: Connection, walletAddress: PublicKey, programId = tokenProgramId): Promise<Array<TokenAccount>> {
   const tokenAccounts = await getTokenAccounts(connection, walletAddress, programId);
   return tokenAccounts.filter(x => x.supply === 1n);
 }

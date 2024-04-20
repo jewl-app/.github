@@ -32,7 +32,7 @@ const getCachedFonts = async (): Promise<Array<FontOption>> => {
 };
 
 
-export async function GET (): Promise<ImageResponse> {
+export async function GET(): Promise<ImageResponse> {
   const width = 800;
   const height = 418;
 

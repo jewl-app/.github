@@ -1,6 +1,6 @@
 import { DependencyList, useCallback, useEffect } from "react";
 
-export function useInterval (delay: number, callback: () => void, deps: DependencyList): void {
+export function useInterval(delay: number, callback: () => void, deps: DependencyList): void {
   const handler = useCallback(callback, deps);
 
   useEffect(() => {

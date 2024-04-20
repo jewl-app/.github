@@ -120,7 +120,7 @@ const path = `M262.1 125a1 1-44.5 0 0 1.3 0q16-12 35.9-8.3 10.9 2 20.6 6.7
     1.8.4.5 9.5-5.6 15.2-15.1 1-1.9-.4-.4Zm-44.5 24.8q4 .6
     6.7-2.2l4.3-4.4q.8-1.4-.3-.6-5.4 3.2-10.8 6.7-.7.4 0 .5Z`;
 
-export function GET (_request: NextRequest, props: IconProps): ImageResponse {
+export function GET(_request: NextRequest, props: IconProps): ImageResponse {
   const properties = props.params.props ?? [];
   const sizes = properties
     .map(x => parseInt(x, 10))

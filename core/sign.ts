@@ -23,7 +23,7 @@ interface Wallet {
   signMessage: (message: Uint8Array) => Promise<Uint8Array>;
 }
 
-export function validateSignature (sig: string, expiry = 86400): Signature | null {
+export function validateSignature(sig: string, expiry = 86400): Signature | null {
   const [data, signature] = sig.split(":");
   const buffer = base58.decode(data);
   const encoded = util.encodeUTF8(buffer);
@@ -40,7 +40,7 @@ export function validateSignature (sig: string, expiry = 86400): Signature | nul
   return { scope: payload.scope, signer };
 }
 
-export async function getSignature (signer: Signer | Wallet, keyScope: string): Promise<string> {
+export async function getSignature(signer: Signer | Wallet, keyScope: string): Promise<string> {
   const payload = {
     scope: keyScope,
     nonce: randomUUID(),

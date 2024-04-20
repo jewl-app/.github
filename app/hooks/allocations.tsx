@@ -17,13 +17,13 @@ export const AllocationContext = createContext<UseAllocations>({
   getAllocation: async () => Promise.reject(new Error("No provider")),
 });
 
-export function useAllocations (): UseAllocations {
+export function useAllocations(): UseAllocations {
   return useContext(AllocationContext);
 }
 
 const refreshInterval = 1000 * 30;
 
-export default function AllocationProvider (props: PropsWithChildren): ReactElement {
+export default function AllocationProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
   const { logError } = useAnalytics();

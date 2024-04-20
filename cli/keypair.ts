@@ -4,7 +4,7 @@ import { linkAccount } from "@/core/ansi";
 import { promptConfirm, promptText } from "@/core/prompt";
 import { loadKeyfile } from "@/core/key";
 
-export default async function keypairUtilities (): Promise<void> {
+export default async function keypairUtilities(): Promise<void> {
   const keyfileExists = await promptConfirm("Do you already have a keyfile?");
   const keyfile = keyfileExists ? await promptText("What is the keyfile path?") : null;
   const keypair = keyfile == null ? Keypair.generate() : loadKeyfile(keyfile ?? "");
