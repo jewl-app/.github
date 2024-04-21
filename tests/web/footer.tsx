@@ -22,7 +22,7 @@ describe("footer", () => {
 
   it("Long footer should contain long copyright", async () => {
     await act(() => { window.innerWidth = 1024; });
-    const longCopyright = component.root.findAllByProps({ children: "© 2023 jewl.app" });
+    const longCopyright = component.root.findAllByProps({ children: "© 2023 jewl" });
     assert.strictEqual(longCopyright.length, 1);
   });
 
