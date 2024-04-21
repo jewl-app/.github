@@ -1,12 +1,30 @@
-.anchor
-.DS_Store
-target
-**/*.rs.bk
+# Yarn 4
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Node dependencies
 node_modules
+
+# Environment variables
+.env
+keys
+
+# Anchor files
+.anchor
 test-ledger
-.yarn
-.vscode
-.parcel-cache
+**/*.rs.bk
+
+# Output folders
 .next
 .vercel
-keys
+target
+
+# Visual Studio Code
+.vscode
+
+# MacOS
+.DS_Store

@@ -44,6 +44,7 @@ module.exports = [
       "@stylistic/semi": ["error", "always"],
       "@stylistic/quote-props": ["error", "consistent-as-needed"],
       "@stylistic/function-call-argument-newline": ["error", "consistent"],
+      "@stylistic/space-before-function-paren": ["error", { anonymous: "always", named: "never", asyncArrow: "always" }],
       "@stylistic/padded-blocks": ["off"],
       "@stylistic/object-curly-spacing": ["error", "always"],
       "@stylistic/object-curly-newline": ["error", { consistent: true }],

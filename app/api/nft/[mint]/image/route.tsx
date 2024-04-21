@@ -6,7 +6,7 @@ interface NftProps {
   readonly params: { mint: string };
 }
 
-export function GET (_request: NextRequest, props: NftProps): ImageResponse {
+export function GET(_request: NextRequest, props: NftProps): ImageResponse {
   const width = 512;
   const height = 512;
   const mintPrefix = props.params.mint.slice(0, 4);

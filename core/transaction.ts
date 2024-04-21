@@ -15,7 +15,7 @@ const retryInterval = 2000;
 const progressInterval = 1000;
 const expiryTimeInBlocks = 300;
 
-async function getComputeLimitSuggestion (connection: Connection, instructions: Array<TransactionInstruction>): Promise<number> {
+async function getComputeLimitSuggestion(connection: Connection, instructions: Array<TransactionInstruction>): Promise<number> {
   try {
     const transactionMessage = new TransactionMessage({
       instructions,
@@ -38,7 +38,7 @@ async function getComputeLimitSuggestion (connection: Connection, instructions: 
   }
 }
 
-async function getComputePriceSuggestion (connection: Connection, instructions: Array<TransactionInstruction>, computeLimit: number): Promise<number> {
+async function getComputePriceSuggestion(connection: Connection, instructions: Array<TransactionInstruction>, computeLimit: number): Promise<number> {
   const lockedWritableAccounts = instructions
     .flatMap(instruction => instruction.keys)
     .filter(key => key.isWritable)
@@ -61,7 +61,7 @@ async function getComputePriceSuggestion (connection: Connection, instructions: 
 }
 
 export class TransactionError extends Error {
-  constructor (
+  constructor(
     public readonly error: string | {},
     public readonly programLogs: Array<string> | null = null,
     public readonly isSimulation: boolean = false,
@@ -78,7 +78,7 @@ export interface SendAndConfirmTransactionProps {
   progress?: ProgressHandler;
 }
 
-export async function sendAndConfirmTransaction (props: SendAndConfirmTransactionProps): Promise<string> {
+export async function sendAndConfirmTransaction(props: SendAndConfirmTransactionProps): Promise<string> {
   let state: TransactionStep = "preparing";
   let block: BlockhashWithExpiryBlockHeight | null = null;
   const abortController = new AbortController();

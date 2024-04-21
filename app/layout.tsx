@@ -6,7 +6,7 @@ import React, { Suspense } from "react";
 
 const robots = process.env.VERCEL_ENV === "production" ? "index,follow" : "noindex,follow";
 
-export default function Root (props: PropsWithChildren): ReactElement {
+export default function Root(props: PropsWithChildren): ReactElement {
   return (
     <html lang="en">
       <head>

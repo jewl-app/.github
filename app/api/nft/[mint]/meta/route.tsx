@@ -4,7 +4,7 @@ interface MetaProps {
   readonly params: { mint: string };
 }
 
-export function GET (_request: NextRequest, props: MetaProps): NextResponse {
+export function GET(_request: NextRequest, props: MetaProps): NextResponse {
   return NextResponse.json({
     name: "jewl",
     symbol: "",

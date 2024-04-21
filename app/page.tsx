@@ -18,7 +18,7 @@ const providers = [AnalyticsProvider, ConnectionProvider,
   ClusterProvider, WalletProvider, BalanceProvider,
   TokensProvider, TransactionProvider, PopupProvider];
 
-export default function Page (): ReactElement {
+export default function Page(): ReactElement {
   return (
     <Provider providers={providers}>
       <Header />

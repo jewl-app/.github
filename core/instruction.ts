@@ -23,7 +23,7 @@ export interface InitializeFeeInstructionProps {
   withdrawAuthority: PublicKey;
 }
 
-export function createInitializeFeeInstruction (props: InitializeFeeInstructionProps): TransactionInstruction {
+export function createInitializeFeeInstruction(props: InitializeFeeInstructionProps): TransactionInstruction {
   return fauxProgram.instruction.initializeFee(props.feeBps, props.withdrawAuthority, {
     accounts: {
       signer: props.payer,
@@ -39,7 +39,7 @@ export interface WithdrawFeeInstructionProps {
   feeTokenAccount?: PublicKey;
 }
 
-export function createWithdrawFeeInstruction (props: WithdrawFeeInstructionProps): TransactionInstruction {
+export function createWithdrawFeeInstruction(props: WithdrawFeeInstructionProps): TransactionInstruction {
   return fauxProgram.instruction.withdrawFee({
     accounts: {
       signer: props.payer,
@@ -60,7 +60,7 @@ export interface InitializeAllocationInstructionProps {
   authority?: PublicKey;
 }
 
-export function createInitializeAllocationInstruction (props: InitializeAllocationInstructionProps): TransactionInstruction {
+export function createInitializeAllocationInstruction(props: InitializeAllocationInstructionProps): TransactionInstruction {
   return fauxProgram.instruction.initializeAllocation(props.authority ?? null, {
     accounts: {
       signer: props.payer,
@@ -82,7 +82,7 @@ export interface IncreaseAllocationInstructionProps {
   amount: bigint;
 }
 
-export function createIncreaseAllocationInstruction (props: IncreaseAllocationInstructionProps): TransactionInstruction {
+export function createIncreaseAllocationInstruction(props: IncreaseAllocationInstructionProps): TransactionInstruction {
   const allocation = allocationAddress(props.nftMint);
   return fauxProgram.instruction.increaseAllocation(new BN(props.amount.toString()), {
     accounts: {
@@ -108,7 +108,7 @@ export interface DecreaseAllocationInstructionProps {
   amount: bigint;
 }
 
-export function createDecreaseAllocationInstruction (props: DecreaseAllocationInstructionProps): TransactionInstruction {
+export function createDecreaseAllocationInstruction(props: DecreaseAllocationInstructionProps): TransactionInstruction {
   const allocation = allocationAddress(props.nftMint);
   return fauxProgram.instruction.decreaseAllocation(new BN(props.amount.toString()), {
     accounts: {
@@ -135,7 +135,7 @@ export interface ExerciseAllocationInstructionProps {
   thirdTokenMint?: PublicKey;
 }
 
-export function createExerciseAllocationInstruction (props: ExerciseAllocationInstructionProps): TransactionInstruction {
+export function createExerciseAllocationInstruction(props: ExerciseAllocationInstructionProps): TransactionInstruction {
   const allocation = allocationAddress(props.nftMint);
   return fauxProgram.instruction.exerciseAllocation({
     accounts: {

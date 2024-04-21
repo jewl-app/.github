@@ -5,7 +5,7 @@ interface ProviderProps extends PropsWithChildren {
   readonly providers: Array<ComponentType<PropsWithChildren>>;
 }
 
-export default function Provider (props: ProviderProps): ReactElement {
+export default function Provider(props: ProviderProps): ReactElement {
   if (props.providers.length === 0) { return <>{props.children}</>; }
   const Tag = props.providers[0];
   let children = props.children;

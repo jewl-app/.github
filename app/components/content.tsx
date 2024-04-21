@@ -9,7 +9,7 @@ const Front = dynamic(() => import("@/app/components/front"), { loading: () => <
 const Allocation = dynamic(() => import("@/app/components/allocation"), { loading: () => <div className="flex-1" /> });
 const List = dynamic(() => import("@/app/components/list"), { loading: () => <div className="flex-1" /> });
 
-export default function Content (): ReactElement {
+export default function Content(): ReactElement {
   const { publicKey } = useWallet();
   const query = useSearchParams();
   const router = useRouter();

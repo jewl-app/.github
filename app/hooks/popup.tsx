@@ -13,11 +13,11 @@ export const PopupContext = createContext<UsePopup>({
   popup: null,
 });
 
-export function usePopup (): UsePopup {
+export function usePopup(): UsePopup {
   return useContext(PopupContext);
 }
 
-export default function PopupProvider (props: PropsWithChildren): ReactElement {
+export default function PopupProvider(props: PropsWithChildren): ReactElement {
   const [popup, setPopup] = useState<ReactElement | null>(null);
   const [closeOnBackground, setCloseOnBackground] = useState(false);
 

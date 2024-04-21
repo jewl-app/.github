@@ -12,11 +12,11 @@ export const AnalyticsContext = createContext<UseAnalytics>({
   logError: () => { throw new Error("No provider"); },
 });
 
-export function useAnalytics (): UseAnalytics {
+export function useAnalytics(): UseAnalytics {
   return useContext(AnalyticsContext);
 }
 
-export default function AnalyticsProvider (props: PropsWithChildren): ReactElement {
+export default function AnalyticsProvider(props: PropsWithChildren): ReactElement {
 
   const logEvent = useCallback((name: string, params?: Record<string, string | number>) => {
     track(name, params);

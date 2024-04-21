@@ -6,7 +6,7 @@ interface AllocationProps {
   nftMint?: PublicKey;
 }
 
-export default function Allocation (props: AllocationProps): ReactElement {
+export default function Allocation(props: AllocationProps): ReactElement {
 
   // pie chart on usd values
   // Total usd value in big

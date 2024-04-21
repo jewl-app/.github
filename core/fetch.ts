@@ -7,7 +7,7 @@ interface Cache {
 
 const cache = new Map<string, Cache>();
 
-export async function memCachedFetch (url: string, ttl = 30): Promise<unknown> {
+export async function memCachedFetch(url: string, ttl = 30): Promise<unknown> {
   const cached = cache.get(url);
   const now = unix();
   if (cached != null && cached.timestamp + ttl > now) {
@@ -19,7 +19,7 @@ export async function memCachedFetch (url: string, ttl = 30): Promise<unknown> {
   return body;
 }
 
-export function invalidateCache (url?: string): void {
+export function invalidateCache(url?: string): void {
   if (url == null) {
     cache.clear();
   } else {
