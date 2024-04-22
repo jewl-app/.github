@@ -1,4 +1,5 @@
 import { Analytics, track } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { PropsWithChildren, ReactElement } from "react";
 import React, { createContext, useContext, useCallback, useMemo } from "react";
 
@@ -34,6 +35,7 @@ export default function AnalyticsProvider(props: PropsWithChildren): ReactElemen
     <AnalyticsContext.Provider value={context}>
       {props.children}
       <Analytics />
+      <SpeedInsights />
     </AnalyticsContext.Provider>
   );
 }
