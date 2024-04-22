@@ -1,5 +1,5 @@
 import { Analytics, track } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { PropsWithChildren, ReactElement } from "react";
 import React, { createContext, useContext, useCallback, useMemo } from "react";
 
