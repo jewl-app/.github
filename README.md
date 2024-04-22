@@ -1,4 +1,4 @@
-# jewl.app
+# jewl
 
 ***Nothing in this document constitutes as tax or legal advice. Consult with a tax attourney before using the jewl platform.***
 
