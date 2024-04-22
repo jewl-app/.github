@@ -10,7 +10,7 @@ export default function Root(props: PropsWithChildren): ReactElement {
   return (
     <html lang="en">
       <head>
-        <title>jewl.app</title>
+        <title>jewl</title>
         <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0" />
         <meta name="description" content="Tax-efficient on-chain renumeration." />
         <meta name="theme-color" content="#e8eaed" media="(prefers-color-scheme: light)" />
@@ -23,11 +23,11 @@ export default function Root(props: PropsWithChildren): ReactElement {
         <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/api/logo/192" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://jewl.app/" />
-        <meta property="og:title" content="jewl.app" />
+        <meta property="og:title" content="jewl" />
         <meta property="og:description" content="Tax-efficient on-chain renumeration." />
         <meta property="og:image" content="/api/preview" />
         <meta property="twitter:card" content="summary" />
-        <meta property="twitter:title" content="jewl.app" />
+        <meta property="twitter:title" content="jewl" />
         <meta property="twitter:image" content="/api/preview" />
         <meta property="twitter:description" content="Tax-efficient on-chain renumeration." />
         <meta property="rpc-url" content={rpcUrl} />
