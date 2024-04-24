@@ -16,6 +16,7 @@
     "@solana/wallet-standard-features": "^1.2.0",
     "@solana/web3.js": "^1.91.7",
     "@vercel/analytics": "^1.2.2",
+    "@vercel/speed-insights": "^1.0.10",
     "@wallet-standard/core": "^1.0.3",
     "bs58": "^5.0.0",
     "clsx": "^2.1.0",
@@ -27,7 +28,6 @@
     "yaml": "^2.4.1"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.2.2",
     "@stylistic/eslint-plugin": "^1.7.2",
     "@types/bn.js": "^5.1.5",
     "@types/jsdom": "^21.1.6",
