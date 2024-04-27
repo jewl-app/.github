@@ -1,5 +1,3 @@
-# jewl
-
 If you live in a country where capital gains are taxed at a lower tax rate than income (Canada...), you get heavily taxed on bonuses and equity allocations. If somehow you could turn your bonuses and equity allocations into something that falls in the capital gains category, you could save a lot of money on taxes.
 
 Jewl is a platform that allows you to create specialized non-fungible tokens that represent your bonuses and equity allocations (given they are also on-chain tokens). The way this works is simple:
