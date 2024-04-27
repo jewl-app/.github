@@ -72,7 +72,7 @@ export default function WalletProvider(props: PropsWithChildren): ReactElement {
   }, [account]);
 
   const wallets = useMemo(() => {
-    const fallbackWallets: SupportedWallet[] = []
+    const fallbackWallets: SupportedWallet[] = [];
     const walletNames = new Set(supportedWallets.map(wallet => wallet.name));
     if (!walletNames.has("Phantom")) {
       fallbackWallets.push(new FallbackWallet("Get Phantom", phantomIcon, "https://www.phantom.app/"));

@@ -7,14 +7,17 @@ export type SupportedWallet = WalletWithFeatures<RequiredFeatures>;
 
 export class FallbackWallet implements SupportedWallet {
   readonly version = "1.0.0";
+
   readonly chains = SOLANA_CHAINS;
+
   readonly accounts = [];
+
   readonly features: RequiredFeatures;
 
   constructor(
     readonly name: string,
     readonly icon: WalletIcon,
-    url: string
+    url: string,
   ) {
     this.features = {
       "standard:connect": {
