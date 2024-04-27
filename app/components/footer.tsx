@@ -1,22 +1,24 @@
 import type { ReactElement } from "react";
-import React, { useMemo } from "react";
-import { useWindowSize } from "@/app/hooks/size";
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXTwitter, faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
+import Button from "@/app/components/button";
 
 export default function Footer(): ReactElement {
-  const { width } = useWindowSize();
-
-  const isPhone = useMemo(() => width < 768, [width]);
-  const copyright = useMemo(() => isPhone ? "© 2023" : "© 2023 jewl", [isPhone]);
-
-  // twitter: https://twitter.com/jewl_app
-  // discord: https://discord.gg/w9DpyG6ddG
-  // github: https://github.com/jewl-app
 
   return (
-    <div className="text-sm flex content-center mx-1">
-      <span className="p-1">{copyright}</span>
-      <span className="flex-1" />
-      {/* TODO: social links? */}
+    <div className="text-sm flex justify-center mx-1">
+      <span className="p-1 grow">Copyright © 2024 jewl</span>
+      <span className="grow" />
+      <Button href="https://twitter.com/jewl_app" className="p-1 px-2">
+        <FontAwesomeIcon className="h-full" icon={faXTwitter} />
+      </Button>
+      <Button href="https://discord.gg/w9DpyG6ddG" className="p-1 px-2">
+        <FontAwesomeIcon className="h-full" icon={faDiscord} />
+      </Button>
+      <Button href="https://github.com/jewl-app" className="p-1 px-2">
+        <FontAwesomeIcon className="h-full" icon={faGithub} />
+      </Button>
     </div>
   );
 }

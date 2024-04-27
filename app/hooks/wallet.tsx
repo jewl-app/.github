@@ -1,11 +1,8 @@
 import { PublicKey } from "@solana/web3.js";
-import type { StandardConnectFeature, Wallet, WalletWithFeatures, StandardDisconnectFeature, WalletAccount } from "@wallet-standard/core";
-import type { SolanaSignTransactionFeature } from "@solana/wallet-standard-features";
-import { getWallets } from "@wallet-standard/core";
+import { Wallet, WalletAccount, getWallets } from "@wallet-standard/core";
 import type { PropsWithChildren, ReactElement } from "react";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-
-export type SupportedWallet = WalletWithFeatures<StandardConnectFeature & Partial<StandardDisconnectFeature> & SolanaSignTransactionFeature>;
+import { FallbackWallet, SupportedWallet, backpackIcon, phantomIcon, solflareIcon } from "@/app/utility/wallet";
 
 export interface UseWallet {
   readonly wallets: Array<SupportedWallet>;
@@ -38,7 +35,7 @@ const filterSupportedWallets = (wallets: ReadonlyArray<Wallet>): Array<Supported
 const { on, get } = getWallets();
 
 export default function WalletProvider(props: PropsWithChildren): ReactElement {
-  const [selectedWallet, setSelectedWallet] = useState<SupportedWallet | null>(null);
+  const [wallet, setWallet] = useState<SupportedWallet | null>(null);
   const [supportedWallets, setSupportedWallets] = useState(filterSupportedWallets(get()));
 
   useEffect(() => {
@@ -47,41 +44,56 @@ export default function WalletProvider(props: PropsWithChildren): ReactElement {
       on("unregister", (...wallets) => setSupportedWallets(current => current.filter(wallet => wallets.includes(wallet)))),
     ];
     return () => listeners.forEach(off => off());
-  }, []);
+  }, [setSupportedWallets]);
 
   const connect = useCallback(async (wallet: SupportedWallet) => {
     await wallet.features["standard:connect"].connect();
-    setSelectedWallet(wallet);
-  }, [setSelectedWallet]);
+    setWallet(wallet);
+  }, [setWallet]);
 
   const disconnect = useCallback(async () => {
-    if (selectedWallet == null) { return; }
+    if (wallet == null) { return; }
     try {
-      await selectedWallet.features["standard:disconnect"]?.disconnect();
+      await wallet.features["standard:disconnect"]?.disconnect();
     } finally {
-      setSelectedWallet(null);
+      setWallet(null);
     }
-  }, [selectedWallet, setSelectedWallet]);
+  }, [wallet, setWallet]);
 
   const account = useMemo(() => {
-    if (selectedWallet == null) { return null; }
-    if (selectedWallet.accounts.length === 0) { return null; }
-    return selectedWallet.accounts[0];
-  }, [selectedWallet]);
+    if (wallet == null) { return null; }
+    if (wallet.accounts.length === 0) { return null; }
+    return wallet.accounts[0];
+  }, [wallet]);
 
   const publicKey = useMemo(() => {
     if (account == null) { return null; }
     return new PublicKey(account.publicKey);
   }, [account]);
 
+  const wallets = useMemo(() => {
+    const fallbackWallets: SupportedWallet[] = []
+    const walletNames = new Set(supportedWallets.map(wallet => wallet.name));
+    if (!walletNames.has("Phantom")) {
+      fallbackWallets.push(new FallbackWallet("Get Phantom", phantomIcon, "https://www.phantom.app/"));
+    }
+    if (!walletNames.has("Solflare")) {
+      fallbackWallets.push(new FallbackWallet("Get Solflare", solflareIcon, "https://solflare.com/"));
+    }
+    if (!walletNames.has("Backpack")) {
+      fallbackWallets.push(new FallbackWallet("Get Backpack", backpackIcon, "https://backpack.app/"));
+    }
+    return [...supportedWallets, ...fallbackWallets];
+  }, [supportedWallets]);
+
   const context = useMemo(() => ({
-    wallets: supportedWallets,
-    wallet: selectedWallet,
+    wallets,
+    wallet,
     account,
     publicKey,
     connect,
     disconnect,
-  }), [supportedWallets, selectedWallet, account, publicKey, connect, disconnect]);
+  }), [wallets, wallet, account, publicKey, connect, disconnect]);
 
   return <WalletContext.Provider value={context}>{props.children}</WalletContext.Provider>;
 }
