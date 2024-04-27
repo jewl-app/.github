@@ -14,6 +14,7 @@ export async function createNftMintInstructions(connection: Connection, mint: Ke
       ["description", "Tax-efficient on-chain renumeration."],
       ["link", "https://jewl.app"],
       ["discord", "https://discord.gg/w9DpyG6ddG"],
+      ["twitter", "https://twitter.com/jewl_app"],
     ],
   };
 
