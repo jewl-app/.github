@@ -6,7 +6,10 @@ import { useCluster } from "@/app/hooks/cluster";
 import { useWallet } from "@/app/hooks/wallet";
 import { useBalance } from "@/app/hooks/balance";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import { useWindowMode } from "@/app/hooks/mode";
 import Button from "@/app/components/button";
+import Link from "next/link";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 
@@ -16,6 +19,7 @@ export default function Header(): ReactElement {
   const { cluster } = useCluster();
   const { logEvent } = useAnalytics();
   const { openPopup, closePopup } = usePopup();
+  const { mode } = useWindowMode();
 
   const connectText = useMemo(() => {
     if (publicKey == null) { return "Connect"; }
@@ -46,8 +50,11 @@ export default function Header(): ReactElement {
   }, [publicKey, openPopup, logEvent]);
 
   return (
-    <div className="w-full flex justify-between items-center">
-      <div className="mx-6 my-2">{clusterText}</div>
+    <div className="relative w-full flex items-center justify-between">
+      <Link className="p-1 mx-3" href="/">
+        <Image src={`/api/logo/${mode}`} alt="jewl logo" width={48} height={48} />
+      </Link>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">{clusterText}</div>
       <Button className="px-4 py-2 m-2 font-bold uppercase" onClick={loginPressed}>
         {connectText}
       </Button>

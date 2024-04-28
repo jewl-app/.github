@@ -12,16 +12,19 @@ interface ButtonProps extends BaseProps {
 
 interface LinkProps extends BaseProps {
   href: string;
+  label?: string;
 }
 
 export default function Button(props: ButtonProps | LinkProps): ReactElement {
-  const content =
+  const content = (
     <div className="block w-full h-full group-hover:-translate-y-1 transition-transform">
       {props.children}
-    </div>;
+    </div>
+  );
+
   if ("href" in props) {
     return (
-      <a className={clsx("group", props.className)} href={props.href} target="_blank" rel="noreferrer onopener">
+      <a className={clsx("group", props.className)} href={props.href} target="_blank" rel="noreferrer onopener" aria-label={props.label}>
         {content}
       </a>
     );

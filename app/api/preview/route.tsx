@@ -13,7 +13,6 @@ interface FontOption {
 }
 
 const fontOptions: Array<FontOption> = [];
-const fontBase = "https://android.googlesource.com/platform/external/roboto-fonts/+/f5cf79102af594c746627b392b4f98eedd254571";
 
 const getCachedFonts = async (): Promise<Array<FontOption>> => {
   if (fontOptions.length > 0) {
@@ -38,7 +37,7 @@ export async function GET(): Promise<ImageResponse> {
 
   const fonts = await getCachedFonts();
 
-  const element =
+  const element = (
     <div tw="w-full h-full bg-emerald-900 text-slate-200 flex flex-col justify-center">
       <div tw="mx-10 text-6xl font-black">
         Tax-efficient on-chain renumeration.
@@ -48,6 +47,7 @@ export async function GET(): Promise<ImageResponse> {
         Prevent forced sales of your assets due to tax obligations.
         Start using jewl today.
       </div>
-    </div>;
+    </div>
+  );
   return new ImageResponse(element, { width, height, fonts });
 }
