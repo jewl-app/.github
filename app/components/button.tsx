@@ -12,6 +12,7 @@ interface ButtonProps extends BaseProps {
 
 interface LinkProps extends BaseProps {
   href: string;
+  label?: string;
 }
 
 export default function Button(props: ButtonProps | LinkProps): ReactElement {
@@ -23,7 +24,7 @@ export default function Button(props: ButtonProps | LinkProps): ReactElement {
 
   if ("href" in props) {
     return (
-      <a className={clsx("group", props.className)} href={props.href} target="_blank" rel="noreferrer onopener">
+      <a className={clsx("group", props.className)} href={props.href} target="_blank" rel="noreferrer onopener" aria-label={props.label}>
         {content}
       </a>
     );
