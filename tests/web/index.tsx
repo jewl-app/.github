@@ -35,9 +35,24 @@ function TestWrapper(props: PropsWithChildren): ReactElement {
 }
 
 export function startTestRender(ui: ReactElement, options?: Omit<RenderOptions, "wrapper">) {
-  jsdom = new JSDOM("<!doctype html><html><body></body></html>");
+  jsdom = new JSDOM("<!doctype html><html><body></body></html>", {
+    url: 'http://localhost:3000',
+    pretendToBeVisual: true
+  });
   global.window = jsdom.window as never;
   global.document = jsdom.window.document;
   window.console = global.console;
+  window.matchMedia = (query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {}, // Deprecated
+    removeListener: () => {}, // Deprecated
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true,
+  });
+  const originalErr = console.error.bind(console.error)
+  console.error = (msg) => !msg.toString().includes('Warning: ') && originalErr(msg);
   context = render(ui, { wrapper: TestWrapper, ...options });
 }
