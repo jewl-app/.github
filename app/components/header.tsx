@@ -6,6 +6,7 @@ import { useCluster } from "@/app/hooks/cluster";
 import { useWallet } from "@/app/hooks/wallet";
 import { useBalance } from "@/app/hooks/balance";
 import dynamic from "next/dynamic";
+import Button from "@/app/components/button";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 
@@ -47,9 +48,9 @@ export default function Header(): ReactElement {
   return (
     <div className="w-full flex justify-between items-center">
       <div className="mx-6 my-2">{clusterText}</div>
-      <button className="px-4 py-2 m-2 font-bold uppercase hover:-translate-y-1 transition-transform" type="button" onClick={loginPressed}>
+      <Button className="px-4 py-2 m-2 font-bold uppercase" onClick={loginPressed}>
         {connectText}
-      </button>
+      </Button>
     </div>
   );
 }
