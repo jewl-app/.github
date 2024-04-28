@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useWindowMode } from "@/app/hooks/mode";
 import Button from "@/app/components/button";
+import Link from "next/link";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 
@@ -50,9 +51,9 @@ export default function Header(): ReactElement {
 
   return (
     <div className="relative w-full flex items-center justify-between">
-      <a className="p-1 mx-3" href="/">
+      <Link className="p-1 mx-3" href="/">
         <Image src={`/api/logo/${mode}`} alt="jewl logo" width={48} height={48} />
-      </a>
+      </Link>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">{clusterText}</div>
       <Button className="px-4 py-2 m-2 font-bold uppercase" onClick={loginPressed}>
         {connectText}
