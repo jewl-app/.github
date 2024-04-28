@@ -120,23 +120,38 @@ const path = `M262.1 125a1 1-44.5 0 0 1.3 0q16-12 35.9-8.3 10.9 2 20.6 6.7
     1.8.4.5 9.5-5.6 15.2-15.1 1-1.9-.4-.4Zm-44.5 24.8q4 .6
     6.7-2.2l4.3-4.4q.8-1.4-.3-.6-5.4 3.2-10.8 6.7-.7.4 0 .5Z`;
 
-export function GET(_request: NextRequest, props: IconProps): ImageResponse {
-  const properties = props.params.props ?? [];
-  const sizes = properties
+function getImageSize(params: string[] = []): [number, number] {
+  const sizes = params
     .map(x => parseInt(x, 10))
     .filter(x => Number.isInteger(x))
     .filter(x => x > 0);
   const width = sizes.length > 0 ? sizes[0] : 512;
   const height = sizes.length > 1 ? sizes[1] : width;
+  return [width, height];
+}
+
+function getColors(attributes: Set<string>): string {
+  if (attributes.has("light")) {
+    return "bg-transparent text-slate-800";
+  }
+  if (attributes.has("dark")) {
+    return "bg-transparent text-slate-200";
+  }
+  return "bg-emerald-900 text-slate-200";
+}
+
+export function GET(_request: NextRequest, props: IconProps): ImageResponse {
+  const [width, height] = getImageSize(props.params.props);
   const attributes = new Set(props.params.props);
   const corners = attributes.has("circle") ? "rounded-full" : "rounded-md";
-  const transparent = attributes.has("transparent") ? "bg-transparent" : "bg-emerald-900";
+  const colors = getColors(attributes);
 
-  const element =
-    <div tw={clsx("w-full h-full flex justify-center content-center", transparent, corners)}>
+  const element = (
+    <div tw={clsx("w-full h-full flex justify-center content-center", colors, corners)}>
       <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 512 512">
-        <path fill="#e2e8f0" d={path} />
+        <path fill="currentColor" d={path} />
       </svg>
-    </div>;
+    </div>
+  );
   return new ImageResponse(element, { width, height });
 }

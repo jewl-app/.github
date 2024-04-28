@@ -38,6 +38,7 @@ module.exports = [
       "@stylistic/function-paren-newline": ["error", "consistent"],
       "@stylistic/multiline-ternary": ["error", "always-multiline"],
       "@stylistic/no-confusing-arrow": ["error", { onlyOneSimpleParam: true }],
+      "@stylistic/no-extra-parens": ["error", "all", { ignoreJSX: "multi-line" }],
       "@stylistic/indent": ["error", 2],
       "@stylistic/linebreak-style": ["error", "unix"],
       "@stylistic/quotes": ["error", "double"],
@@ -50,6 +51,7 @@ module.exports = [
       "@stylistic/object-curly-newline": ["error", { consistent: true }],
       "@stylistic/object-property-newline": ["error", { allowAllPropertiesOnSameLine: true }],
       "@stylistic/member-delimiter-style": ["error", { multiline: { delimiter: "semi", requireLast: true }, singleline: { delimiter: "comma", requireLast: false } }],
+      "@stylistic/jsx-wrap-multilines": ["error", { declaration: "parens-new-line" }],
     },
   },
 ];
