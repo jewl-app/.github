@@ -16,7 +16,7 @@ describe("footer", () => {
   });
 
   it("Footer should contain social links", async () => {
-    const links = await context.findAllByRole("link") as HTMLAnchorElement[];
+    const links = await context.findAllByRole("link") as Array<HTMLAnchorElement>;
     assert.strictEqual(links.length, 3);
     assert.strictEqual(links[0].href, "https://twitter.com/jewl_app");
     assert.strictEqual(links[1].href, "https://discord.gg/w9DpyG6ddG");

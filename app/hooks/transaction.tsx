@@ -1,11 +1,12 @@
 import type { TransactionInstruction } from "@solana/web3.js";
 import { VersionedTransaction } from "@solana/web3.js";
-import { PublicKey, TransactionMessage } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import type { PropsWithChildren, ReactElement } from "react";
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { useWallet } from "@/app/hooks/wallet";
 import { useConnection } from "@/app/hooks/connection";
-import { TransactionStep, sendAndConfirmTransaction } from "@/core/transaction";
+import type { TransactionStep } from "@/core/transaction";
+import { sendAndConfirmTransaction } from "@/core/transaction";
 
 export interface TransactionState {
   step: TransactionStep | "ready";
@@ -35,19 +36,18 @@ export default function TransactionProvider(props: PropsWithChildren): ReactElem
     if (wallet == null) { return null; }
     if (account == null) { return null; }
     try {
-      const signTransaction = async (transaction: VersionedTransaction) => {
-        const [{ signedTransaction }] = await wallet.features["solana:signTransaction"].signTransaction({
-          transaction: transaction.serialize(),
-          account,
-        });
-        return VersionedTransaction.deserialize(signedTransaction);
-      };
       return await sendAndConfirmTransaction({
         connection,
         instructions,
         payer: new PublicKey(account.publicKey),
-        signTransaction,
-        progress: (step, expiry) => setTransactionState({ step, expiry }),
+        signTransaction: async (transaction: VersionedTransaction) => {
+          const [{ signedTransaction }] = await wallet.features["solana:signTransaction"].signTransaction({
+            transaction: transaction.serialize(),
+            account,
+          });
+          return VersionedTransaction.deserialize(signedTransaction);
+        },
+        progress: (step, expiry) => { setTransactionState({ step, expiry }); },
       });
     } finally {
       setTransactionState({ step: "ready", expiry: 0 });

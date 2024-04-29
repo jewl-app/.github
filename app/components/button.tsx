@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import { PropsWithChildren, ReactElement } from "react";
+import type { PropsWithChildren, ReactElement } from "react";
 
 interface BaseProps extends PropsWithChildren {
   className?: string;

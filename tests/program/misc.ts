@@ -1,7 +1,7 @@
 import { describe, it, beforeEach } from "mocha";
 import assert from "assert";
 import { testTransaction, startTestRunner } from "@/tests/program";
-import { Transaction, TransactionInstruction } from "@solana/web3.js";
+import { TransactionInstruction } from "@solana/web3.js";
 import { jewlProgramId } from "@/core/address";
 import { createHash } from "crypto";
 

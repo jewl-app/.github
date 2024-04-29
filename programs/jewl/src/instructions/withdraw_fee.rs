@@ -8,10 +8,12 @@ use crate::state::fee::FeeConfigAccount;
 use crate::utility::cpi::CrossProgramInvocations;
 use crate::utility::signer::SeedSigner;
 
-pub fn withdraw_fee(ctx: Context<WithdrawFeeState>) -> Result<()> {
+pub fn withdraw_fee(ctx: Context<WithdrawFeeState>, amount: Option<u64>) -> Result<()> {
     let bump = Pubkey::find_program_address(&[FeeConfigAccount::seed()], &id()).1;
     let signer: SeedSigner = &[&[FeeConfigAccount::seed(), &[bump]]];
 
+    // Transfer the fee token to the signer's token account
+    let transfer_amount = amount.unwrap_or(ctx.accounts.fee_token_account.amount);
     CrossProgramInvocations::transfer_token(
         ctx.accounts.fee_token_account.to_account_info(),
         ctx.accounts.token_mint.to_account_info(),
@@ -19,17 +21,20 @@ pub fn withdraw_fee(ctx: Context<WithdrawFeeState>) -> Result<()> {
         ctx.accounts.fee_config.to_account_info(),
         ctx.accounts.token_program.to_account_info(),
         Some(signer),
-        ctx.accounts.fee_token_account.amount,
+        transfer_amount,
         ctx.accounts.token_mint.decimals,
     )?;
 
-    CrossProgramInvocations::close_token(
-        ctx.accounts.fee_token_account.to_account_info(),
-        ctx.accounts.signer.to_account_info(),
-        ctx.accounts.fee_config.to_account_info(),
-        ctx.accounts.token_program.to_account_info(),
-        Some(signer),
-    )?;
+    // Close the fee token account if the full amount was withdrawn
+    if transfer_amount == ctx.accounts.fee_token_account.amount {
+        CrossProgramInvocations::close_token(
+            ctx.accounts.fee_token_account.to_account_info(),
+            ctx.accounts.signer.to_account_info(),
+            ctx.accounts.fee_config.to_account_info(),
+            ctx.accounts.token_program.to_account_info(),
+            Some(signer),
+        )?;
+    }
 
     Ok(())
 }

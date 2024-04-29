@@ -1,8 +1,10 @@
 import { PublicKey } from "@solana/web3.js";
-import { Wallet, WalletAccount, getWallets } from "@wallet-standard/core";
+import type { Wallet, WalletAccount } from "@wallet-standard/core";
+import { getWallets } from "@wallet-standard/core";
 import type { PropsWithChildren, ReactElement } from "react";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { FallbackWallet, SupportedWallet, backpackIcon, phantomIcon, solflareIcon } from "@/app/utility/wallet";
+import type { SupportedWallet } from "@/app/utility/wallet";
+import { FallbackWallet, backpackIcon, phantomIcon, solflareIcon } from "@/app/utility/wallet";
 
 export interface UseWallet {
   readonly wallets: Array<SupportedWallet>;
@@ -32,6 +34,7 @@ const filterSupportedWallets = (wallets: ReadonlyArray<Wallet>): Array<Supported
     .filter(wallet => Object.hasOwn(wallet.features, "solana:signTransaction")) as Array<SupportedWallet>;
 };
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const { on, get } = getWallets();
 
 export default function WalletProvider(props: PropsWithChildren): ReactElement {
@@ -40,15 +43,15 @@ export default function WalletProvider(props: PropsWithChildren): ReactElement {
 
   useEffect(() => {
     const listeners = [
-      on("register", (...wallets) => setSupportedWallets(current => [...current, ...filterSupportedWallets(wallets)])),
-      on("unregister", (...wallets) => setSupportedWallets(current => current.filter(wallet => wallets.includes(wallet)))),
+      on("register", (...newWallets) => { setSupportedWallets(currentWallets => [...currentWallets, ...filterSupportedWallets(newWallets)]); }),
+      on("unregister", (...newWallets) => { setSupportedWallets(currentWallets => currentWallets.filter(x => newWallets.includes(x))); }),
     ];
-    return () => listeners.forEach(off => off());
+    return () => { listeners.forEach(off => { off(); }); };
   }, [setSupportedWallets]);
 
-  const connect = useCallback(async (wallet: SupportedWallet) => {
-    await wallet.features["standard:connect"].connect();
-    setWallet(wallet);
+  const connect = useCallback(async (selectedWallet: SupportedWallet) => {
+    await selectedWallet.features["standard:connect"].connect();
+    setWallet(selectedWallet);
   }, [setWallet]);
 
   const disconnect = useCallback(async () => {
@@ -72,8 +75,8 @@ export default function WalletProvider(props: PropsWithChildren): ReactElement {
   }, [account]);
 
   const wallets = useMemo(() => {
-    const fallbackWallets: SupportedWallet[] = [];
-    const walletNames = new Set(supportedWallets.map(wallet => wallet.name));
+    const fallbackWallets: Array<SupportedWallet> = [];
+    const walletNames = new Set(supportedWallets.map(x => x.name));
     if (!walletNames.has("Phantom")) {
       fallbackWallets.push(new FallbackWallet("Get Phantom", phantomIcon, "https://www.phantom.app/"));
     }

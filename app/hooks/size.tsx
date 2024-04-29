@@ -16,7 +16,7 @@ export function useWindowSize(): UseWindowSize {
     };
     aspectChanged();
     window.addEventListener("resize", aspectChanged);
-    return () => window.removeEventListener("resize", aspectChanged);
+    return () => { window.removeEventListener("resize", aspectChanged); };
   }, []);
 
   return { width, height };

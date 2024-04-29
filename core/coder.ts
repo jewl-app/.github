@@ -1,7 +1,7 @@
 import type { Jewl } from "@/target/types/jewl";
 import type { Idl, IdlAccounts } from "@coral-xyz/anchor";
 import { BN, BorshAccountsCoder } from "@coral-xyz/anchor";
-import { PublicKey, AccountInfo } from "@solana/web3.js";
+import type { PublicKey, AccountInfo } from "@solana/web3.js";
 import idl from "@/target/idl/jewl.json";
 import { jewlProgramId } from "@/core/address";
 import { convertIdlToCamelCase } from "@coral-xyz/anchor/dist/cjs/idl";
@@ -65,12 +65,12 @@ export function unpackAllocation(address: PublicKey, accountInfo: AccountInfo<Bu
   return convertToBigInt({ address, ...decoded });
 }
 
-export function packFeeConfig(state: FeeConfigAccount): Promise<Buffer> {
+export async function packFeeConfig(state: FeeConfigAccount): Promise<Buffer> {
   const stateBN = convertFromBigInt(state);
   return coder.encode("feeConfigAccount", stateBN);
 }
 
-export function packAllocation(state: AllocationAccount): Promise<Buffer> {
+export async function packAllocation(state: AllocationAccount): Promise<Buffer> {
   const stateBN = convertFromBigInt(state);
   return coder.encode("allocationAccount", stateBN);
 }

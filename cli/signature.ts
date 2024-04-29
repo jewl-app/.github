@@ -18,5 +18,5 @@ export default async function getSignatureData(): Promise<void> {
   console.info(`Tx: ${signature}`);
   console.info(`Block: ${transaction.slot}`);
   console.info(`Time: ${transaction.blockTime}`);
-  transaction.meta?.logMessages?.forEach(log => console.info(log));
+  transaction.meta?.logMessages?.forEach(log => { console.info(log); });
 }

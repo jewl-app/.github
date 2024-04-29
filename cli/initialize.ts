@@ -23,7 +23,7 @@ export default async function initializeFeeConfig(): Promise<void> {
     payer: signer.publicKey,
     signTransaction: async tx => {
       tx.sign([signer]);
-      return tx;
+      return Promise.resolve(tx);
     },
   });
 

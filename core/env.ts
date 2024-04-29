@@ -3,7 +3,8 @@ import { existsSync, readFileSync } from "fs";
 import { homedir } from "os";
 import YAML from "yaml";
 import base58 from "bs58";
-import { Keypair, Signer } from "@solana/web3.js";
+import type { Signer } from "@solana/web3.js";
+import { Keypair } from "@solana/web3.js";
 
 export let rpcUrl = process.env.RPC_URL ?? "https://api.devnet.solana.com";
 let solanaWallet = process.env.SOLANA_WALLET ?? base58.encode(Keypair.generate().secretKey);

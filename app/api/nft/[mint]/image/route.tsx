@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { ImageResponse } from "next/og";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 interface NftProps {
   readonly params: { mint: string };

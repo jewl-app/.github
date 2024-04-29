@@ -1,11 +1,44 @@
-import { DependencyList, useCallback, useEffect } from "react";
+import type { DependencyList } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useAnalytics } from "@/app/hooks/analytics";
 
-export function useInterval(delay: number, callback: () => void, deps: DependencyList): void {
-  const handler = useCallback(callback, deps);
+interface UseInterval<T> {
+  readonly loading: boolean;
+  readonly result: T | null;
+}
+
+interface UseIntervalPropsBase<T> {
+  interval?: number;
+  callback: () => T | Promise<T>;
+}
+
+export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyList): UseInterval<T> {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [result, setResult] = useState<T | null>(null);
+  const { logError } = useAnalytics();
+
+  const handler = useCallback(() => {
+    const maybePromise = props.callback();
+    if (maybePromise instanceof Promise) {
+      setLoading(true);
+      maybePromise
+        .then(setResult)
+        .catch(logError)
+        .finally(() => { setLoading(false); });
+    } else {
+      setResult(maybePromise);
+    }
+  }, [setLoading, ...deps]);
 
   useEffect(() => {
-    const interval = setInterval(callback, delay);
+    const id = setInterval(handler, props.interval ?? 1000);
+    setResult(null);
     handler();
-    return () => clearInterval(interval);
-  }, [delay, handler, ...deps]);
+    return () => { clearInterval(id); };
+  }, [props.interval, handler, setResult, logError]);
+
+  return {
+    loading,
+    result,
+  };
 }

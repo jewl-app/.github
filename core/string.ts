@@ -21,7 +21,7 @@ const multipliers = [
 
 export const formatLargeNumber = (num: number): string => {
   const multiplier = multipliers.find(value => num >= value.value);
-  if (multiplier === undefined) { return `${num.toFixed(2)}`; }
+  if (multiplier === undefined) { return num.toFixed(2); }
   const value = num / multiplier.value;
   const fixed = value.toFixed(1);
   return `${fixed}${multiplier.symbol}`;

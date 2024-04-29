@@ -1,16 +1,18 @@
 import type { PropsWithChildren, ReactElement } from "react";
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { useConnection } from "@/app/hooks/connection";
-import { useAnalytics } from "@/app/hooks/analytics";
 import { useInterval } from "@/app/hooks/interval";
 import { useWallet } from "@/app/hooks/wallet";
-import { TokenAccount, getFungibleTokenAccounts } from "@/core/token";
+import type { TokenAccount } from "@/core/token";
+import { getFungibleTokenAccounts } from "@/core/token";
 
 export interface UseTokens {
+  readonly loading: boolean;
   readonly tokenAccounts: Array<TokenAccount>;
 }
 
 export const TokensContext = createContext<UseTokens>({
+  loading: false,
   tokenAccounts: [],
 });
 
@@ -18,34 +20,25 @@ export function useTokens(): UseTokens {
   return useContext(TokensContext);
 }
 
-const refreshInterval = 1000 * 30;
-
 export default function TokensProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
-  const { logError } = useAnalytics();
-  const [tokenAccounts, setTokenAccounts] = useState<Array<TokenAccount>>([]);
 
-  useEffect(() => {
-    setTokenAccounts([]);
-  }, [publicKey, setTokenAccounts]);
+  const { result, loading } = useInterval({
+    interval: 1000 * 30, // 30 seconds
+    callback: async () => {
+      if (publicKey == null) {
+        return [];
+      }
+      return getFungibleTokenAccounts(connection, publicKey);
+    },
+  }, [publicKey, connection]);
 
-  useInterval(refreshInterval, () => {
-    if (publicKey == null) {
-      setTokenAccounts([]);
-      return;
-    }
-    getFungibleTokenAccounts(connection, publicKey)
-      .then(setTokenAccounts)
-      .catch(error => {
-        logError(error);
-        setTokenAccounts([]);
-      });
-  }, [publicKey, setTokenAccounts]);
+  const tokenAccounts = result ?? [];
 
   const context = useMemo(() => {
-    return { tokenAccounts };
-  }, [tokenAccounts]);
+    return { tokenAccounts, loading };
+  }, [tokenAccounts, loading]);
 
   return (
     <TokensContext.Provider value={context}>

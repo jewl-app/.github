@@ -1,7 +1,9 @@
-import { Connection, PublicKey } from "@solana/web3.js";
+import type { Connection, PublicKey } from "@solana/web3.js";
 import { allocationAddress, tokenExtensionsProgramId } from "@/core/address";
-import { AllocationAccount, unpackAllocation } from "@/core/coder";
-import { TokenAccount, getNonFungibleTokenAccounts, getTokenAccount } from "@/core/token";
+import type { AllocationAccount } from "@/core/coder";
+import { unpackAllocation } from "@/core/coder";
+import type { TokenAccount } from "@/core/token";
+import { getNonFungibleTokenAccounts, getTokenAccount } from "@/core/token";
 import { getMultipleAccountsBatched } from "@/core/account";
 
 export type Allocation = AllocationAccount & TokenAccount;

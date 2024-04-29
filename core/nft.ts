@@ -1,7 +1,9 @@
 import { AuthorityType, ExtensionType, LENGTH_SIZE, TYPE_SIZE, createInitializeMetadataPointerInstruction, createInitializeMintCloseAuthorityInstruction, createInitializeMintInstruction, createSetAuthorityInstruction, getMintLen } from "@solana/spl-token";
-import { Connection, Keypair, PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
+import type { Connection, Keypair, PublicKey, TransactionInstruction } from "@solana/web3.js";
+import { SystemProgram } from "@solana/web3.js";
 import { feeConfigAddress, tokenExtensionsProgramId } from "@/core/address";
-import { TokenMetadata, createInitializeInstruction, createUpdateAuthorityInstruction, createUpdateFieldInstruction, pack } from "@solana/spl-token-metadata";
+import type { TokenMetadata } from "@solana/spl-token-metadata";
+import { createInitializeInstruction, createUpdateAuthorityInstruction, createUpdateFieldInstruction, pack } from "@solana/spl-token-metadata";
 
 export async function createNftMintInstructions(connection: Connection, mint: Keypair, payer: PublicKey): Promise<Array<TransactionInstruction>> {
   const metadata: TokenMetadata = {

@@ -16,7 +16,7 @@ export function useWindowMode(): UseWindowMode {
     };
     modeChanged();
     query.addEventListener("change", modeChanged);
-    return () => query.removeEventListener("change", modeChanged);
+    return () => { query.removeEventListener("change", modeChanged); };
   }, []);
 
   return { mode };

@@ -4,8 +4,6 @@ import { AnchorProvider, BN, Program } from "@coral-xyz/anchor";
 import type { Jewl } from "@/target/types/jewl";
 import idl from "@/target/idl/jewl.json";
 import { allocationAddress, associatedTokenAddress, associatedTokenProgramId, feeConfigAddress, solMint, systemProgramId, tokenExtensionsProgramId, tokenProgramId } from "@/core/address";
-import exp from "constants";
-
 
 const fauxWallet = {
   publicKey: PublicKey.default,
@@ -37,10 +35,12 @@ export interface WithdrawFeeInstructionProps {
   payer: PublicKey;
   tokenMint: PublicKey;
   feeTokenAccount?: PublicKey;
+  amount?: bigint;
 }
 
 export function createWithdrawFeeInstruction(props: WithdrawFeeInstructionProps): TransactionInstruction {
-  return fauxProgram.instruction.withdrawFee({
+  const amount = props.amount != null ? new BN(props.amount.toString()) : null;
+  return fauxProgram.instruction.withdrawFee(amount, {
     accounts: {
       signer: props.payer,
       feeConfig: feeConfigAddress,

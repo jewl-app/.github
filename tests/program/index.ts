@@ -1,11 +1,13 @@
 import { allocationAddress, feeConfigAddress, jewlProgramId, solMint, systemProgramId, tokenExtensionsProgramId, tokenProgramId, usdcMint, usdtMint } from "@/core/address";
 import type { BanksTransactionMeta, ProgramTestContext } from "solana-bankrun";
 import { Clock, startAnchor } from "solana-bankrun";
-import { AccountInfo, Keypair, Signer, Transaction, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import type { AccountInfo, Signer, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import type { Account, Mint } from "@solana/spl-token";
 import { ACCOUNT_SIZE, AccountLayout, AccountState, MINT_SIZE, MintLayout, unpackAccount, unpackMint } from "@solana/spl-token";
-import { AllocationAccount, FeeConfigAccount, packAllocation, packFeeConfig, unpackAllocation, unpackFeeConfig } from "@/core/coder";
+import type { AllocationAccount, FeeConfigAccount } from "@/core/coder";
+import { packAllocation, packFeeConfig, unpackAllocation, unpackFeeConfig } from "@/core/coder";
 
 let context: ProgramTestContext = { } as ProgramTestContext;
 const testSigner = Keypair.generate();
@@ -18,6 +20,7 @@ export async function closeAccount(address: PublicKey): Promise<void> {
     lamports: 0,
     data: Buffer.alloc(0),
   });
+  return Promise.resolve();
 }
 
 export interface TokenMintProps {
@@ -66,6 +69,7 @@ export async function setTokenMint(props: TokenMintProps): Promise<void> {
     lamports: LAMPORTS_PER_SOL,
     data: buffer,
   });
+  return Promise.resolve();
 }
 
 interface TokenAccountProps {
@@ -99,6 +103,7 @@ export async function setTokenAccount(props: TokenAccountProps): Promise<void> {
     lamports: LAMPORTS_PER_SOL,
     data: buffer,
   });
+  return Promise.resolve();
 }
 
 interface FeeConfigAccountProps {
@@ -217,7 +222,7 @@ export async function testTransaction(txOrIxs: Transaction | VersionedTransactio
   } else {
     tx.sign(testSigner, ...signers);
   }
-  return await context.banksClient.processTransaction(tx);
+  return context.banksClient.processTransaction(tx);
 }
 
 export async function startTestRunner(): Promise<void> {

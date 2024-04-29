@@ -19,9 +19,14 @@ module.exports = {
           "50%": { "background-position": "100% 50%" },
           "100%": { "background-position": "0% 50%" },
         },
+        hourglass: {
+          "0%, 46%, 100%": { transform: "rotate(0deg)" },
+          "54%, 99.99%": { transform: "rotate(180deg)" },
+        },
       },
       animation: {
         gradient: "gradient 60s ease-in-out infinite",
+        hourglass: "hourglass 4s ease-in-out infinite",
       },
     },
   },

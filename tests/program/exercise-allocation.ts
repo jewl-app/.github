@@ -1,6 +1,7 @@
 import { describe, it, beforeEach } from "mocha";
 import assert from "assert";
 import { testTransaction, startTestRunner, signerAddress, setFeeConfig, getTokenAccount, setTokenMint, setTokenAccount, setAllocation, closeAccount, getAllocation, getTokenMint } from "@/tests/program";
+import type { TransactionInstruction } from "@solana/web3.js";
 import { Keypair, PublicKey } from "@solana/web3.js";
 import { createExerciseAllocationInstruction } from "@/core/instruction";
 import { allocationAddress, associatedTokenAddress, feeConfigAddress, solMint, tokenExtensionsProgramId, usdcMint, usdtMint } from "@/core/address";
@@ -30,7 +31,7 @@ describe("exercise_allocation", () => {
   const usdtSignerTokenAddress = associatedTokenAddress(signerAddress, usdtMint);
   const usdtAllocationTokenAddress = associatedTokenAddress(nftAllocationAddress, usdtMint);
   const usdtFeeTokenAddress = associatedTokenAddress(feeConfigAddress, usdtMint);
-  const instruction = (props?: { noFirst?: boolean, noSecond?: boolean, noThird?: boolean }) => createExerciseAllocationInstruction({
+  const instruction = (props?: { noFirst?: boolean, noSecond?: boolean, noThird?: boolean }): TransactionInstruction => createExerciseAllocationInstruction({
     payer: signerAddress,
     nftMint: nftMintAddress,
     firstTokenMint: props?.noFirst ?? false ? solMint : firstTokenMintAddress,
