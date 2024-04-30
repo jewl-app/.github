@@ -17,12 +17,16 @@ const fauxProgram = new Program<Jewl>(idl as Jewl, fauxProvider);
 
 export interface InitializeFeeInstructionProps {
   payer: PublicKey;
-  feeBps: number;
-  withdrawAuthority: PublicKey;
+  feeBps?: number;
+  feeAuthority?: PublicKey;
+  feeWithdrawAuthority?: PublicKey;
 }
 
 export function createInitializeFeeInstruction(props: InitializeFeeInstructionProps): TransactionInstruction {
-  return fauxProgram.instruction.initializeFee(props.feeBps, props.withdrawAuthority, {
+  const feeBps = props.feeBps ?? null;
+  const feeAuthority = props.feeAuthority ?? null;
+  const withdrawAuthority = props.feeWithdrawAuthority ?? null;
+  return fauxProgram.instruction.initializeFee(feeBps, feeAuthority, withdrawAuthority, {
     accounts: {
       signer: props.payer,
       feeConfig: feeConfigAddress,

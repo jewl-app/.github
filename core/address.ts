@@ -24,4 +24,25 @@ export function allocationAddress(nftMint: PublicKey): PublicKey {
   return PublicKey.findProgramAddressSync(seeds, jewlProgramId)[0];
 }
 
+export function shortAddress(publicKey?: PublicKey | string | null, chars = 4): string {
+  if (publicKey == null) {
+    return "";
+  }
+  const key = publicKey.toString();
+  const prefix = key.slice(0, chars);
+  const suffix = key.slice(-chars);
+  return `${prefix}...${suffix}`;
+}
+
+export function publicKeyOrDefault(publicKey?: string | null): PublicKey {
+  if (publicKey == null) {
+    return PublicKey.default;
+  }
+  try {
+    return new PublicKey(publicKey);
+  } catch {
+    return PublicKey.default;
+  }
+}
+
 

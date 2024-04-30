@@ -5,6 +5,7 @@ import { useAnalytics } from "@/app/hooks/analytics";
 interface UseInterval<T> {
   readonly loading: boolean;
   readonly result: T | null;
+  readonly reload: () => void;
 }
 
 interface UseIntervalPropsBase<T> {
@@ -15,6 +16,7 @@ interface UseIntervalPropsBase<T> {
 export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyList): UseInterval<T> {
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<T | null>(null);
+  const [counter, setCounter] = useState<number>(0);
   const { logError } = useAnalytics();
 
   const handler = useCallback(() => {
@@ -28,7 +30,7 @@ export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyL
     } else {
       setResult(maybePromise);
     }
-  }, [setLoading, ...deps]);
+  }, [setLoading, counter, ...deps]);
 
   useEffect(() => {
     const id = setInterval(handler, props.interval ?? 1000);
@@ -37,8 +39,13 @@ export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyL
     return () => { clearInterval(id); };
   }, [props.interval, handler, setResult, logError]);
 
+  const reload = useCallback(() => {
+    setCounter(c => c + 1);
+  }, [setCounter]);
+
   return {
     loading,
     result,
+    reload,
   };
 }

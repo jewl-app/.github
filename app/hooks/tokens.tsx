@@ -4,7 +4,7 @@ import { useConnection } from "@/app/hooks/connection";
 import { useInterval } from "@/app/hooks/interval";
 import { useWallet } from "@/app/hooks/wallet";
 import type { TokenAccount } from "@/core/token";
-import { getFungibleTokenAccounts } from "@/core/token";
+import { getFungibleTokenAccountsForOwner } from "@/core/token";
 
 export interface UseTokens {
   readonly loading: boolean;
@@ -30,7 +30,7 @@ export default function TokensProvider(props: PropsWithChildren): ReactElement {
       if (publicKey == null) {
         return [];
       }
-      return getFungibleTokenAccounts(connection, publicKey);
+      return getFungibleTokenAccountsForOwner(connection, publicKey);
     },
   }, [publicKey, connection]);
 

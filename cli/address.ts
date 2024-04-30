@@ -18,9 +18,10 @@ export default async function getAccountData(): Promise<void> {
   }
 
   const balance = accountInfo.lamports / LAMPORTS_PER_SOL;
+  const balanceSuffix = balance > 0 && balance < 0.005 ? "+" : "";
 
   console.info(`Account ${await linkAccount(address)}`);
   console.info(`Owner: ${await linkAccount(accountInfo.owner)}`);
-  console.info(`Balance: ◎${balance.toFixed(2)}`);
+  console.info(`Balance: ◎${balance.toFixed(2)}${balanceSuffix}`);
   console.info(`Data: ${new Uint8Array(accountInfo.data)}`);
 }

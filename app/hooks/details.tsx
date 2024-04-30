@@ -2,46 +2,27 @@ import type { PublicKey } from "@solana/web3.js";
 import { useInterval } from "@/app/hooks/interval";
 import { useAllocations } from "@/app/hooks/allocations";
 import { useMemo } from "react";
-import type { IconDefinition } from "@fortawesome/fontawesome-common-types";
-import { faChevronDown, faCoins, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useWallet } from "@/app/hooks/wallet";
-import { useFeeConfig } from "./fee";
 import { getFeeTokenAccounts } from "@/core/fee";
 import { useConnection } from "@/app/hooks/connection";
-
-interface ButtonSpec {
-  icon: IconDefinition;
-  label: string;
-  onClick: () => void;
-  enabled: boolean;
-}
-
-interface ItemSpec {
-  mint: PublicKey;
-  name?: string;
-  symbol?: string;
-  amount: number;
-  usdValue: number;
-  decimals: number;
-}
+import type { TokenAccount } from "@/core/token";
+import { useIncreaseAllocationButton } from "@/app/transactions/increase";
+import { useDecreaseAllocationButton } from "@/app/transactions/decrease";
+import { useExerciseAllocationButton } from "@/app/transactions/exercise";
+import { useConfigureFeesButton } from "@/app/transactions/configure";
+import { useWithdrawFeesButton } from "@/app/transactions/withdraw";
+import type { ButtonSpec } from "@/app/transactions/spec";
 
 interface UseDetails {
   readonly loading: boolean;
-  readonly items: Array<ItemSpec>;
+  readonly items: Array<TokenAccount> | null;
   readonly buttons: Array<ButtonSpec>;
 }
 
 export function useDetails(nftMint?: PublicKey): UseDetails {
   const { connection } = useConnection();
-  const { getAllocation, allocations, loading: l1 } = useAllocations();
-  const { feeWithdrawAuthority, feeAuthority } = useFeeConfig();
-  const { publicKey } = useWallet();
+  const { getAllocation, loading: l1 } = useAllocations();
 
-  const ownedAllocations = useMemo(() => {
-    return new Set(allocations.map(a => a.address.toBase58()));
-  }, [allocations]);
-
-  const { loading: l2, result: allocation } = useInterval({
+  const { loading: l2, result: allocation, reload: r1 } = useInterval({
     interval: 1000 * 30, // 30 seconds
     callback: async () => {
       if (nftMint == null) {
@@ -51,79 +32,57 @@ export function useDetails(nftMint?: PublicKey): UseDetails {
     },
   }, [nftMint, getAllocation]);
 
-  const { loading: l3, result: _tokenAccounts } = useInterval({
+  const { loading: l3, result: tokenAccounts, reload: r2 } = useInterval({
     interval: 1000 * 30, // 30 seconds
     callback: async () => {
       if (nftMint != null) {
-        return [];
+        return null;
       }
       return getFeeTokenAccounts(connection);
     },
   }, [nftMint, connection]);
 
+  const items = useMemo(() => {
+    if (nftMint == null && tokenAccounts != null) {
+      return tokenAccounts;
+    } else if (allocation != null) {
+      // Override the amounts since the redeemable amount is stored in the allocation
+      // and does not have to match the token account balance
+      const tokens: Array<TokenAccount> = [];
+      if (allocation.firstToken != null) {
+        tokens.push({ ...allocation.firstToken, amount: allocation.firstTokenAmount });
+      }
+      if (allocation.secondToken != null) {
+        tokens.push({ ...allocation.secondToken, amount: allocation.secondTokenAmount });
+      }
+      if (allocation.thirdToken != null) {
+        tokens.push({ ...allocation.thirdToken, amount: allocation.thirdTokenAmount });
+      }
+      return tokens;
+    }
+    return null;
+  }, [nftMint, allocation, tokenAccounts]);
+
+  const buttonCtx = useMemo(() => ({
+    reload: () => [r1, r2].forEach(r => r()),
+    items,
+  }), [r1, r2, items]);
+
+  const withdrawFeesButton = useWithdrawFeesButton(buttonCtx);
+  const configureFeesButton = useConfigureFeesButton(buttonCtx);
+  const increaseAllocationButton = useIncreaseAllocationButton(buttonCtx);
+  const decreaseAllocationButton = useDecreaseAllocationButton(buttonCtx);
+  const exerciseAllocationButton = useExerciseAllocationButton(buttonCtx);
+
   const buttons = useMemo(() => {
     if (nftMint == null) {
-      return [
-        {
-          icon: faChevronDown,
-          label: "Withdraw",
-          enabled: allowedPublicKey(publicKey, feeWithdrawAuthority),
-          onClick: () => {
-            // open withdraw modal
-          },
-        },
-        {
-          icon: faCoins,
-          label: "Configure",
-          enabled: allowedPublicKey(publicKey, feeAuthority),
-          onClick: () => {
-            // open configure modal to set fee bps
-          },
-        },
-      ];
+      return [withdrawFeesButton, configureFeesButton];
     } else {
-      return [
-        {
-          icon: faPlus,
-          label: "Add",
-          enabled: true,
-          onClick: () => {
-            // open add modal
-          },
-        },
-        {
-          icon: faMinus,
-          label: "Remove",
-          enabled: allowedPublicKey(publicKey, allocation?.decreaseAuthority),
-          onClick: () => {
-            // open remove modal
-          },
-        },
-        {
-          icon: faCoins,
-          label: "Exercise",
-          enabled: ownedAllocations.has(nftMint.toBase58()),
-          onClick: () => {
-            // open exercise modal
-          },
-        },
-      ];
+      return [increaseAllocationButton, decreaseAllocationButton, exerciseAllocationButton];
     }
-  }, [nftMint, ownedAllocations, publicKey, feeWithdrawAuthority, feeAuthority, allocation]);
+  }, [nftMint, withdrawFeesButton, configureFeesButton, increaseAllocationButton, decreaseAllocationButton, exerciseAllocationButton]);
 
   const loading = [l1, l2, l3].some(l => l);
 
-  return {
-    loading,
-    items: [],
-    buttons,
-  };
+  return { loading, items, buttons };
 }
-
-function allowedPublicKey(publicKey?: PublicKey | null, authority?: PublicKey | null): boolean {
-  if (publicKey == null || authority == null) {
-    return false;
-  }
-  return publicKey.equals(authority);
-}
-

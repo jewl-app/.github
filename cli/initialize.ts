@@ -13,8 +13,6 @@ export default async function initializeFeeConfig(): Promise<void> {
 
   const instructions = [createInitializeFeeInstruction({
     payer: signer.publicKey,
-    feeBps: 100,
-    withdrawAuthority: signer.publicKey,
   })];
 
   const signature = await sendAndConfirmTransaction({

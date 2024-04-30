@@ -1,38 +1,50 @@
 import clsx from "clsx";
 import React from "react";
-import type { PropsWithChildren, ReactElement } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, PropsWithChildren, ReactElement } from "react";
 
 interface BaseProps extends PropsWithChildren {
   className?: string;
+  outerClassName?: string;
 }
 
-interface ButtonProps extends BaseProps {
-  onClick: () => void;
-}
+type ButtonProps = BaseProps & ButtonHTMLAttributes<HTMLButtonElement>;
+type LinkProps = BaseProps & AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
 
-interface LinkProps extends BaseProps {
-  href: string;
-  label?: string;
-}
+type Props = ButtonProps | LinkProps;
 
-export default function Button(props: ButtonProps | LinkProps): ReactElement {
+export default function Button(props: Props): ReactElement {
+  const { children, className, outerClassName, ...rest } = props;
+
+  let disabled = false;
+  if ("disabled" in rest) {
+    disabled = rest.disabled ?? false;
+  }
+
   const content = (
-    <div className="block w-full h-full group-hover:-translate-y-1 transition-transform">
-      {props.children}
+    <div className={clsx(
+      "block w-full h-full transition-transform",
+      disabled ? "" : "group-hover:-translate-y-1",
+      className,
+    )}>
+      {children}
     </div>
   );
 
-  if ("href" in props) {
+  if ("href" in rest) {
+    delete rest.target;
+    delete rest.rel;
     return (
-      <a className={clsx("group", props.className)} href={props.href} target="_blank" rel="noreferrer onopener" aria-label={props.label}>
+      <a {...rest} className={clsx("group disabled:cursor-not-allowed", outerClassName)} target="_blank" rel="noreferrer onopener" >
         {content}
       </a>
     );
   }
 
+  delete rest.type;
   return (
-    <button className={clsx("group", props.className)} type="button" onClick={props.onClick}>
+    <button {...rest} className={clsx("group disabled:cursor-not-allowed", outerClassName)} type="button">
       {content}
     </button>
   );
+
 }

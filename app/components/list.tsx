@@ -7,8 +7,17 @@ interface AllocationListProps {
 }
 
 export default function AllocationList(props: AllocationListProps): ReactElement {
+  // TODO:
   // list of allocations for the current wallet.
   // button to create a new allocation
+
+  // Show them as cards?
+
+  // Image of the NFT
+  // Name of the NFT
+  // Total value
+  // mint address copyable
+  // TokenIcons of the three tokens?
 
   return (
     <div className="">

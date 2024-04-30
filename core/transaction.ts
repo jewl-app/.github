@@ -67,7 +67,14 @@ export class TransactionError extends Error {
     public readonly programLogs: Array<string> | null = null,
     public readonly isSimulation = false,
   ) {
-    super(`${isSimulation ? "Simulation" : "Transaction"} failed: ${JSON.stringify(error)}`);
+    super(
+      [
+        isSimulation ? "Simulation" : "Transaction",
+        "failed:",
+        JSON.stringify(error),
+        programLogs?.join("\n") ?? "",
+      ].join(" "),
+    );
   }
 }
 
