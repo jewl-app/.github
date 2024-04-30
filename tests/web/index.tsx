@@ -57,7 +57,7 @@ export function startTestRender(ui: ReactElement, options?: Omit<RenderOptions, 
   });
   const originalErr = console.error.bind(console.error);
   console.error = (msg: { toString: () => string }) => {
-    if (!msg.toString().includes("Warning: ")) {
+    if (msg.toString().includes("Warning: ")) {
       return;
     }
     originalErr(msg);

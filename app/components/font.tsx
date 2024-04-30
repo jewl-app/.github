@@ -1,3 +1,4 @@
+import React from "react";
 import type { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import type { ReactElement } from "react";
 
