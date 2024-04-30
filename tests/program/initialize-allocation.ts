@@ -1,6 +1,7 @@
 import { describe, it, beforeEach } from "mocha";
 import assert from "assert";
 import { testTransaction, startTestRunner, signerAddress, setFeeConfig, getTokenAccount, setTokenMint, setTokenAccount, setAllocation, getAllocation } from "@/tests/program";
+import type { TransactionInstruction } from "@solana/web3.js";
 import { Keypair, PublicKey } from "@solana/web3.js";
 import { createInitializeAllocationInstruction } from "@/core/instruction";
 import { allocationAddress, associatedTokenAddress, feeConfigAddress, solMint, tokenExtensionsProgramId, usdcMint, usdtMint } from "@/core/address";
@@ -9,7 +10,7 @@ describe("initialize_allocation", () => {
   const nftMintAddress = Keypair.generate().publicKey;
   const nftAllocationAddress = allocationAddress(nftMintAddress);
   const nftTokenAddress = associatedTokenAddress(signerAddress, nftMintAddress, tokenExtensionsProgramId);
-  const instruction = (props?: { authority?: PublicKey }) => createInitializeAllocationInstruction({
+  const instruction = (props?: { authority?: PublicKey }): TransactionInstruction => createInitializeAllocationInstruction({
     payer: signerAddress,
     nftMint: nftMintAddress,
     authority: props?.authority,

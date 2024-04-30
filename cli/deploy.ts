@@ -13,7 +13,7 @@ export default async function deploySolanaProgram(): Promise<void> {
   await execute("anchor", "build");
 
   const programInfo = await connection.getAccountInfo(jewlProgramId);
-  const programDeployed = programInfo != null && programInfo.executable;
+  const programDeployed = programInfo?.executable ?? false;
 
   if (programDeployed) {
     await execute("anchor", "upgrade", "target/deploy/jewl.so", "--program-id", jewlProgramId.toBase58(), "--provider.cluster", cluster);
@@ -25,7 +25,7 @@ export default async function deploySolanaProgram(): Promise<void> {
   const idlOwner = PublicKey.findProgramAddressSync([], jewlProgramId)[0];
   const idlAccount = await PublicKey.createWithSeed(idlOwner, "anchor:idl", jewlProgramId);
   const idlInfo = await connection.getAccountInfo(idlAccount);
-  const idlInitialized = idlInfo != null && idlInfo.owner.equals(jewlProgramId);
+  const idlInitialized = idlInfo?.owner.equals(jewlProgramId) ?? false;
 
   if (idlInitialized) {
     await execute("anchor", "idl", "upgrade", jewlProgramId.toBase58(), "--filepath", "target/idl/jewl.json", "--provider.cluster", cluster);

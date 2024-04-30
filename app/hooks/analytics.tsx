@@ -5,7 +5,7 @@ import React, { createContext, useContext, useCallback, useMemo } from "react";
 
 export interface UseAnalytics {
   logEvent: (name: string, params?: Record<string, string | number>) => void;
-  logError: (error: Error) => void;
+  logError: (error: unknown) => void;
 }
 
 export const AnalyticsContext = createContext<UseAnalytics>({
@@ -23,7 +23,7 @@ export default function AnalyticsProvider(props: PropsWithChildren): ReactElemen
     track(name, params);
   }, []);
 
-  const logError = useCallback((error: Error) => {
+  const logError = useCallback((error: unknown) => {
     console.error(error);
   }, []);
 

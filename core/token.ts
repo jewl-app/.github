@@ -1,5 +1,6 @@
-import { Account, Mint, unpackAccount, unpackMint } from "@solana/spl-token";
-import { Connection, PublicKey } from "@solana/web3.js";
+import type { Account, Mint } from "@solana/spl-token";
+import { unpackAccount, unpackMint } from "@solana/spl-token";
+import type { Connection, PublicKey } from "@solana/web3.js";
 import { getMultipleAccountsBatched } from "@/core/account";
 import { tokenProgramId } from "@/core/address";
 

@@ -13,10 +13,14 @@ import ConnectionProvider from "@/app/hooks/connection";
 import BalanceProvider from "@/app/hooks/balance";
 import TokensProvider from "@/app/hooks/tokens";
 import Content from "@/app/components/content";
+import FeeConfigProvider from "@/app/hooks/fee";
 
-const providers = [AnalyticsProvider, ConnectionProvider,
+const providers = [
+  AnalyticsProvider, ConnectionProvider,
   ClusterProvider, WalletProvider, BalanceProvider,
-  TokensProvider, TransactionProvider, PopupProvider];
+  FeeConfigProvider, TokensProvider, TransactionProvider,
+  PopupProvider,
+];
 
 export default function Page(): ReactElement {
   return (

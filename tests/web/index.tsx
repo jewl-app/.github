@@ -1,7 +1,9 @@
 import Provider from "@/app/components/provider";
-import { PublicKey } from "@solana/web3.js";
-import React, { PropsWithChildren, ReactElement, useMemo, useState } from "react";
-import { render, RenderOptions, RenderResult } from "@testing-library/react";
+import type { PublicKey } from "@solana/web3.js";
+import type { PropsWithChildren, ReactElement } from "react";
+import React, { useMemo, useState } from "react";
+import type { RenderOptions, RenderResult } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { WalletContext } from "@/app/hooks/wallet";
 import { JSDOM } from "jsdom";
 
@@ -34,7 +36,7 @@ function TestWrapper(props: PropsWithChildren): ReactElement {
   return <Provider providers={testProviders}>{props.children}</Provider>;
 }
 
-export function startTestRender(ui: ReactElement, options?: Omit<RenderOptions, "wrapper">) {
+export function startTestRender(ui: ReactElement, options?: Omit<RenderOptions, "wrapper">): void {
   jsdom = new JSDOM("<!doctype html><html><body></body></html>", {
     url: "http://localhost:3000",
     pretendToBeVisual: true,
@@ -47,13 +49,18 @@ export function startTestRender(ui: ReactElement, options?: Omit<RenderOptions, 
     matches: false,
     media: query,
     onchange: null,
-    addListener: () => {}, // Deprecated
-    removeListener: () => {}, // Deprecated
-    addEventListener: () => {},
-    removeEventListener: () => {},
+    addListener: () => { /* Empty */ },
+    removeListener: () => { /* Empty */ },
+    addEventListener: () => { /* Empty */ },
+    removeEventListener: () => { /* Empty */ },
     dispatchEvent: () => true,
   });
   const originalErr = console.error.bind(console.error);
-  console.error = msg => !msg.toString().includes("Warning: ") && originalErr(msg);
+  console.error = (msg: { toString: () => string }) => {
+    if (msg.toString().includes("Warning: ")) {
+      return;
+    }
+    originalErr(msg);
+  };
   context = render(ui, { wrapper: TestWrapper, ...options });
 }

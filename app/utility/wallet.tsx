@@ -6,17 +6,14 @@ type RequiredFeatures = StandardConnectFeature & Partial<StandardDisconnectFeatu
 export type SupportedWallet = WalletWithFeatures<RequiredFeatures>;
 
 export class FallbackWallet implements SupportedWallet {
-  readonly version = "1.0.0";
+  public readonly version = "1.0.0";
+  public readonly chains = SOLANA_CHAINS;
+  public readonly accounts = [];
+  public readonly features: RequiredFeatures;
 
-  readonly chains = SOLANA_CHAINS;
-
-  readonly accounts = [];
-
-  readonly features: RequiredFeatures;
-
-  constructor(
-    readonly name: string,
-    readonly icon: WalletIcon,
+  public constructor(
+    public readonly name: string,
+    public readonly icon: WalletIcon,
     url: string,
   ) {
     this.features = {
@@ -24,7 +21,7 @@ export class FallbackWallet implements SupportedWallet {
         version: "1.0.0",
         connect: async () => {
           window.open(url, "_blank");
-          return { accounts: [] };
+          return Promise.resolve({ accounts: [] });
         },
       },
       "solana:signTransaction": {

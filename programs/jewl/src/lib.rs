@@ -37,10 +37,7 @@ pub mod jewl {
         _exercise_allocation(ctx)
     }
 
-    pub fn withdraw_fee(ctx: Context<WithdrawFeeState>) -> Result<()> {
-        _withdraw_fee(ctx)
+    pub fn withdraw_fee(ctx: Context<WithdrawFeeState>, amount: Option<u64>) -> Result<()> {
+        _withdraw_fee(ctx, amount)
     }
-
-    // IDEA: recover funds from dangling token account without allocation account
-
 }

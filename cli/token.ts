@@ -16,7 +16,7 @@ export default async function createNonFungibleToken(): Promise<void> {
     payer: signer.publicKey,
     signTransaction: async tx => {
       tx.sign([signer, keypair]);
-      return tx;
+      return Promise.resolve(tx);
     },
   });
 

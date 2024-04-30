@@ -1,4 +1,5 @@
-import { BlockhashWithExpiryBlockHeight, ComputeBudgetProgram, Connection, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import type { BlockhashWithExpiryBlockHeight, Connection, TransactionInstruction } from "@solana/web3.js";
+import { ComputeBudgetProgram, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import base58 from "bs58";
 import { wait } from "@/core/time";
 import { clamp } from "@/core/interval";
@@ -26,7 +27,7 @@ async function getComputeLimitSuggestion(connection: Connection, instructions: A
     const transaction = new VersionedTransaction(transactionMessage);
 
     const simulation = await connection.simulateTransaction(transaction, { sigVerify: false, replaceRecentBlockhash: true });
-    if (!simulation.value.unitsConsumed) {
+    if (simulation.value.unitsConsumed == null) {
       throw new Error("Failed to simulate transaction");
     }
 
@@ -61,10 +62,10 @@ async function getComputePriceSuggestion(connection: Connection, instructions: A
 }
 
 export class TransactionError extends Error {
-  constructor(
-    public readonly error: string | {},
+  public constructor(
+    public readonly error: string | object,
     public readonly programLogs: Array<string> | null = null,
-    public readonly isSimulation: boolean = false,
+    public readonly isSimulation = false,
   ) {
     super(`${isSimulation ? "Simulation" : "Transaction"} failed: ${JSON.stringify(error)}`);
   }
@@ -84,7 +85,7 @@ export async function sendAndConfirmTransaction(props: SendAndConfirmTransaction
   const abortController = new AbortController();
 
   if (props.progress != null) {
-    new Promise<void>(async resolve => {
+    void new Promise<void>(async resolve => {
       while (!abortController.signal.aborted) {
         let progress = 1;
         if (block != null) {
@@ -142,7 +143,7 @@ export async function sendAndConfirmTransaction(props: SendAndConfirmTransaction
         continue;
       }
 
-      if (confirmedTransaction.value.err) {
+      if (confirmedTransaction.value.err != null) {
         const txInfo = await props.connection.getParsedTransaction(signature, { maxSupportedTransactionVersion: 0 });
         throw new TransactionError(confirmedTransaction.value.err, txInfo?.meta?.logMessages);
       }
