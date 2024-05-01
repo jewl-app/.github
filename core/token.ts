@@ -1,6 +1,6 @@
 import type { Account, Mint } from "@solana/spl-token";
 import { unpackAccount, unpackMint } from "@solana/spl-token";
-import type { AccountInfo, Connection, PublicKey } from "@solana/web3.js";
+import type { Connection, PublicKey } from "@solana/web3.js";
 import { getAccountsBatched } from "@/core/account";
 import { tokenProgramId } from "@/core/address";
 import { nonNull } from "./array";
