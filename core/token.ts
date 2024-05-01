@@ -1,8 +1,9 @@
 import type { Account, Mint } from "@solana/spl-token";
 import { unpackAccount, unpackMint } from "@solana/spl-token";
-import type { Connection, PublicKey } from "@solana/web3.js";
+import type { AccountInfo, Connection, PublicKey } from "@solana/web3.js";
 import { getAccountsBatched } from "@/core/account";
 import { tokenProgramId } from "@/core/address";
+import { nonNull } from "./array";
 
 export type TokenAccount = Account & Mint;
 
@@ -19,7 +20,7 @@ export async function getTokenAccount(connection: Connection, accountAddress: Pu
 export async function getTokenAccounts(connection: Connection, accountAddresses: Array<PublicKey>, programId = tokenProgramId): Promise<Array<TokenAccount | null>> {
   const accountInfos = await getAccountsBatched(connection, accountAddresses);
   const tokenAccounts = accountInfos
-    .flatMap(x => (x == null ? [] : [x]))
+    .filter(nonNull)
     .map((x, i) => unpackAccount(accountAddresses[i], x, programId));
   const mintAddresses = tokenAccounts.map(x => x.mint);
   const mintInfos = await getAccountsBatched(connection, mintAddresses);

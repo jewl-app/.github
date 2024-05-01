@@ -12,6 +12,7 @@ import { useFeeConfig } from "@/app/hooks/fee";
 import { useInterval } from "@/app/hooks/interval";
 import { getFungibleTokenAccountsForOwner } from "@/core/token";
 import { useConnection } from "@/app/hooks/connection";
+import { nonNull } from "@/core/array";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -29,7 +30,7 @@ export function useIncreaseAllocationButton(ctx: ButtonContext): ButtonSpec {
       allocation?.firstTokenMint.toBase58(),
       allocation?.secondTokenMint.toBase58(),
       allocation?.thirdTokenMint.toBase58(),
-    ].flatMap(x => (x == null ? [] : [x])));
+    ].filter(nonNull));
   }, [allocation]);
 
   const { result: tokenAccounts } = useInterval({

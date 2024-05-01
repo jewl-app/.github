@@ -1,16 +1,16 @@
-import { PublicKey } from "@solana/web3.js";
+import type { PublicKey } from "@solana/web3.js";
 import { useInterval } from "@/app/hooks/interval";
 import { useAllocations } from "@/app/hooks/allocations";
 import { useMemo } from "react";
 import { getFeeTokenAccounts } from "@/core/fee";
 import { useConnection } from "@/app/hooks/connection";
-import { TokenAccount } from "@/core/token";
+import type { TokenAccount } from "@/core/token";
 import { useIncreaseAllocationButton } from "@/app/transactions/increase";
 import { useDecreaseAllocationButton } from "@/app/transactions/decrease";
 import { useExerciseAllocationButton } from "@/app/transactions/exercise";
 import { useConfigureFeesButton } from "@/app/transactions/configure";
 import { useWithdrawFeesButton } from "@/app/transactions/withdraw";
-import { ButtonSpec } from "@/app/transactions/spec";
+import type { ButtonSpec } from "@/app/transactions/spec";
 
 interface UseDetails {
   readonly loading: boolean;
@@ -65,7 +65,7 @@ export function useDetails(nftMint?: PublicKey): UseDetails {
 
   const buttonCtx = useMemo(() => ({
     reload: () => [r1, r2].forEach(r => r()),
-    value: allocation ?? tokenAccounts
+    value: allocation ?? tokenAccounts,
   }), [r1, r2, items]);
 
   const withdrawFeesButton = useWithdrawFeesButton(buttonCtx);
@@ -76,7 +76,7 @@ export function useDetails(nftMint?: PublicKey): UseDetails {
 
   const buttons = useMemo(() => {
     if (nftMint == null) {
-      return [withdrawFeesButton, configureFeesButton ];
+      return [withdrawFeesButton, configureFeesButton];
     } else {
       return [increaseAllocationButton, decreaseAllocationButton, exerciseAllocationButton];
     }

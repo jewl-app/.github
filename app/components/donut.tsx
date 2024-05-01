@@ -1,4 +1,4 @@
-import { interval } from "@/core/interval";
+import { interval } from "@/core/array";
 import type { ReactElement } from "react";
 import { useMemo } from "react";
 import { useWindowMode } from "../hooks/mode";

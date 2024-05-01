@@ -1,6 +1,6 @@
 import type { Connection, AccountInfo } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
-import { interval } from "@/core/interval";
+import { interval } from "@/core/array";
 
 const MAX_CHUNK_SIZE = 100;
 

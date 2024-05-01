@@ -1,8 +1,8 @@
-import { range, interval, clamp } from "@/core/interval";
+import { range, interval, clamp, nonNull } from "@/core/array";
 import { describe, it } from "mocha";
 import assert from "assert";
 
-describe("interval", () => {
+describe("array", () => {
   it("Range should be properly created", () => {
     const actual = range(1, 10);
     const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -33,5 +33,12 @@ describe("interval", () => {
     assert.strictEqual(clamp(3, 2, 4), 3);
     assert.strictEqual(clamp(2, 2, 4), 2);
     assert.strictEqual(clamp(1, 2, 4), 2);
+  });
+
+  it("NonNull should filter out null and undefined values from array", () => {
+    const actual = [0, 1, null, undefined, 2, null, undefined, 3, null, undefined]
+      .filter(nonNull);
+    const expected = [0, 1, 2, 3];
+    assert.deepStrictEqual(actual, expected);
   });
 });
