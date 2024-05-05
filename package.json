@@ -18,14 +18,14 @@
     "@solana/spl-token-metadata": "^0.1.4",
     "@solana/wallet-standard-chains": "^1.1.0",
     "@solana/wallet-standard-features": "^1.2.0",
-    "@solana/web3.js": "^1.91.7",
+    "@solana/web3.js": "^1.91.8",
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
     "@wallet-standard/core": "^1.0.3",
     "bs58": "^5.0.0",
     "clsx": "^2.1.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.0",
+    "react-dom": "^18.3.1",
     "tailwindcss": "^3.4.3",
     "tweetnacl": "^1.0.3",
     "tweetnacl-util": "^0.15.1",
@@ -47,7 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "autoprefixer": "^10.4.19",
-    "eslint": "^9.1.1",
+    "eslint": "^9.2.0",
     "jsdom": "^24.0.0",
     "mocha": "^10.4.0",
     "next": "^14.2.3",
@@ -59,7 +59,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5",
-    "vercel": "^34.1.7"
+    "vercel": "^34.1.8"
   },
   "resolutions": {
     "@solana/web3.js": "^1.91.7"
