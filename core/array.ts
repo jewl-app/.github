@@ -10,3 +10,10 @@ export function range(start: number, end: number, step = 1): Array<number> {
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
+
+export function nonNull<T>(value: T | null | undefined): value is T {
+  if (value == null) {
+    return false;
+  }
+  return true;
+}

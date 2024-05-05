@@ -40,7 +40,7 @@ export default function Spinner(props: SpinnerProps): ReactElement {
   }, [props.state]);
 
   return (
-    <div role="status" className={clsx("flex flex-col gap-1", props.className)}>
+    <div role="status" className={clsx("flex flex-col items-center gap-1", props.className)}>
       <FontIcon icon={icon} className={clsx("text-emerald-600 dark:text-emerald-500", size, animation)} />
       {props.message != null ? <span className="m-2">{props.message}</span> : null}
     </div>

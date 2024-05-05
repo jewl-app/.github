@@ -1,13 +1,23 @@
 import type { PropsWithChildren, ReactElement } from "react";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { useConnection } from "@/app/hooks/connection";
 import { useInterval } from "@/app/hooks/interval";
-import type { FeeConfigAccount } from "@/core/coder";
 import { getFeeConfig } from "@/core/fee";
+import type { PublicKey } from "@solana/web3.js";
 
-export type UseFeeConfig = Partial<Pick<FeeConfigAccount, "feeAuthority" | "feeWithdrawAuthority" | "feeBps">>;
+export interface UseFeeConfig {
+  readonly feeAuthority: PublicKey | null;
+  readonly feeWithdrawAuthority: PublicKey | null;
+  readonly feeBps: number;
+  readonly reload: () => void;
+}
 
-export const FeeConfigContext = createContext<UseFeeConfig>({});
+export const FeeConfigContext = createContext<UseFeeConfig>({
+  feeAuthority: null,
+  feeWithdrawAuthority: null,
+  feeBps: 0,
+  reload: () => { /* Empty */ },
+});
 
 export function useFeeConfig(): UseFeeConfig {
   return useContext(FeeConfigContext);
@@ -16,13 +26,22 @@ export function useFeeConfig(): UseFeeConfig {
 export default function FeeConfigProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
 
-  const { result } = useInterval({
+  const { result, reload } = useInterval({
     interval: 1000 * 60 * 30, // 30 minutes
     callback: async () => getFeeConfig(connection),
   }, [connection]);
 
+  const context = useMemo(() => {
+    return {
+      feeAuthority: result?.feeAuthority ?? null,
+      feeWithdrawAuthority: result?.feeWithdrawAuthority ?? null,
+      feeBps: result?.feeBps ?? 0,
+      reload,
+    };
+  }, [result, reload]);
+
   return (
-    <FeeConfigContext.Provider value={result ?? {}}>
+    <FeeConfigContext.Provider value={context}>
       {props.children}
     </FeeConfigContext.Provider>
   );

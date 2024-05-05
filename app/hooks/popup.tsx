@@ -6,12 +6,14 @@ import Spinner from "@/app/components/spinner";
 export interface UsePopup {
   openPopup: (node: ReactElement, closeOnBackground?: boolean) => void;
   closePopup: () => void;
+  setCloseOnBackground: (closesOnBackground: boolean) => void;
   readonly popup: ReactElement | null;
 }
 
 export const PopupContext = createContext<UsePopup>({
   openPopup: () => { /* Empty */ },
   closePopup: () => { /* Empty */ },
+  setCloseOnBackground: () => { /* Empty */ },
   popup: null,
 });
 
@@ -60,8 +62,8 @@ export default function PopupProvider(props: PropsWithChildren): ReactElement {
   }, [popup, closeOnBackground]);
 
   const context = useMemo(() => {
-    return { openPopup, closePopup, popup };
-  }, [openPopup, closePopup, popup]);
+    return { openPopup, closePopup, setCloseOnBackground, popup };
+  }, [openPopup, closePopup, setCloseOnBackground, popup]);
 
   return (
     <PopupContext.Provider value={context}>

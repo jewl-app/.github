@@ -17,8 +17,8 @@ use crate::instructions::withdraw_fee::{WithdrawFeeState, withdraw_fee as _withd
 pub mod jewl {
     use super::*;
 
-    pub fn initialize_fee(ctx: Context<InitializeFeeState>, fee_bps: u16, withdraw_authority: Option<Pubkey>) -> Result<()> {
-        _initialize_fee(ctx, fee_bps, withdraw_authority)
+    pub fn initialize_fee(ctx: Context<InitializeFeeState>, fee_bps: Option<u16>, fee_authority: Option<Pubkey>, fee_withdraw_authority: Option<Pubkey>) -> Result<()> {
+        _initialize_fee(ctx, fee_bps, fee_authority, fee_withdraw_authority)
     }
 
     pub fn initialize_allocation(ctx: Context<InitializeAllocationState>, decrease_athority: Option<Pubkey>) -> Result<()> {

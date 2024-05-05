@@ -21,7 +21,7 @@ export default function Connect(): ReactElement {
   const buttons = useMemo(() => {
     return wallets.map(wallet => {
       return (
-        <Button className="m-2 basis-5/12" key={wallet.name} onClick={() => { connectWallet(wallet); }}>
+        <Button outerClassName="m-2 basis-5/12" key={wallet.name} onClick={() => { connectWallet(wallet); }}>
           <div className="pt-2 flex flex-col items-center bg-slate-100 bg-opacity-50 dark:bg-opacity-10 rounded-lg">
             <Image className="rounded-lg" src={wallet.icon} alt={`${wallet.name} logo`} width={32} height={32} />
             <span className="text-center w-full font-bold py-2 px-4">{wallet.name}</span>

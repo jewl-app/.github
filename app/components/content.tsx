@@ -41,11 +41,11 @@ export default function Content(): ReactElement {
         setContent(<List allocations={allocations} />);
       }
     }
-  }, [query, publicKey]);
+  }, [query, publicKey, allocations, path, router]);
 
   return (
     <div className="flex flex-1 items-center justify-center w-screen overflow-y-auto">
-      <div className="max-w-lg w-screen h-full flex flex-col">
+      <div className="relative max-w-lg w-screen h-full flex flex-col items-center gap-4">
         {content}
       </div>
     </div>

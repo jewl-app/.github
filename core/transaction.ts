@@ -2,7 +2,7 @@ import type { BlockhashWithExpiryBlockHeight, Connection, TransactionInstruction
 import { ComputeBudgetProgram, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import base58 from "bs58";
 import { wait } from "@/core/time";
-import { clamp } from "@/core/interval";
+import { clamp } from "@/core/array";
 
 export type TransactionStep = "preparing" | "signing" | "sending" | "confirming";
 export type ProgressHandler = (step: TransactionStep, expiry: number) => void;
@@ -67,7 +67,14 @@ export class TransactionError extends Error {
     public readonly programLogs: Array<string> | null = null,
     public readonly isSimulation = false,
   ) {
-    super(`${isSimulation ? "Simulation" : "Transaction"} failed: ${JSON.stringify(error)}`);
+    super(
+      [
+        isSimulation ? "Simulation" : "Transaction",
+        "failed:",
+        JSON.stringify(error),
+        programLogs?.join("\n") ?? "",
+      ].join(" "),
+    );
   }
 }
 
