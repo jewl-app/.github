@@ -35,7 +35,7 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.3",
     "@next/eslint-plugin-next": "^14.2.3",
-    "@stylistic/eslint-plugin": "^1.8.0",
+    "@stylistic/eslint-plugin": "^1.8.1",
     "@testing-library/react": "^15.0.7",
     "@types/bn.js": "^5.1.5",
     "@types/jsdom": "^21.1.6",
