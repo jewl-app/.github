@@ -8,7 +8,7 @@ import { convertIdlToCamelCase } from "@coral-xyz/anchor/dist/cjs/idl";
 
 const coder = new BorshAccountsCoder(convertIdlToCamelCase(idl as Idl));
 
-type WithAddress<T> = {
+export type WithAddress<T> = {
   readonly address: PublicKey;
 } & T;
 

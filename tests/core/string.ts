@@ -1,19 +1,54 @@
-import { stripNonDigits, formatLargeNumber, formatPriceDelta } from "@/core/string";
+import { stripNonDigits, formatLargeNumber, formatPriceDelta, stripCharacters } from "@/core/string";
 import { describe, it } from "mocha";
 import assert from "assert";
 
 describe("string", () => {
+  it("Should strip characters from a string", () => {
+    const input = "abwowioaaj20389rj29o3j";
+    const expected = "abaa33";
+    const actual = stripCharacters(input, "ab3");
+    assert.strictEqual(actual, expected);
+  });
+
+  it("Should strip characters from a string with array", () => {
+    const input = "abwowioaaj20389rj29o3j";
+    const expected = "abaa33";
+    const actual = stripCharacters(input, ["a", "b", "3"]);
+    assert.strictEqual(actual, expected);
+  });
+
+  it("Should strip characters from a string with set", () => {
+    const input = "abwowioaaj20389rj29o3j";
+    const expected = "abaa33";
+    const actual = stripCharacters(input, new Set(["a", "b", "3"]));
+    assert.strictEqual(actual, expected);
+  });
+
   it("Should strip non-numeric characters from a string", () => {
-    const input = "1a23456ab7890a.4185";
-    const expected = "12345678904185";
+    const input = "-1a23456ab7890a.4185";
+    const expected = "-1234567890.4185";
     const actual = stripNonDigits(input);
     assert.strictEqual(actual, expected);
   });
 
-  it("Should strip non-numeric a large number with decimal", () => {
-    const input = "1a23456ab7890a.4185";
+  it("Should strip non-numeric characters without decimals", () => {
+    const input = "-1a23456ab7890a.4185";
+    const expected = "-12345678904185";
+    const actual = stripNonDigits(input, { allowDecimal: false });
+    assert.strictEqual(actual, expected);
+  });
+
+  it("Should strip non-numeric characters without negative", () => {
+    const input = "-1a23456ab7890a.4185";
     const expected = "1234567890.4185";
-    const actual = stripNonDigits(input, true);
+    const actual = stripNonDigits(input, { allowNegative: false });
+    assert.strictEqual(actual, expected);
+  });
+
+  it("Should strip an empty string", () => {
+    const input = "";
+    const expected = "";
+    const actual = stripNonDigits(input);
     assert.strictEqual(actual, expected);
   });
 

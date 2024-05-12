@@ -7,29 +7,38 @@ import Spinner from "@/app/components/spinner";
 import FontIcon from "@/app/components/font";
 import Button from "@/app/components/button";
 import clsx from "clsx";
+import { useTokenPrices } from "@/app/hooks/price";
+import { toNumber } from "@/core/number";
+import type { TokenAccount } from "@/core/token";
+import { useTokenMetadata } from "@/app/hooks/meta";
 
 interface AllocationProps {
   nftMint?: PublicKey;
 }
 
+function tokenValue(account: TokenAccount, price: (mint: TokenAccount) => number | null): number {
+  return toNumber(account.amount, account.decimals) * (price(account) ?? 0);
+}
+
 export default function AllocationDetails(props: AllocationProps): ReactElement {
   const { items, buttons, loading } = useDetails(props.nftMint);
+  const mints = useMemo(() => items?.map(t => t.mint) ?? [], [items]);
+  const { price } = useTokenPrices(mints);
+  const { name, symbol } = useTokenMetadata(mints);
 
   const donutItems = useMemo(() => {
-    // TODO: prices, token metadata
     return new Map(items?.map(t => [
-      t.mint.toBase58(),
-      Number(t.amount),
+      `${name(t)} (${symbol(t)})`,
+      tokenValue(t, price),
     ]));
-  }, [items]);
+  }, [items, name, price, symbol]);
 
   const totalValue = useMemo(() => {
-    // TODO: prices
-    return items?.reduce((acc, t) => acc + Number(t.amount), 0);
-  }, [items]);
+    return items?.reduce((acc, t) => acc + tokenValue(t, price), 0);
+  }, [items, price]);
 
   const buttonElements = useMemo(() => {
-    // TODO: Tooltip on hover disable?
+    // TODO: Tooltip on hover if button is disabled?
     return buttons.map(button => (
       <Button
         key={button.label}

@@ -5,6 +5,8 @@ import type { PropsWithChildren, ReactElement } from "react";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { SupportedWallet } from "@/app/utility/wallet";
 import { FallbackWallet, backpackIcon, phantomIcon, solflareIcon } from "@/app/utility/wallet";
+import { useAnalytics } from "@/app/hooks/analytics";
+import { useStatic } from "@/app/hooks/static";
 
 export interface UseWallet {
   readonly wallets: Array<SupportedWallet>;
@@ -36,10 +38,12 @@ const filterSupportedWallets = (wallets: ReadonlyArray<Wallet>): Array<Supported
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 const { on, get } = getWallets();
+const lastWalletLocalStorageKey = "last_connected_wallet";
 
 export default function WalletProvider(props: PropsWithChildren): ReactElement {
   const [wallet, setWallet] = useState<SupportedWallet | null>(null);
   const [supportedWallets, setSupportedWallets] = useState(filterSupportedWallets(get()));
+  const { logError } = useAnalytics();
 
   useEffect(() => {
     const listeners = [
@@ -87,6 +91,22 @@ export default function WalletProvider(props: PropsWithChildren): ReactElement {
       fallbackWallets.push(new FallbackWallet("Get Backpack", backpackIcon, "https://backpack.app/"));
     }
     return [...supportedWallets, ...fallbackWallets];
+  }, [supportedWallets]);
+
+  useEffect(() => {
+    if (wallet == null) { return; }
+    localStorage.setItem(lastWalletLocalStorageKey, wallet.name);
+  }, [wallet]);
+
+  const staticWallet = useStatic(wallet);
+  useEffect(() => {
+    if (staticWallet != null) { return; }
+    const lastConnectedWalletName = localStorage.getItem(lastWalletLocalStorageKey);
+    if (lastConnectedWalletName == null) { return; }
+    const lastConnectedWallet = supportedWallets.find(x => x.name === lastConnectedWalletName);
+    if (lastConnectedWallet == null) { return; }
+    connect(lastConnectedWallet)
+      .catch(logError);
   }, [supportedWallets]);
 
   const context = useMemo(() => ({

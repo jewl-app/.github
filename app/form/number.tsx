@@ -22,10 +22,11 @@ interface FormFieldNumberProps {
 }
 
 export default function FormFieldNumber(props: FormFieldNumberProps): ReactElement {
+  const decimals = props.fieldProps.decimals ?? 0;
 
   const onChange = useCallback((value: string) => {
-    const noDecimals = props.fieldProps.decimals === 0 || props.fieldProps.decimals == null;
-    const numberString = stripNonDigits(value, !noDecimals);
+    const noDecimals = props.fieldProps.decimals === 0;
+    const numberString = stripNonDigits(value, { allowDecimal: !noDecimals });
     const maximum = props.fieldProps.max ?? Number.POSITIVE_INFINITY;
     const minimum = props.fieldProps.min ?? Number.NEGATIVE_INFINITY;
     const number = Math.max(Math.min(Number(numberString), maximum), minimum);
@@ -33,7 +34,6 @@ export default function FormFieldNumber(props: FormFieldNumberProps): ReactEleme
   }, [props.fieldProps.decimals, props.onChange]);
 
   const innerProps = useMemo(() => {
-    const decimals = props.fieldProps.decimals ?? 0;
     return {
       type: "text",
       value: props.fieldProps.value?.toFixed(decimals),

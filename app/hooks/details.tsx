@@ -1,7 +1,7 @@
 import type { PublicKey } from "@solana/web3.js";
 import { useInterval } from "@/app/hooks/interval";
 import { useAllocations } from "@/app/hooks/allocations";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { getFeeTokenAccounts } from "@/core/fee";
 import { useConnection } from "@/app/hooks/connection";
 import type { TokenAccount } from "@/core/token";
@@ -63,16 +63,12 @@ export function useDetails(nftMint?: PublicKey): UseDetails {
     return null;
   }, [nftMint, allocation, tokenAccounts]);
 
-  const buttonCtx = useMemo(() => ({
-    reload: () => [r1, r2].forEach(r => r()),
-    value: allocation ?? tokenAccounts,
-  }), [r1, r2, items]);
-
-  const withdrawFeesButton = useWithdrawFeesButton(buttonCtx);
-  const configureFeesButton = useConfigureFeesButton(buttonCtx);
-  const increaseAllocationButton = useIncreaseAllocationButton(buttonCtx);
-  const decreaseAllocationButton = useDecreaseAllocationButton(buttonCtx);
-  const exerciseAllocationButton = useExerciseAllocationButton(buttonCtx);
+  const reload = useCallback(() => [r1, r2].forEach(r => r()), [r1, r2]);
+  const withdrawFeesButton = useWithdrawFeesButton({ reload, value: tokenAccounts });
+  const configureFeesButton = useConfigureFeesButton({ reload, value: tokenAccounts });
+  const increaseAllocationButton = useIncreaseAllocationButton({ reload, value: allocation });
+  const decreaseAllocationButton = useDecreaseAllocationButton({ reload, value: allocation });
+  const exerciseAllocationButton = useExerciseAllocationButton({ reload, value: allocation });
 
   const buttons = useMemo(() => {
     if (nftMint == null) {
@@ -82,7 +78,7 @@ export function useDetails(nftMint?: PublicKey): UseDetails {
     }
   }, [nftMint, withdrawFeesButton, configureFeesButton, increaseAllocationButton, decreaseAllocationButton, exerciseAllocationButton]);
 
-  const loading = [l1, l2, l3].some(l => l);
+  const loading = useMemo(() => [l1, l2, l3].some(l => l), [l1, l2, l3]);
 
   return { loading, items, buttons };
 }

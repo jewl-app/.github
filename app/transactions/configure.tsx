@@ -1,6 +1,6 @@
 import { faCogs } from "@fortawesome/free-solid-svg-icons";
 import { PublicKey } from "@solana/web3.js";
-import type { ButtonSpec, ButtonContext } from "@/app/transactions/spec";
+import type { ButtonSpec, TreasuryButtonContext } from "@/app/transactions/spec";
 import dynamic from "next/dynamic";
 import { useFeeConfig } from "@/app/hooks/fee";
 import { useWallet } from "@/app/hooks/wallet";
@@ -14,7 +14,7 @@ import { useTransaction } from "@/app/hooks/transaction";
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
 
-export function useConfigureFeesButton(_ctx: ButtonContext): ButtonSpec {
+export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec {
   const { publicKey } = useWallet();
   const { feeAuthority, feeWithdrawAuthority, feeBps } = useFeeConfig();
   const { openPopup } = usePopup();
@@ -25,11 +25,11 @@ export function useConfigureFeesButton(_ctx: ButtonContext): ButtonSpec {
     if (publicKey == null) {
       throw new Error("No wallet");
     }
-    const newWithdrawAuthority = fields[1].value as string;
+    const newWithdrawAuthority = fields[1].value as PublicKey;
     const newFeeBps = fields[2].value as number;
     const instruction = createInitializeFeeInstruction({
       payer: publicKey,
-      feeWithdrawAuthority: new PublicKey(newWithdrawAuthority),
+      feeWithdrawAuthority: newWithdrawAuthority,
       feeBps: newFeeBps,
     });
     const hash = await sendTransaction([instruction]);
@@ -46,6 +46,7 @@ export function useConfigureFeesButton(_ctx: ButtonContext): ButtonSpec {
     openPopup(
       <Form
         title="Configure fees"
+        subtitle="Update the fee configuration for the jewl program."
         button="Save"
         fields={fields}
         onComplete={formCompletion}

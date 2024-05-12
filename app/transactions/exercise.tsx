@@ -1,5 +1,5 @@
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
-import type { AllocationButtonContext, ButtonContext, ButtonSpec } from "@/app/transactions/spec";
+import type { AllocationButtonContext, ButtonSpec } from "@/app/transactions/spec";
 import dynamic from "next/dynamic";
 import { useWallet } from "@/app/hooks/wallet";
 import { usePopup } from "@/app/hooks/popup";
@@ -14,8 +14,8 @@ import { shortAddress } from "@/core/address";
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
 
-export function useExerciseAllocationButton(ctx: ButtonContext): ButtonSpec {
-  const { value: allocation } = ctx as AllocationButtonContext;
+export function useExerciseAllocationButton(ctx: AllocationButtonContext): ButtonSpec {
+  const { value: allocation } = ctx;
   const { publicKey } = useWallet();
   const { openPopup } = usePopup();
   const { allocations } = useAllocations();
@@ -78,10 +78,10 @@ export function useExerciseAllocationButton(ctx: ButtonContext): ButtonSpec {
     const fields: Array<FormFieldMeta> = Array.from(tokenMap.keys()).map((x, i) => ({
       type: "info", title: `Token ${i + 1} - ${shortAddress(x)}`, value: amountMap.get(x)?.toString(),
     }));
-    // TODO: some warning about tax implications?
     openPopup(
       <Form
-        title="Decrease allocation"
+        title="Exercise allocation"
+        subtitle="Exchange your jewl nft for the allocated tokens. Exercising might have tax implications."
         button="Continue"
         fields={fields}
         onComplete={formCompletion}

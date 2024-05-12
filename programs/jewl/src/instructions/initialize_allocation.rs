@@ -37,7 +37,7 @@ pub fn initialize_allocation(ctx: Context<InitializeAllocationState>, authority:
     let bump = Pubkey::find_program_address(&[FeeConfigAccount::seed()], &id()).1;
     let signer: SeedSigner = &[&[FeeConfigAccount::seed(), &[bump]]];
 
-    // TODO: mint close authoirty must be the fee config
+    // Mint close authoirty must be the fee config
     let mint_info = ctx.accounts.nft_mint.to_account_info();
     let mint_data = mint_info.try_borrow_data()?;
     let mint_state = StateWithExtensions::<StateMint>::unpack(&mint_data)?;

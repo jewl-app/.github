@@ -5,6 +5,7 @@ import idl from "@/target/idl/jewl.json";
 
 export { tokenExtensionsProgramId, tokenProgramId, associatedTokenProgramId };
 export const systemProgramId = SystemProgram.programId;
+export const metadataProgramId = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
 
 export const solMint = new PublicKey("So11111111111111111111111111111111111111112");
 export const usdcMint = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
@@ -22,6 +23,11 @@ export const feeConfigAddress = PublicKey.findProgramAddressSync([Buffer.from("f
 export function allocationAddress(nftMint: PublicKey): PublicKey {
   const seeds = [Buffer.from("allocation"), nftMint.toBuffer()];
   return PublicKey.findProgramAddressSync(seeds, jewlProgramId)[0];
+}
+
+export function metadataAddress(mint: PublicKey): PublicKey {
+  const seeds = [Buffer.from("metadata"), metadataProgramId.toBuffer(), mint.toBuffer()];
+  return PublicKey.findProgramAddressSync(seeds, metadataProgramId)[0];
 }
 
 export function shortAddress(publicKey?: PublicKey | string | null, chars = 4): string {
