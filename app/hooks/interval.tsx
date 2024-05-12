@@ -1,5 +1,5 @@
 import type { DependencyList } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAnalytics } from "@/app/hooks/analytics";
 
 interface UseInterval<T> {
@@ -19,6 +19,13 @@ export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyL
   const [counter, setCounter] = useState<number>(0);
   const { logError } = useAnalytics();
 
+  const interval = useMemo(() => {
+    if (props.interval == null) {
+      return 1000;
+    }
+    return props.interval * 1000;
+  }, [props.interval]);
+
   const handler = useCallback(() => {
     const maybePromise = props.callback();
     if (maybePromise instanceof Promise) {
@@ -33,11 +40,11 @@ export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyL
   }, [setLoading, counter, ...deps]);
 
   useEffect(() => {
-    const id = setInterval(handler, props.interval ?? 1000);
+    const id = setInterval(handler, interval ?? 1000);
     setResult(null);
     handler();
     return () => { clearInterval(id); };
-  }, [props.interval, handler, setResult, logError]);
+  }, [interval, handler, setResult, logError]);
 
   const reload = useCallback(() => {
     setCounter(c => c + 1);

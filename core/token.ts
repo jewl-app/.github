@@ -3,7 +3,7 @@ import { unpackAccount, unpackMint } from "@solana/spl-token";
 import type { Connection, PublicKey } from "@solana/web3.js";
 import { getAccountsBatched } from "@/core/account";
 import { tokenProgramId } from "@/core/address";
-import { nonNull } from "./array";
+import { nonNull } from "@/core/array";
 
 export type TokenAccount = Account & Mint;
 

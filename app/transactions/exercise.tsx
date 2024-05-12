@@ -10,6 +10,8 @@ import type { FormFieldMeta } from "@/app/form/field";
 import { createExerciseAllocationInstruction } from "@/core/instruction";
 import { useTransaction } from "@/app/hooks/transaction";
 import { shortAddress } from "@/core/address";
+import { nonNull } from "@/core/array";
+import { useTokenMetadata } from "@/app/hooks/meta";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -57,6 +59,14 @@ export function useExerciseAllocationButton(ctx: AllocationButtonContext): Butto
     return map;
   }, [allocation]);
 
+  const tokenMints = useMemo(() => [
+    allocation?.firstTokenMint,
+    allocation?.secondTokenMint,
+    allocation?.thirdTokenMint,
+  ].filter(nonNull), [tokenMap]);
+
+  const { symbol } = useTokenMetadata(tokenMints);
+
   const formCompletion = useCallback(async () => {
     if (publicKey == null || allocation == null) {
       throw new Error("No wallet");
@@ -69,14 +79,13 @@ export function useExerciseAllocationButton(ctx: AllocationButtonContext): Butto
       thirdTokenMint: allocation.thirdTokenMint,
     });
     const hash = await sendTransaction([instruction]);
-    // TODO: page will no longer exist? cause allocation does not exist
+    // FIXME: page will no longer exist? cause allocation does not exist
     return hash;
   }, [publicKey, allocation, sendTransaction]);
 
   const openForm = useCallback(() => {
-    // TODO: \/ token meta name and symbol suffix
-    const fields: Array<FormFieldMeta> = Array.from(tokenMap.keys()).map((x, i) => ({
-      type: "info", title: `Token ${i + 1} - ${shortAddress(x)}`, value: amountMap.get(x)?.toString(),
+    const fields: Array<FormFieldMeta> = Array.from(tokenMap.keys()).map(x => ({
+      type: "info", title: `${symbol(x)} (${shortAddress(x)})`, value: amountMap.get(x)?.toString(),
     }));
     openPopup(
       <Form
@@ -89,10 +98,12 @@ export function useExerciseAllocationButton(ctx: AllocationButtonContext): Butto
     );
   }, [tokenMap, openPopup, formCompletion]);
 
+  const enabled = ownedAllocations.has(allocationAddress);
+
   return {
     icon: faCoins,
     label: "Exchange",
-    enabled: ownedAllocations.has(allocationAddress),
+    disabled: enabled ? false : "Connect using the wallet that owns this allocation.",
     onClick: () => {
       if (publicKey == null) {
         openPopup(<Connect />);

@@ -1,9 +1,10 @@
 import type { ReactElement, ChangeEvent } from "react";
 import { useCallback, useMemo } from "react";
 
+
 export interface FormFieldChoiceMeta {
   readonly type: "choice";
-  readonly options: Array<string>;
+  readonly options: Record<string, string>;
   readonly value?: string;
   readonly required?: boolean;
 }
@@ -20,8 +21,8 @@ export default function FormFieldChoice(props: FormFieldChoiceProps): ReactEleme
   }, [props.onChange]);
 
   const options = useMemo(() => {
-    return props.fieldProps.options.map(option => {
-      return <option key={option} value={option}>{option}</option>;
+    return Object.entries(props.fieldProps.options).map(([id, value]) => {
+      return <option key={id} value={id}>{value}</option>;
     });
   }, [props.fieldProps.options, props.fieldProps.value, onChange]);
 

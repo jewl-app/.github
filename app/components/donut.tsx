@@ -1,7 +1,7 @@
 import { interval } from "@/core/array";
 import type { ReactElement } from "react";
 import { useMemo } from "react";
-import { useWindowMode } from "../hooks/mode";
+import { useWindowMode } from "@/app/hooks/mode";
 import clsx from "clsx";
 
 interface DonutChartProps {

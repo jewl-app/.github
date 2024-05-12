@@ -27,7 +27,7 @@ export default function FeeConfigProvider(props: PropsWithChildren): ReactElemen
   const { connection } = useConnection();
 
   const { result, reload } = useInterval({
-    interval: 1000 * 60 * 30, // 30 minutes
+    interval: 60 * 30, // 30 minutes
     callback: async () => getFeeConfig(connection),
   }, [connection]);
 

@@ -7,8 +7,7 @@ interface AllocationListProps {
 }
 
 export default function AllocationList(props: AllocationListProps): ReactElement {
-  // TODO:
-  // list of allocations for the current wallet.
+  // TODO: list of allocations for the current wallet.
   // button to create a new allocation
 
   // Show them as cards?

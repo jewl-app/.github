@@ -11,6 +11,7 @@ import { useTokenPrices } from "@/app/hooks/price";
 import { toNumber } from "@/core/number";
 import type { TokenAccount } from "@/core/token";
 import { useTokenMetadata } from "@/app/hooks/meta";
+import type { ButtonSpec } from "@/app/transactions/spec";
 
 interface AllocationProps {
   nftMint?: PublicKey;
@@ -18,6 +19,16 @@ interface AllocationProps {
 
 function tokenValue(account: TokenAccount, price: (mint: TokenAccount) => number | null): number {
   return toNumber(account.amount, account.decimals) * (price(account) ?? 0);
+}
+
+function buttonDisabled(spec: ButtonSpec): boolean {
+  if (spec.disabled == null) {
+    return false;
+  }
+  if (typeof spec.disabled === "string") {
+    return true;
+  }
+  return spec.disabled;
 }
 
 export default function AllocationDetails(props: AllocationProps): ReactElement {
@@ -38,18 +49,18 @@ export default function AllocationDetails(props: AllocationProps): ReactElement 
   }, [items, price]);
 
   const buttonElements = useMemo(() => {
-    // TODO: Tooltip on hover if button is disabled?
     return buttons.map(button => (
       <Button
         key={button.label}
         className="flex flex-col items-center"
         onClick={button.onClick}
-        disabled={!button.enabled}
+        disabled={buttonDisabled(button)}
+        title={typeof button.disabled === "string" ? button.disabled : undefined}
       >
         <FontIcon icon={button.icon} className={clsx(
           "w-10 h-10 p-2 rounded-full border-2",
-          button.enabled ? "text-emerald-600 dark:text-emerald-500" : "text-slate-600 dark:text-slate-400",
-          button.enabled ? "border-emerald-600 dark:border-emerald-500" : "border-slate-600 dark:border-slate-400",
+          !buttonDisabled(button) ? "text-emerald-600 dark:text-emerald-500" : "text-slate-600 dark:text-slate-400",
+          !buttonDisabled(button) ? "border-emerald-600 dark:border-emerald-500" : "border-slate-600 dark:border-slate-400",
         )} />
         <span className="text-sm">{button.label}</span>
       </Button>

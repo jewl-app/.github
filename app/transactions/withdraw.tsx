@@ -9,6 +9,8 @@ import { createWithdrawFeeInstruction } from "@/core/instruction";
 import { useCallback, useMemo } from "react";
 import type { FormFieldMeta } from "@/app/form/field";
 import { useTransaction } from "@/app/hooks/transaction";
+import { shortAddress } from "@/core/address";
+import { useTokenMetadata } from "@/app/hooks/meta";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -51,9 +53,15 @@ export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
     return Promise.resolve(newFields);
   }, [tokenMap]);
 
+  const { symbol } = useTokenMetadata(tokenAccounts ?? []);
+
   const openForm = useCallback(() => {
-    // TODO: \/ token meta name and symbol suffix
-    const options = tokenAccounts?.map(x => x.mint.toBase58()) ?? [];
+    const options = Object.fromEntries(
+      tokenAccounts?.map(x => [
+        x.mint.toBase58(),
+        `${symbol(x)} (${shortAddress(x.mint)})`,
+      ]) ?? [],
+    );
     const fields: Array<FormFieldMeta> = [
       { type: "choice", title: "Token", options: options, required: true },
       { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
@@ -71,12 +79,14 @@ export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
   }, [tokenAccounts, editForm, openPopup, formCompletion]);
 
   const correctPublicKey = publicKey == null || publicKey.equals(feeAuthority ?? PublicKey.default);
+  const correctPublicKeyDisabled = correctPublicKey ? null : "Connect using the fee withdraw authority to withdraw fees.";
   const hasTokenAccounts = tokenMap.size > 0;
+  const hasTokenAccountsDisabled = hasTokenAccounts ? null : "No token accounts to withdraw from.";
 
   return {
     icon: faChevronDown,
     label: "Withdraw",
-    enabled: correctPublicKey && hasTokenAccounts,
+    disabled: correctPublicKeyDisabled ?? hasTokenAccountsDisabled ?? false,
     onClick: () => {
       if (publicKey == null) {
         openPopup(<Connect />);

@@ -1,6 +1,6 @@
 import type { PublicKey } from "@solana/web3.js";
 import { transactionUrl, accountUrl } from "@/core/link";
-import { shortAddress } from "./address";
+import { shortAddress } from "@/core/address";
 
 export function link(str: string, url: string): string {
   return `\u{1b}]8;;${url}\u{7}${str}\u{1b}]8;;\u{7}`;

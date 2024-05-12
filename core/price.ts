@@ -15,7 +15,8 @@ export async function getTokenPrices(mints: Array<string>): Promise<Map<string, 
   if (mints.length === 0) {
     return new Map();
   }
-  const ids = mints.join(",");
+  // Limit to 100 mints
+  const ids = mints.slice(0, 100).join(",");
   const response = await fetch(`${baseUrl}?ids=${ids}`);
   const data = await response.json() as JupiterPriceResponse;
   const prices = new Map<string, number>();

@@ -9,6 +9,9 @@ import type { Mint } from "@solana/spl-token";
 import { createDecreaseAllocationInstruction } from "@/core/instruction";
 import type { FormFieldMeta } from "@/app/form/field";
 import { useTransaction } from "@/app/hooks/transaction";
+import { shortAddress } from "@/core/address";
+import { useTokenMetadata } from "@/app/hooks/meta";
+import { nonNull } from "@/core/array";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -47,6 +50,14 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
     return map;
   }, [allocation]);
 
+  const tokenMints = useMemo(() => [
+    allocation?.firstTokenMint,
+    allocation?.secondTokenMint,
+    allocation?.thirdTokenMint,
+  ].filter(nonNull), [tokenMap]);
+
+  const { symbol } = useTokenMetadata(tokenMints);
+
   const formCompletion = useCallback(async (fields: Array<FormFieldMeta>) => {
     if (publicKey == null || allocation == null) {
       throw new Error("No wallet");
@@ -76,8 +87,12 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
   }, [amountMap]);
 
   const openForm = useCallback(() => {
-    // TODO: \/ token meta name and symbol suffix
-    const options = Array.from(tokenMap.keys());
+    const options = Object.fromEntries(
+      Array.from(tokenMap.entries()).map(([key]) => [
+        key,
+        `${symbol(key)} (${shortAddress(key)})`,
+      ]),
+    );
     const fields: Array<FormFieldMeta> = [
       { type: "choice", title: "Token", options: options, required: true },
       { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
@@ -96,12 +111,14 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
 
 
   const correctPublicKey = publicKey == null || publicKey.equals(allocation?.decreaseAuthority ?? PublicKey.default);
+  const correctPublicKeyDisabled = correctPublicKey ? null : "Connect using the decrease authority of this allocation to decrease the allocation.";
   const hasTokenAccounts = tokenMap.size > 0;
+  const hasTokenAccountsDisabled = hasTokenAccounts ? null : "No token accounts available to decrease the allocation.";
 
   return {
     icon: faMinus,
     label: "Decrease",
-    enabled: correctPublicKey && hasTokenAccounts,
+    disabled: correctPublicKeyDisabled ?? hasTokenAccountsDisabled ?? false,
     onClick: () => {
       if (publicKey == null) {
         openPopup(<Connect />);

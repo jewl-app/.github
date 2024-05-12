@@ -24,7 +24,7 @@ export default function BalanceProvider(props: PropsWithChildren): ReactElement 
   const { publicKey } = useWallet();
 
   const { loading, result } = useInterval({
-    interval: 1000 * 30, // 30 seconds,
+    interval: 30, // 30 seconds,
     callback: async () => {
       if (publicKey == null) {
         return 0;

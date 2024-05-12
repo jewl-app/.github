@@ -14,6 +14,7 @@ import { getFungibleTokenAccountsForOwner } from "@/core/token";
 import { useConnection } from "@/app/hooks/connection";
 import { nonNull } from "@/core/array";
 import { useTokenMetadata } from "@/app/hooks/meta";
+import { shortAddress } from "@/core/address";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -35,7 +36,7 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
   }, [allocation]);
 
   const { result: tokenAccounts } = useInterval({
-    interval: 1000 * 30, // 30 seconds
+    interval: 30, // 30 seconds
     callback: async () => {
       if (publicKey == null) {
         return [];
@@ -90,8 +91,12 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
   }, [tokenMap, feeBps]);
 
   const openForm = useCallback(() => {
-    // TODO: \/ token meta name and symbol suffixes
-    const options = Array.from(tokenMap.keys());
+    const options = Object.fromEntries(
+      Array.from(tokenMap.entries()).map(([key]) => [
+        key,
+        `${symbol(key)} (${shortAddress(key)})`,
+      ]),
+    );
     const fields: Array<FormFieldMeta> = [
       { type: "choice", title: "Token", options: options, required: true },
       { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
@@ -112,7 +117,6 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
   return {
     icon: faPlus,
     label: "Increase",
-    enabled: true,
     onClick: () => {
       if (publicKey == null) {
         openPopup(<Connect />);

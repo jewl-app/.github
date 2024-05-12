@@ -28,7 +28,7 @@ export default function AllocationProvider(props: PropsWithChildren): ReactEleme
   const { publicKey } = useWallet();
 
   const { loading, result } = useInterval({
-    interval: 1000 * 30, // 30 seconds,
+    interval: 30, // 30 seconds
     callback: async () => {
       if (publicKey == null) {
         return [];

@@ -3,6 +3,7 @@ import type { PublicKey } from "@solana/web3.js";
 import { useInterval } from "@/app/hooks/interval";
 import { getTokenPrices } from "@/core/price";
 import { useCallback, useMemo } from "react";
+import { memCache } from "@/core/cache";
 
 type TokenPriceType = Mint | Account | PublicKey | string;
 
@@ -24,17 +25,14 @@ function priceKey(mint: TokenPriceType): string {
 }
 
 export function useTokenPrices(mints: Array<TokenPriceType>): UsePrices {
-  if (mints.length > 100) {
-    throw new Error("Too many mints");
-  }
-
   const mappedMints = useMemo(() => mints.map(priceKey), [mints]);
 
   const { loading, result: priceMap } = useInterval({
-    interval: 1000 * 60 * 5, // 5 minutes
-    callback: async () => {
-      return getTokenPrices(mappedMints);
-    },
+    interval: 60 * 5, // 5 minutes
+    callback: async () => memCache({
+      key: "token-prices",
+      handler: async () => getTokenPrices(mappedMints),
+    }),
   }, [mappedMints]);
 
   const price = useCallback((mint: TokenPriceType) => {
