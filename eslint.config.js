@@ -78,6 +78,7 @@ module.exports = [
       "@typescript-eslint/explicit-function-return-type": ["error", { allowExpressions: true }],
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
       "@typescript-eslint/array-type": ["error", { default: "generic", readonly: "generic" }],
+      "@typescript-eslint/no-restricted-imports": ["error", { patterns: [".*"] }],
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/naming-convention": "off",
       "@typescript-eslint/space-before-function-paren": "off",

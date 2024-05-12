@@ -6,7 +6,7 @@ import { useFeeConfig } from "@/app/hooks/fee";
 import { useWallet } from "@/app/hooks/wallet";
 import { usePopup } from "@/app/hooks/popup";
 import { useCallback } from "react";
-import type { FormFieldMeta } from "../form/field";
+import type { FormFieldMeta } from "@/app/form/field";
 import { shortAddress } from "@/core/address";
 import { createInitializeFeeInstruction } from "@/core/instruction";
 import { useTransaction } from "@/app/hooks/transaction";

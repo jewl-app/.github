@@ -10,7 +10,7 @@ import { createDecreaseAllocationInstruction } from "@/core/instruction";
 import type { FormFieldMeta } from "@/app/form/field";
 import { useTransaction } from "@/app/hooks/transaction";
 import { shortAddress } from "@/core/address";
-import { useTokenMetadata } from "../hooks/meta";
+import { useTokenMetadata } from "@/app/hooks/meta";
 import { nonNull } from "@/core/array";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));

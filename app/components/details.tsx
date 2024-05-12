@@ -11,7 +11,7 @@ import { useTokenPrices } from "@/app/hooks/price";
 import { toNumber } from "@/core/number";
 import type { TokenAccount } from "@/core/token";
 import { useTokenMetadata } from "@/app/hooks/meta";
-import { ButtonSpec } from "../transactions/spec";
+import type { ButtonSpec } from "@/app/transactions/spec";
 
 interface AllocationProps {
   nftMint?: PublicKey;
