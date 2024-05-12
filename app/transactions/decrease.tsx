@@ -1,6 +1,6 @@
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { PublicKey } from "@solana/web3.js";
-import type { AllocationButtonContext, ButtonContext, ButtonSpec } from "@/app/transactions/spec";
+import type { AllocationButtonContext, ButtonSpec } from "@/app/transactions/spec";
 import dynamic from "next/dynamic";
 import { useWallet } from "@/app/hooks/wallet";
 import { usePopup } from "@/app/hooks/popup";
@@ -13,8 +13,8 @@ import { useTransaction } from "@/app/hooks/transaction";
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
 
-export function useDecreaseAllocationButton(ctx: ButtonContext): ButtonSpec {
-  const { value: allocation, reload } = ctx as AllocationButtonContext;
+export function useDecreaseAllocationButton(ctx: AllocationButtonContext): ButtonSpec {
+  const { value: allocation, reload } = ctx;
   const { publicKey } = useWallet();
   const { openPopup } = usePopup();
   const { sendTransaction } = useTransaction();
@@ -52,12 +52,12 @@ export function useDecreaseAllocationButton(ctx: ButtonContext): ButtonSpec {
       throw new Error("No wallet");
     }
     const tokenMint = fields[0].value as string;
-    const amount = fields[1].value as number;
+    const amount = fields[1].value as bigint;
     const instruction = createDecreaseAllocationInstruction({
       payer: publicKey,
       nftMint: allocation.address,
       tokenMint: new PublicKey(tokenMint),
-      amount: BigInt(amount), // TODO: <- decimals
+      amount,
     });
     const hash = await sendTransaction([instruction]);
     reload();
@@ -66,10 +66,11 @@ export function useDecreaseAllocationButton(ctx: ButtonContext): ButtonSpec {
 
   const editForm = useCallback(async (fields: Array<FormFieldMeta>) => {
     const tokenMint = fields[0].value as string;
-    // TODO: \/ decimals
-    const tokenAmount = Number(amountMap.get(tokenMint) ?? 0n);
+    const tokenAmount = amountMap.get(tokenMint) ?? 0n;
+    const tokenDecimals = tokenMap.get(tokenMint)?.decimals ?? 0;
+
     const newFields = [...fields];
-    newFields[1] = { ...fields[1], max: tokenAmount } as FormFieldMeta;
+    newFields[1] = { ...fields[1], max: tokenAmount, decimals: tokenDecimals } as FormFieldMeta;
 
     return Promise.resolve(newFields);
   }, [amountMap]);
@@ -79,11 +80,12 @@ export function useDecreaseAllocationButton(ctx: ButtonContext): ButtonSpec {
     const options = Array.from(tokenMap.keys());
     const fields: Array<FormFieldMeta> = [
       { type: "choice", title: "Token", options: options, required: true },
-      { type: "number", title: "Amount", placeholder: 0, min: 0, required: true },
+      { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
     ];
     openPopup(
       <Form
         title="Decrease allocation"
+        subtitle="Remove tokens from the allocation."
         button="Continue"
         fields={fields}
         onChange={editForm}

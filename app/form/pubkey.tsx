@@ -3,6 +3,8 @@ import React, { useCallback, useMemo } from "react";
 import type { FormFieldTextMeta } from "@/app/form/text";
 import FormFieldText from "@/app/form/text";
 import { PublicKey } from "@solana/web3.js";
+import { stripCharacters } from "@/core/string";
+import base58 from "bs58";
 
 export interface FormFieldPubkeyMeta {
   readonly type: "pubkey";
@@ -19,11 +21,10 @@ interface FormFieldPubkeyProps {
 export default function FormFieldNumber(props: FormFieldPubkeyProps): ReactElement {
 
   const onChange = useCallback((value: string) => {
-    // TODO: what to do if invalid?
-    // Parse as pubkey?
-    // allow empty if not required
-    props.onChange(new PublicKey(value));
-  }, [props.fieldProps.required, props.onChange]);
+    const stripped = stripCharacters(value, "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
+    const data = base58.decode(stripped);
+    props.onChange(new PublicKey(data));
+  }, [props.onChange]);
 
   const innerProps = useMemo(() => {
     return {

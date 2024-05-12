@@ -1,6 +1,6 @@
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { PublicKey } from "@solana/web3.js";
-import type { ButtonContext, ButtonSpec, TreasuryButtonContext } from "@/app/transactions/spec";
+import type { ButtonSpec, TreasuryButtonContext } from "@/app/transactions/spec";
 import dynamic from "next/dynamic";
 import { useFeeConfig } from "@/app/hooks/fee";
 import { useWallet } from "@/app/hooks/wallet";
@@ -13,8 +13,8 @@ import { useTransaction } from "@/app/hooks/transaction";
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
 
-export function useWithdrawFeesButton(ctx: ButtonContext): ButtonSpec {
-  const { value: tokenAccounts, reload } = ctx as TreasuryButtonContext;
+export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
+  const { value: tokenAccounts, reload } = ctx;
   const { publicKey } = useWallet();
   const { feeAuthority } = useFeeConfig();
   const { openPopup } = usePopup();
@@ -29,11 +29,11 @@ export function useWithdrawFeesButton(ctx: ButtonContext): ButtonSpec {
       throw new Error("No wallet");
     }
     const tokenMint = fields[0].value as string;
-    const amount = fields[1].value as number;
+    const amount = fields[1].value as bigint;
     const instruction = createWithdrawFeeInstruction({
       payer: publicKey,
       tokenMint: new PublicKey(tokenMint),
-      amount: BigInt(amount), // TODO: <- decimals
+      amount: amount,
     });
     const hash = await sendTransaction([instruction]);
     reload();
@@ -42,11 +42,11 @@ export function useWithdrawFeesButton(ctx: ButtonContext): ButtonSpec {
 
   const editForm = useCallback(async (fields: Array<FormFieldMeta>) => {
     const tokenMint = fields[0].value as string;
-    const tokenAccount = tokenMap.get(tokenMint);
-    // TODO: \/ decimals
-    const maxAmount = Number(tokenAccount?.amount ?? 0n);
+    const maxAmount = tokenMap.get(tokenMint)?.amount ?? 0n;
+    const tokenDecimals = tokenMap.get(tokenMint)?.decimals ?? 0;
+
     const newFields = [...fields];
-    newFields[1] = { ...fields[1], max: maxAmount } as FormFieldMeta;
+    newFields[1] = { ...fields[1], max: maxAmount, decimals: tokenDecimals } as FormFieldMeta;
 
     return Promise.resolve(newFields);
   }, [tokenMap]);
@@ -56,11 +56,12 @@ export function useWithdrawFeesButton(ctx: ButtonContext): ButtonSpec {
     const options = tokenAccounts?.map(x => x.mint.toBase58()) ?? [];
     const fields: Array<FormFieldMeta> = [
       { type: "choice", title: "Token", options: options, required: true },
-      { type: "number", title: "Amount", placeholder: 0, min: 0, required: true },
+      { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
     ];
     openPopup(
       <Form
         title="Withdraw fees"
+        subtitle="Withdraw fees from the protocol fee accounts."
         button="Continue"
         fields={fields}
         onChange={editForm}

@@ -14,12 +14,14 @@ import type { FormFieldChoiceMeta } from "@/app/form/choice";
 import FormFieldChoice from "@/app/form/choice";
 import type { FormFieldPubkeyMeta } from "@/app/form/pubkey";
 import FormFieldPubkey from "@/app/form/pubkey";
+import type { FormFieldBigIntMeta } from "@/app/form/bigint";
+import FormFieldBigInt from "@/app/form/bigint";
 
 export type FormFieldMeta = [
   FormFieldInfoMeta, FormFieldTextMeta,
   FormFieldNumberMeta, FormFieldCheckboxMeta,
   FormFieldRadioboxMeta, FormFieldChoiceMeta,
-  FormFieldPubkeyMeta,
+  FormFieldPubkeyMeta, FormFieldBigIntMeta,
 ][number] & {
   title: string;
 };
@@ -39,6 +41,7 @@ export default function FormField(props: FormFieldInnerProps): ReactElement {
       case "radiobox": return <FormFieldRadiobox fieldProps={props.fieldProps} onChange={props.onChange} />;
       case "choice": return <FormFieldChoice fieldProps={props.fieldProps} onChange={props.onChange} />;
       case "pubkey": return <FormFieldPubkey fieldProps={props.fieldProps} onChange={props.onChange} />;
+      case "bigint": return <FormFieldBigInt fieldProps={props.fieldProps} onChange={props.onChange} />;
       default: return null;
     }
   }, [props]);
