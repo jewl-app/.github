@@ -11,7 +11,7 @@ describe("number", () => {
     assert.strictEqual(actual, expected);
   });
 
-  it("Should convert a large bigint to a decimal", () => {
+  it("Should convert a large bigint to a decimal without losing precision", () => {
     const input = 12121212121212121212n;
     const expected = "12.121212121212121212";
     const actual = toDecimal(input, 18);
@@ -62,7 +62,7 @@ describe("number", () => {
 
   it("Should convert a large bigint to a number", () => {
     const input = 12121212121212121212n;
-    const expected = 12.12121212121212;
+    const expected = 12.121212121212121;
     const actual = toNumber(input, 18);
     assert.strictEqual(actual, expected);
   });
