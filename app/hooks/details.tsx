@@ -23,7 +23,7 @@ export function useDetails(nftMint?: PublicKey): UseDetails {
   const { getAllocation, loading: l1 } = useAllocations();
 
   const { loading: l2, result: allocation, reload: r1 } = useInterval({
-    interval: 1000 * 30, // 30 seconds
+    interval: 30, // 30 seconds
     callback: async () => {
       if (nftMint == null) {
         return null;
@@ -33,7 +33,7 @@ export function useDetails(nftMint?: PublicKey): UseDetails {
   }, [nftMint, getAllocation]);
 
   const { loading: l3, result: tokenAccounts, reload: r2 } = useInterval({
-    interval: 1000 * 30, // 30 seconds
+    interval: 30, // 30 seconds
     callback: async () => {
       if (nftMint != null) {
         return null;

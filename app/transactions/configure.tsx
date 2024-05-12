@@ -39,7 +39,7 @@ export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec 
 
   const openForm = useCallback(() => {
     const fields: Array<FormFieldMeta> = [
-      { type: "info", title: "Fee Authority", value: shortAddress(feeAuthority) },
+      { type: "info", title: "Fee Authority", value: shortAddress(feeAuthority ?? PublicKey.default) },
       { type: "pubkey", title: "Fee Withdraw Authority", value: feeWithdrawAuthority ?? undefined, placeholder: PublicKey.default, required: true },
       { type: "number", title: "Fee Basis Points", value: feeBps, placeholder: 100, min: 0, max: 10000, suffix: "bps", required: true },
     ];
@@ -54,10 +54,12 @@ export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec 
     );
   }, [feeAuthority, feeWithdrawAuthority, feeBps, openPopup, formCompletion]);
 
+  const enabled = publicKey == null || publicKey.equals(feeAuthority ?? PublicKey.default);
+
   return {
     icon: faCogs,
     label: "Configure",
-    enabled: publicKey == null || publicKey.equals(feeAuthority ?? PublicKey.default),
+    disabled: enabled ? false : "Connect using the fee authority to configure fees.",
     onClick: () => {
       if (publicKey == null) {
         openPopup(<Connect />);

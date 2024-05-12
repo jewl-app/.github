@@ -6,7 +6,7 @@ export interface ButtonSpec {
   readonly icon: IconDefinition;
   readonly label: string;
   readonly onClick: () => void;
-  readonly enabled: boolean;
+  readonly disabled?: boolean | string | null;
 }
 
 interface BaseButtonContext<T> {

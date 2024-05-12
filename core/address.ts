@@ -30,13 +30,11 @@ export function metadataAddress(mint: PublicKey): PublicKey {
   return PublicKey.findProgramAddressSync(seeds, metadataProgramId)[0];
 }
 
-export function shortAddress(publicKey?: PublicKey | string | null, chars = 4): string {
-  if (publicKey == null) {
-    return "";
-  }
+export function shortAddress(publicKey: PublicKey | string, chars = 4): string {
+  const numChars = Math.max(4, Math.min(chars, 8));
   const key = publicKey.toString();
-  const prefix = key.slice(0, chars);
-  const suffix = key.slice(-chars);
+  const prefix = key.slice(0, numChars);
+  const suffix = key.slice(-numChars);
   return `${prefix}...${suffix}`;
 }
 

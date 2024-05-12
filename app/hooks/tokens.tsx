@@ -25,7 +25,7 @@ export default function TokensProvider(props: PropsWithChildren): ReactElement {
   const { publicKey } = useWallet();
 
   const { result, loading } = useInterval({
-    interval: 1000 * 30, // 30 seconds
+    interval: 30, // 30 seconds
     callback: async () => {
       if (publicKey == null) {
         return [];
