@@ -53,6 +53,7 @@ module.exports = [
       "@stylistic/member-delimiter-style": ["error", { multiline: { delimiter: "semi", requireLast: true }, singleline: { delimiter: "comma", requireLast: false } }],
       "@stylistic/jsx-wrap-multilines": ["error", { declaration: "parens-new-line" }],
       "@stylistic/no-confusing-arrow": ["error", { onlyOneSimpleParam: true }],
+      "@stylistic/multiline-comment-style": ["error", "separate-lines"],
       "@stylistic/array-element-newline": "off",
       "@stylistic/padded-blocks": "off",
       "@stylistic/lines-between-class-members": "off",
