@@ -1884,20 +1884,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^7.8.0":
-  version: 7.8.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:7.8.0"
+"@typescript-eslint/eslint-plugin@npm:^7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/eslint-plugin@npm:7.9.0"
   dependencies:
     "@eslint-community/regexpp": "npm:^4.10.0"
-    "@typescript-eslint/scope-manager": "npm:7.8.0"
-    "@typescript-eslint/type-utils": "npm:7.8.0"
-    "@typescript-eslint/utils": "npm:7.8.0"
-    "@typescript-eslint/visitor-keys": "npm:7.8.0"
-    debug: "npm:^4.3.4"
+    "@typescript-eslint/scope-manager": "npm:7.9.0"
+    "@typescript-eslint/type-utils": "npm:7.9.0"
+    "@typescript-eslint/utils": "npm:7.9.0"
+    "@typescript-eslint/visitor-keys": "npm:7.9.0"
     graphemer: "npm:^1.4.0"
     ignore: "npm:^5.3.1"
     natural-compare: "npm:^1.4.0"
-    semver: "npm:^7.6.0"
     ts-api-utils: "npm:^1.3.0"
   peerDependencies:
     "@typescript-eslint/parser": ^7.0.0
@@ -1905,25 +1903,25 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/37ca22620d1834ff0baa28fa4b8fd92039a3903cb95748353de32d56bae2a81ce50d1bbaed27487eebc884e0a0f9387fcb0f1647593e4e6df5111ef674afa9f0
+  checksum: 10c0/5c0ded9cb2210c141d236075f01a86447bf497a5061773c3c64a90756264776b4c4df100f7588e36d34f727eca55afd52fe6696a3cbe2d1f131250934254603a
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^7.8.0":
-  version: 7.8.0
-  resolution: "@typescript-eslint/parser@npm:7.8.0"
+"@typescript-eslint/parser@npm:^7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/parser@npm:7.9.0"
   dependencies:
-    "@typescript-eslint/scope-manager": "npm:7.8.0"
-    "@typescript-eslint/types": "npm:7.8.0"
-    "@typescript-eslint/typescript-estree": "npm:7.8.0"
-    "@typescript-eslint/visitor-keys": "npm:7.8.0"
+    "@typescript-eslint/scope-manager": "npm:7.9.0"
+    "@typescript-eslint/types": "npm:7.9.0"
+    "@typescript-eslint/typescript-estree": "npm:7.9.0"
+    "@typescript-eslint/visitor-keys": "npm:7.9.0"
     debug: "npm:^4.3.4"
   peerDependencies:
     eslint: ^8.56.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/0dd994c1b31b810c25e1b755b8d352debb7bf21a31f9a91acaec34acf4e471320bcceaa67cf64c110c0b8f5fac10a037dbabac6ec423e17adf037e59a7bce9c1
+  checksum: 10c0/16ca04645429436d9b7986cddda979ef4d088f4223f4a69e04a369e0fd4852dd5ff3d4b99da2e43cddaa2b421b24ff42f275d87bd110ae2356bdd0e81c2534e7
   languageName: node
   linkType: hard
 
@@ -1937,12 +1935,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/type-utils@npm:7.8.0":
-  version: 7.8.0
-  resolution: "@typescript-eslint/type-utils@npm:7.8.0"
+"@typescript-eslint/scope-manager@npm:7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/scope-manager@npm:7.9.0"
   dependencies:
-    "@typescript-eslint/typescript-estree": "npm:7.8.0"
-    "@typescript-eslint/utils": "npm:7.8.0"
+    "@typescript-eslint/types": "npm:7.9.0"
+    "@typescript-eslint/visitor-keys": "npm:7.9.0"
+  checksum: 10c0/1ba6fc559a42a9b54e38c3ac2b6669efcff1a30292fb4e5fc8739c890a6c0f37d1a6aee1d115198f57c88e4f1776e95c1d7143de5cb5b970d5eb3023e97789dd
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/type-utils@npm:7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/type-utils@npm:7.9.0"
+  dependencies:
+    "@typescript-eslint/typescript-estree": "npm:7.9.0"
+    "@typescript-eslint/utils": "npm:7.9.0"
     debug: "npm:^4.3.4"
     ts-api-utils: "npm:^1.3.0"
   peerDependencies:
@@ -1950,7 +1958,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/00f6315626b64f7dbc1f7fba6f365321bb8d34141ed77545b2a07970e59a81dbdf768c1e024225ea00953750d74409ddd8a16782fc4a39261e507c04192dacab
+  checksum: 10c0/775280fb179268f8bacd60e684d9d5a1c6a379646b082c7244bf2dfb7dd693053bd9efa473b71e10a86db69322b0a2cecf5598d019684930df50000bf3d70af0
   languageName: node
   linkType: hard
 
@@ -1958,6 +1966,13 @@ __metadata:
   version: 7.8.0
   resolution: "@typescript-eslint/types@npm:7.8.0"
   checksum: 10c0/b2fdbfc21957bfa46f7d8809b607ad8c8b67c51821d899064d09392edc12f28b2318a044f0cd5d523d782e84e8f0558778877944964cf38e139f88790cf9d466
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/types@npm:7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/types@npm:7.9.0"
+  checksum: 10c0/d5f4a547dba4865ee2391bf06f2b3f8e8592a561976d2be35bb61ce340c7d1b7b4b25ac6ab5b9941813b465b9420bebb7b2179b1d71f6a83069feeb000b3558d
   languageName: node
   linkType: hard
 
@@ -1980,7 +1995,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:7.8.0, @typescript-eslint/utils@npm:^7.8.0":
+"@typescript-eslint/typescript-estree@npm:7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/typescript-estree@npm:7.9.0"
+  dependencies:
+    "@typescript-eslint/types": "npm:7.9.0"
+    "@typescript-eslint/visitor-keys": "npm:7.9.0"
+    debug: "npm:^4.3.4"
+    globby: "npm:^11.1.0"
+    is-glob: "npm:^4.0.3"
+    minimatch: "npm:^9.0.4"
+    semver: "npm:^7.6.0"
+    ts-api-utils: "npm:^1.3.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/cfc3d2b7a5433c9a2989c7289bc72b49786993782801ad8ca5a07c651df457a67fbce13b120c86c34c03d56570a90e5cf4f3b8806349f103a3658f2366ec28ea
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/utils@npm:7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/utils@npm:7.9.0"
+  dependencies:
+    "@eslint-community/eslint-utils": "npm:^4.4.0"
+    "@typescript-eslint/scope-manager": "npm:7.9.0"
+    "@typescript-eslint/types": "npm:7.9.0"
+    "@typescript-eslint/typescript-estree": "npm:7.9.0"
+  peerDependencies:
+    eslint: ^8.56.0
+  checksum: 10c0/cb99d6a950e7da0319bc7b923a82c52c0798a14e837afee51b2295cfbde02e0a2ac8e0b5904cd7bd01d1b376c7a6ad3739101b486feaf2517c8640024deb88c7
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/utils@npm:^7.8.0":
   version: 7.8.0
   resolution: "@typescript-eslint/utils@npm:7.8.0"
   dependencies:
@@ -2007,6 +2055,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/visitor-keys@npm:7.9.0":
+  version: 7.9.0
+  resolution: "@typescript-eslint/visitor-keys@npm:7.9.0"
+  dependencies:
+    "@typescript-eslint/types": "npm:7.9.0"
+    eslint-visitor-keys: "npm:^3.4.3"
+  checksum: 10c0/19181d8b9d2d7bc43d5c8884661cd9a86ac316392b8e590187cc507442093a1ba2bef0cc22181b8298d5dc9f455abb73cffa4663451bdf32b1b7fe12160c5c99
+  languageName: node
+  linkType: hard
+
 "@vercel/analytics@npm:^1.2.2":
   version: 1.2.2
   resolution: "@vercel/analytics@npm:1.2.2"
@@ -2024,10 +2082,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/build-utils@npm:8.1.0":
-  version: 8.1.0
-  resolution: "@vercel/build-utils@npm:8.1.0"
-  checksum: 10c0/ddbc9d3447df72d253640b8bf1f623b1a2a3ddfd95652c9f87f2a37dfab14cf7c9c0e7a4f64943fe44e875c5ba99530472625993cf5a85e1f61ee77275d1977e
+"@vercel/build-utils@npm:8.1.3":
+  version: 8.1.3
+  resolution: "@vercel/build-utils@npm:8.1.3"
+  checksum: 10c0/64a192f90abf3da8c0c24383a05b48db882659836d762f180e23596ce129b3c16803db6aad1c504cc359b603f7d671c27eedc098a01c1ea7521fd9bfd6409285
   languageName: node
   linkType: hard
 
@@ -2075,17 +2133,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/gatsby-plugin-vercel-builder@npm:2.0.27":
-  version: 2.0.27
-  resolution: "@vercel/gatsby-plugin-vercel-builder@npm:2.0.27"
+"@vercel/gatsby-plugin-vercel-builder@npm:2.0.30":
+  version: 2.0.30
+  resolution: "@vercel/gatsby-plugin-vercel-builder@npm:2.0.30"
   dependencies:
     "@sinclair/typebox": "npm:0.25.24"
-    "@vercel/build-utils": "npm:8.1.0"
+    "@vercel/build-utils": "npm:8.1.3"
     "@vercel/routing-utils": "npm:3.1.0"
     esbuild: "npm:0.14.47"
     etag: "npm:1.8.1"
     fs-extra: "npm:11.1.0"
-  checksum: 10c0/a53458d8c3e9515c9ca12a94dcb63292964fbe899c6c1dc5ad2feaeb2de9dee9f2020a12d73bfc496e4b2d1400f489b993cc13c783a2ca7deb9012bbf12fa90e
+  checksum: 10c0/829e20a07591f9805ca68b1693223857010fa5ba7e89421fa99dbe4ba2b73dd6f3384a7ce6a7f5a35eeb0e9e3e4450d8f9109cb83e1eb3ece04b92ae79c15356
   languageName: node
   linkType: hard
 
@@ -2106,12 +2164,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/next@npm:4.2.10":
-  version: 4.2.10
-  resolution: "@vercel/next@npm:4.2.10"
+"@vercel/next@npm:4.2.11":
+  version: 4.2.11
+  resolution: "@vercel/next@npm:4.2.11"
   dependencies:
     "@vercel/nft": "npm:0.27.0"
-  checksum: 10c0/439e7796cc8ef9631d20fa27722691b1ae0c12bef7508eb2b34a13182aaa24c78ddf974185dcc4d2f156ab678e4522ef36890d9eb54abb8efc95120ab7de6005
+  checksum: 10c0/a353edd2b866b2a0434170afb195151013a70281a18413f804bdff25e84ad932a4e4d4bf8cf5bc5255ebee6d8df750405898cb668f0e1e63cfb9287a6da7f8b6
   languageName: node
   linkType: hard
 
@@ -2137,15 +2195,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/node@npm:3.1.1":
-  version: 3.1.1
-  resolution: "@vercel/node@npm:3.1.1"
+"@vercel/node@npm:3.1.4":
+  version: 3.1.4
+  resolution: "@vercel/node@npm:3.1.4"
   dependencies:
     "@edge-runtime/node-utils": "npm:2.3.0"
     "@edge-runtime/primitives": "npm:4.1.0"
     "@edge-runtime/vm": "npm:3.2.0"
     "@types/node": "npm:16.18.11"
-    "@vercel/build-utils": "npm:8.1.0"
+    "@vercel/build-utils": "npm:8.1.3"
     "@vercel/error-utils": "npm:2.0.2"
     "@vercel/nft": "npm:0.27.0"
     "@vercel/static-config": "npm:3.0.0"
@@ -2161,7 +2219,7 @@ __metadata:
     ts-node: "npm:10.9.1"
     typescript: "npm:4.9.5"
     undici: "npm:5.26.5"
-  checksum: 10c0/e9db780ccc7e5ccfd88be6483097469454b310c53dbf2e7f037983d65abaa1473704932f2d9e1376317323abaf9614182f9188e465c7e842d208d192428ae96e
+  checksum: 10c0/f22edaf2e6ec77f3551b8df478910788325b80bfb7a79db85162482be425102f16e4d4ef94c17c5def1a5fd0e79d4fd3def6276a9d7bf398ceaca00e02165fe4
   languageName: node
   linkType: hard
 
@@ -2242,15 +2300,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/static-build@npm:2.5.5":
-  version: 2.5.5
-  resolution: "@vercel/static-build@npm:2.5.5"
+"@vercel/static-build@npm:2.5.8":
+  version: 2.5.8
+  resolution: "@vercel/static-build@npm:2.5.8"
   dependencies:
     "@vercel/gatsby-plugin-vercel-analytics": "npm:1.0.11"
-    "@vercel/gatsby-plugin-vercel-builder": "npm:2.0.27"
+    "@vercel/gatsby-plugin-vercel-builder": "npm:2.0.30"
     "@vercel/static-config": "npm:3.0.0"
     ts-morph: "npm:12.0.0"
-  checksum: 10c0/b9812f1c08d5d30f5c0772162d7575b5cacfee258c1d55877280c750d6eb82b493572305bad7dd21d8588c9872bf7099feacfcd974440312ff57ef8fe1bbcb02
+  checksum: 10c0/5e549e362a7070b172a7504a2852fc957471fc37f192041adeaaab563633ea456dfa23654ef34a6a6ce9a61c49ad37085498429acd19a1e056916d422734f755
   languageName: node
   linkType: hard
 
@@ -5929,8 +5987,8 @@ __metadata:
     "@types/prompts": "npm:^2.4.9"
     "@types/react": "npm:^18.3.2"
     "@types/sinon": "npm:^17.0.3"
-    "@typescript-eslint/eslint-plugin": "npm:^7.8.0"
-    "@typescript-eslint/parser": "npm:^7.8.0"
+    "@typescript-eslint/eslint-plugin": "npm:^7.9.0"
+    "@typescript-eslint/parser": "npm:^7.9.0"
     "@vercel/analytics": "npm:^1.2.2"
     "@vercel/speed-insights": "npm:^1.0.10"
     "@wallet-standard/core": "npm:^1.0.3"
@@ -5955,7 +6013,7 @@ __metadata:
     tweetnacl: "npm:^1.0.3"
     tweetnacl-util: "npm:^0.15.1"
     typescript: "npm:^5.4.5"
-    vercel: "npm:^34.1.11"
+    vercel: "npm:^34.1.14"
     yaml: "npm:^2.4.2"
     yarn: "npm:^1.22.22"
   languageName: unknown
@@ -9323,26 +9381,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vercel@npm:^34.1.11":
-  version: 34.1.11
-  resolution: "vercel@npm:34.1.11"
+"vercel@npm:^34.1.14":
+  version: 34.1.14
+  resolution: "vercel@npm:34.1.14"
   dependencies:
-    "@vercel/build-utils": "npm:8.1.0"
+    "@vercel/build-utils": "npm:8.1.3"
     "@vercel/fun": "npm:1.1.0"
     "@vercel/go": "npm:3.1.1"
     "@vercel/hydrogen": "npm:1.0.2"
-    "@vercel/next": "npm:4.2.10"
-    "@vercel/node": "npm:3.1.1"
+    "@vercel/next": "npm:4.2.11"
+    "@vercel/node": "npm:3.1.4"
     "@vercel/python": "npm:4.2.0"
     "@vercel/redwood": "npm:2.0.9"
     "@vercel/remix-builder": "npm:2.1.6"
     "@vercel/ruby": "npm:2.1.0"
-    "@vercel/static-build": "npm:2.5.5"
+    "@vercel/static-build": "npm:2.5.8"
     chokidar: "npm:3.3.1"
   bin:
     vc: dist/index.js
     vercel: dist/index.js
-  checksum: 10c0/f7b04fb0ef58e2172f83ed841233468240515507556a6e076df22d9208123aeabd87017fa4e7d64f14ac2f5efe09fb06d26d5c91cb45d7a07b727ef6c1fde860
+  checksum: 10c0/f8800247a43d339be1aea0ed8c41425bbfdaee840035fa0acca95d360903fd0f35778c8e138e3a40b5afe17394e3a4b4f410b4f9ba72e8db943e18a70d30c35a
   languageName: node
   linkType: hard
 
