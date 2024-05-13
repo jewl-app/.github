@@ -48,6 +48,7 @@
     "@typescript-eslint/parser": "^7.8.0",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.2.0",
+    "eslint-plugin-react": "^7.34.1",
     "jsdom": "^24.0.0",
     "mocha": "^10.4.0",
     "next": "^14.2.3",
