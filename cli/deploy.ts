@@ -34,6 +34,7 @@ export default async function deploySolanaProgram(): Promise<void> {
   }
 
   console.info("");
-  console.info(`Deployed program to ${await linkAccount(jewlProgramId)}`);
-  console.info(`Deployed IDL to ${await linkAccount(idlAccount)}`);
+  console.info(`${programDeployed ? "Upgraded" : "Deployed"} Solana program`);
+  console.info(`Program:  ${await linkAccount(jewlProgramId)}`);
+  console.info(`IDL:      ${await linkAccount(idlAccount)}`);
 }

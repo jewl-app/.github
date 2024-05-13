@@ -33,6 +33,7 @@
     "yarn": "^1.22.22"
   },
   "devDependencies": {
+    "@irys/sdk": "^0.2.0",
     "@next/bundle-analyzer": "^14.2.3",
     "@next/eslint-plugin-next": "^14.2.3",
     "@stylistic/eslint-plugin": "^2.1.0",

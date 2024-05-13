@@ -8,15 +8,15 @@ export default async function getSignatureData(): Promise<void> {
 
   const transaction = await connection.getParsedTransaction(signature, { maxSupportedTransactionVersion: 0 });
 
-  console.info();
-
   if (transaction == null) {
-    console.info(`Transaction ${signature} not found`);
+    console.error(`Transaction ${signature} not found`);
     return;
   }
 
-  console.info(`Tx: ${signature}`);
-  console.info(`Block: ${transaction.slot}`);
-  console.info(`Time: ${transaction.blockTime}`);
+  console.info();
+  console.info("Fetched transaction data");
+  console.info(`Tx:     ${signature}`);
+  console.info(`Block:  ${transaction.slot}`);
+  console.info(`Time:   ${transaction.blockTime}`);
   transaction.meta?.logMessages?.forEach(log => { console.info(log); });
 }

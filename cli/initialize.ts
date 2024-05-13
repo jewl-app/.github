@@ -26,6 +26,7 @@ export default async function initializeFeeConfig(): Promise<void> {
   });
 
   console.info();
-  console.info(`${feeConfigInitialized ? "Updated" : "Initialized"} fee config ${await linkAccount(feeConfigAddress)}`);
-  console.info(`Transaction ${await linkTransaction(signature)}`);
+  console.info(`${feeConfigInitialized ? "Updated" : "Initialized"} fee config`);
+  console.info(`Account:      ${await linkAccount(feeConfigAddress)}`);
+  console.info(`Transaction:  ${await linkTransaction(signature)}`);
 }

@@ -11,12 +11,13 @@ function handler(file: string): Handler {
 }
 
 const commands: Array<Choice<Handler>> = [
-  { title: "deploy", description: "Deploy Solana program.", value: handler("@/cli/deploy") },
+  { title: "deploy", description: "Deploy Solana program", value: handler("@/cli/deploy") },
   { title: "initialize", description: "Initialize/update the jewl fee config", value: handler("@/cli/initialize") },
+  { title: "upload", description: "Upload nft metadata to arweave", value: handler("@/cli/upload") },
   { title: "token", description: "Create a new jewl non-fungible token", value: handler("@/cli/token") },
-  { title: "keypair", description: "Keypair utilities.", value: handler("@/cli/keypair") },
-  { title: "address", description: "Get account data at address.", value: handler("@/cli/address") },
-  { title: "signature", description: "Get transaction data at signature.", value: handler("@/cli/signature") },
+  { title: "keypair", description: "Generate a new keypair in base58", value: handler("@/cli/keypair") },
+  { title: "address", description: "Get account data at address", value: handler("@/cli/address") },
+  { title: "signature", description: "Get transaction data at signature", value: handler("@/cli/signature") },
 ];
 
 promptChoice("Select an instruction to execute", commands)

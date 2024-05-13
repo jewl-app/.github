@@ -12,7 +12,6 @@ export default async function keypairUtilities(): Promise<void> {
 
   console.info();
   console.info(keyfileExists ? "Used existing keypair" : "Generated a new keypair");
-  console.info(`Address: ${await linkAccount(keypair.publicKey)}`);
-  console.info(`Key: ${secretKey}`);
-  return Promise.resolve();
+  console.info(`Address:  ${await linkAccount(keypair.publicKey)}`);
+  console.info(`Key:      ${secretKey}`);
 }

@@ -2,9 +2,10 @@ import type { NextRequest } from "next/server";
 import { ImageResponse } from "next/og";
 import React from "react";
 import clsx from "clsx";
+import { nonNull } from "@/core/array";
 
 interface IconProps {
-  readonly params: { props?: [string] };
+  readonly params: { props?: Array<string> };
 }
 
 const path = `M262.1 125a1 1-44.5 0 0 1.3 0q16-12 35.9-8.3 10.9 2 20.6 6.7
@@ -138,6 +139,20 @@ function getColors(attributes: Set<string>): string {
     return "bg-transparent text-slate-200";
   }
   return "bg-emerald-900 text-slate-200";
+}
+
+const prerenderedAttributes = {
+  size: [
+    null, "16", "24", "32", "48",
+    "64", "72", "96", "128", "144",
+    "152", "192", "256", "384", "512",
+  ],
+  color: [null, "light", "dark"],
+  corner: [null, "circle"],
+};
+
+export function generateStaticParams(): Array<IconProps["params"]> {
+  return prerenderedAttributes.size.flatMap(size => prerenderedAttributes.color.flatMap(color => prerenderedAttributes.corner.map(corner => ({ props: [size, color, corner].filter(nonNull) }))));
 }
 
 export function GET(_request: NextRequest, props: IconProps): ImageResponse {

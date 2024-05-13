@@ -18,17 +18,17 @@ export default function Root(props: PropsWithChildren): ReactElement {
         <meta name="robots" content={robots} />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/api/logo/32/circle" />
-        <link rel="icon" type="image/png" sizes="64x64" href="/api/logo/64/circle" />
-        <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/api/logo/192" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/image/logo/32/circle" />
+        <link rel="icon" type="image/png" sizes="64x64" href="/image/logo/64/circle" />
+        <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/image/logo/192" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://jewl.app/" />
         <meta property="og:title" content="jewl" />
         <meta property="og:description" content="Tax-efficient on-chain renumeration." />
-        <meta property="og:image" content="/api/preview" />
+        <meta property="og:image" content="/image/preview" />
         <meta property="twitter:card" content="summary" />
         <meta property="twitter:title" content="jewl" />
-        <meta property="twitter:image" content="/api/preview" />
+        <meta property="twitter:image" content="/image/preview" />
         <meta property="twitter:description" content="Tax-efficient on-chain renumeration." />
         <meta property="rpc-url" content={rpcUrl} />
       </head>
