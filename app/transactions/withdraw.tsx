@@ -11,6 +11,7 @@ import type { FormFieldMeta } from "@/app/form/field";
 import { useTransaction } from "@/app/hooks/transaction";
 import { shortAddress } from "@/core/address";
 import { useTokenMetadata } from "@/app/hooks/meta";
+import { useAnalytics } from "@/app/hooks/analytics";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -20,6 +21,7 @@ export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
   const { publicKey } = useWallet();
   const { feeAuthority } = useFeeConfig();
   const { openPopup } = usePopup();
+  const { logEvent } = useAnalytics();
   const { sendTransaction } = useTransaction();
 
   const tokenMap = useMemo(() => {
@@ -30,6 +32,7 @@ export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
     if (publicKey == null) {
       throw new Error("No wallet");
     }
+    logEvent("withdraw.completed");
     const tokenMint = fields[0].value as string;
     const amount = fields[1].value as bigint;
     const instruction = createWithdrawFeeInstruction({
@@ -40,7 +43,7 @@ export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
     const hash = await sendTransaction([instruction]);
     reload();
     return hash;
-  }, [publicKey, sendTransaction, reload]);
+  }, [publicKey, sendTransaction, reload, logEvent, tokenMap]);
 
   const editForm = useCallback(async (fields: Array<FormFieldMeta>) => {
     const tokenMint = fields[0].value as string;
@@ -66,6 +69,7 @@ export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
       { type: "choice", title: "Token", options: options, required: true },
       { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
     ];
+    logEvent("withdraw.opened");
     openPopup(
       <Form
         title="Withdraw fees"
@@ -76,7 +80,7 @@ export function useWithdrawFeesButton(ctx: TreasuryButtonContext): ButtonSpec {
         onComplete={formCompletion}
       />,
     );
-  }, [tokenAccounts, editForm, openPopup, formCompletion]);
+  }, [tokenAccounts, editForm, openPopup, formCompletion, logEvent, symbol, tokenMap]);
 
   const correctPublicKey = publicKey == null || publicKey.equals(feeAuthority ?? PublicKey.default);
   const correctPublicKeyDisabled = correctPublicKey ? null : "Connect using the fee withdraw authority to withdraw fees.";

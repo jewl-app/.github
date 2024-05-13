@@ -11,7 +11,6 @@ export default function Connect(): ReactElement {
   const { logEvent, logError } = useAnalytics();
 
   const connectWallet = useCallback((wallet: SupportedWallet) => {
-    logEvent("wallet.connecting", { wallet: wallet.name });
     disconnect()
       .then(async () => connect(wallet))
       .then(() => { logEvent("wallet.connected", { wallet: wallet.name }); })

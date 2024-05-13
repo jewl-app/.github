@@ -7,6 +7,7 @@ import { useWallet } from "@/app/hooks/wallet";
 import { useConnection } from "@/app/hooks/connection";
 import type { TransactionStep } from "@/core/transaction";
 import { sendAndConfirmTransaction } from "@/core/transaction";
+import { useAnalytics } from "@/app/hooks/analytics";
 
 export interface TransactionState {
   step: TransactionStep | "ready";
@@ -30,13 +31,15 @@ export function useTransaction(): UseTransaction {
 export default function TransactionProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const { wallet, account } = useWallet();
+  const { logEvent } = useAnalytics();
   const [transactionState, setTransactionState] = useState<TransactionState>({ step: "ready", expiry: 0 });
 
   const sendTransaction = useCallback(async (instructions: Array<TransactionInstruction>) => {
     if (wallet == null) { return null; }
     if (account == null) { return null; }
     try {
-      return await sendAndConfirmTransaction({
+      logEvent("transaction.initiated");
+      const hash = await sendAndConfirmTransaction({
         connection,
         instructions,
         payer: new PublicKey(account.publicKey),
@@ -49,10 +52,19 @@ export default function TransactionProvider(props: PropsWithChildren): ReactElem
         },
         progress: (step, expiry) => { setTransactionState({ step, expiry }); },
       });
+      logEvent("transaction.completed");
+      return hash;
+    } catch (error) {
+      if (`${error}`.includes("User rejected the request")) {
+        logEvent("transaction.aborted");
+      } else {
+        logEvent("transaction.failed");
+      }
+      throw error;
     } finally {
       setTransactionState({ step: "ready", expiry: 0 });
     }
-  }, [connection, wallet, account, setTransactionState]);
+  }, [connection, wallet, account, setTransactionState, logEvent]);
 
   const context = useMemo(() => ({
     state: transactionState,

@@ -12,6 +12,7 @@ import { useTransaction } from "@/app/hooks/transaction";
 import { shortAddress } from "@/core/address";
 import { nonNull } from "@/core/array";
 import { useTokenMetadata } from "@/app/hooks/meta";
+import { useAnalytics } from "@/app/hooks/analytics";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -20,6 +21,7 @@ export function useExerciseAllocationButton(ctx: AllocationButtonContext): Butto
   const { value: allocation } = ctx;
   const { publicKey } = useWallet();
   const { openPopup } = usePopup();
+  const { logEvent } = useAnalytics();
   const { allocations } = useAllocations();
   const { sendTransaction } = useTransaction();
 
@@ -71,6 +73,7 @@ export function useExerciseAllocationButton(ctx: AllocationButtonContext): Butto
     if (publicKey == null || allocation == null) {
       throw new Error("No wallet");
     }
+    logEvent("exercise.completed");
     const instruction = createExerciseAllocationInstruction({
       payer: publicKey,
       nftMint: allocation.address,
@@ -81,12 +84,13 @@ export function useExerciseAllocationButton(ctx: AllocationButtonContext): Butto
     const hash = await sendTransaction([instruction]);
     // FIXME: page will no longer exist? cause allocation does not exist
     return hash;
-  }, [publicKey, allocation, sendTransaction]);
+  }, [publicKey, allocation, sendTransaction, logEvent]);
 
   const openForm = useCallback(() => {
     const fields: Array<FormFieldMeta> = Array.from(tokenMap.keys()).map(x => ({
       type: "info", title: `${symbol(x)} (${shortAddress(x)})`, value: amountMap.get(x)?.toString(),
     }));
+    logEvent("exercise.opened");
     openPopup(
       <Form
         title="Exercise allocation"
@@ -96,7 +100,7 @@ export function useExerciseAllocationButton(ctx: AllocationButtonContext): Butto
         onComplete={formCompletion}
       />,
     );
-  }, [tokenMap, openPopup, formCompletion]);
+  }, [tokenMap, openPopup, formCompletion, logEvent, symbol, amountMap]);
 
   const enabled = ownedAllocations.has(allocationAddress);
 
