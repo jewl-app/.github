@@ -34,7 +34,7 @@ export default function Button(props: Props): ReactElement {
     delete rest.target;
     delete rest.rel;
     return (
-      <a {...rest} className={clsx("group disabled:cursor-not-allowed", outerClassName)} target="_blank" rel="noreferrer onopener" >
+      <a {...rest} className={clsx("group disabled:cursor-not-allowed", outerClassName)} target="_blank" rel="noreferrer noopener" >
         {content}
       </a>
     );

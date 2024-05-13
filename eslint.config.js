@@ -1,7 +1,9 @@
 const stylistic = require("@stylistic/eslint-plugin");
 const typescript = require("@typescript-eslint/eslint-plugin");
 const next = require("@next/eslint-plugin-next");
+const react = require("eslint-plugin-react");
 const parser = require("@typescript-eslint/parser");
+const globals = require("globals");
 
 module.exports = [
   {
@@ -98,16 +100,92 @@ module.exports = [
       "@typescript-eslint/parameter-properties": "off",
     },
   },
-  // {
-  //   plugins: {
-  //     "@next/next": next,
-  //   },
-  //   languageOptions: {
-  //     parser,
-  //   },
-  //   files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-  //   rules: {
-  //     ...next.configs["recommended"].rules,
-  //   },
-  // },
+  {
+    plugins: {
+      "@next/next": next,
+    },
+    languageOptions: {
+      parser,
+    },
+    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+    rules: {
+      ...next.configs["recommended"].rules,
+      // following rules are disabled because then don't work in eslint 9 yet
+      "@next/next/no-duplicate-head": "off",
+      "@next/next/no-page-custom-font": "off",
+    },
+  },
+  {
+    plugins: {
+      react,
+    },
+    languageOptions: {
+      parser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+      },
+    },
+    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+    rules: {
+      ...react.configs["all"].rules,
+      "react/jsx-indent": ["error", 2],
+      "react/jsx-filename-extension": ["error", { extensions: [".jsx", ".tsx"] }],
+      "react/jsx-indent-props": ["error", 2],
+      "react/jsx-newline": ["error", { prevent: true }],
+      "react/no-unknown-property": ["error", { ignore: ["tw"] }],
+      "react/jsx-one-expression-per-line": "off",
+      "react/jsx-max-props-per-line": "off",
+      "react/jsx-no-literals": "off",
+      "react/jsx-no-useless-fragment": "off",
+      "react/forbid-component-props": "off",
+      "react/jsx-sort-props": "off",
+      "react/jsx-props-no-spreading": "off",
+      "react/jsx-handler-names": "off",
+      "react/jsx-first-prop-new-line": "off",
+      "react/jsx-closing-bracket-location": "off",
+      // following rules are disabled because then don't work in eslint 9 yet
+      "react/destructuring-assignment": "off",
+      "react/jsx-no-bind": "off",
+      "react/no-access-state-in-setstate": "off",
+      "react/no-unstable-nested-components": "off",
+      "react/no-array-index-key": "off",
+      "react/no-direct-mutation-state": "off",
+      "react/no-string-refs": "off",
+      "react/static-property-placement": "off",
+      "react/boolean-prop-naming": "off",
+      "react/default-props-match-prop-types": "off",
+      "react/display-name": "off",
+      "react/function-component-definition": "off",
+      "react/hook-use-state": "off",
+      "react/jsx-no-constructed-context-values": "off",
+      "react/no-arrow-function-lifecycle": "off",
+      "react/no-multi-comp": "off",
+      "react/no-set-state": "off",
+      "react/no-this-in-sfc": "off",
+      "react/no-typos": "off",
+      "react/no-unused-prop-types": "off",
+      "react/no-object-type-as-default-prop": "off",
+      "react/prefer-exact-props": "off",
+      "react/prefer-read-only-props": "off",
+      "react/prefer-stateless-function": "off",
+      "react/prop-types": "off",
+      "react/require-default-props": "off",
+      "react/require-optimization": "off",
+      "react/require-render-return": "off",
+      "react/sort-comp": "off",
+      "react/jsx-uses-react": "off",
+      "react/jsx-no-undef": "off",
+      "react/forbid-prop-types": "off",
+      "react/jsx-uses-vars": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-max-depth": "off",
+      "react/jsx-fragments": "off",
+      "react/no-danger-with-children": "off",
+    },
+  },
 ];
