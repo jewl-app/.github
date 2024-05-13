@@ -52,7 +52,7 @@ export default function Header(): ReactElement {
   return (
     <div className="relative w-full flex items-center justify-between">
       <Link className="p-1 mx-3" href="/">
-        <Image src={`/api/logo/${mode}`} alt="jewl logo" width={48} height={48} />
+        <Image src={`/image/logo/${mode}`} alt="jewl logo" width={48} height={48} />
       </Link>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">{clusterText}</div>
       <Button className="px-4 py-2 m-2 font-bold uppercase" onClick={loginPressed}>
