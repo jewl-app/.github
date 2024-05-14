@@ -8,7 +8,7 @@ import { Connection, Keypair } from "@solana/web3.js";
 export default async function createNonFungibleToken(): Promise<void> {
   const connection = new Connection(rpcUrl);
   const keypair = Keypair.generate();
-  const uri = await promptText("What metadata uri?", "https://arweave.net/nduI5wPV_qtMdQnJvV0XDTDmTdc5VeyxzeiWGAPNDTM");
+  const uri = await promptText("What metadata uri?", "https://arweave.net/NiFmd5Nm15DkEaLC-ltEZlYmFoyf1_2h3VN2u2Vsn9E");
 
   const instructions = await createNftMintInstructions(connection, keypair, signer.publicKey, uri);
 

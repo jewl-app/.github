@@ -48,7 +48,7 @@ export function useInitializeAllocationButton(): Omit<ButtonSpec, "disabled"> {
   const openForm = useCallback(() => {
     const fields: Array<FormFieldMeta> = [
       { type: "pubkey", title: "Decrease Authority", placeholder: PublicKey.default },
-      { type: "info", title: "Metadata", value: "https://arweave.net/nduI5wPV_qtMdQnJvV0XDTDmTdc5VeyxzeiWGAPNDTM" },
+      { type: "info", title: "Metadata", value: "https://arweave.net/NiFmd5Nm15DkEaLC-ltEZlYmFoyf1_2h3VN2u2Vsn9E" },
     ];
     logEvent("increase.opened");
     openPopup(
