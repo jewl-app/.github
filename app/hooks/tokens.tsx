@@ -9,11 +9,13 @@ import { getFungibleTokenAccountsForOwner } from "@/core/token";
 export interface UseTokens {
   readonly loading: boolean;
   readonly tokenAccounts: Array<TokenAccount>;
+  reload: () => void;
 }
 
 export const TokensContext = createContext<UseTokens>({
   loading: false,
   tokenAccounts: [],
+  reload: () => { throw new Error("No provider"); },
 });
 
 export function useTokens(): UseTokens {
@@ -24,7 +26,7 @@ export default function TokensProvider(props: PropsWithChildren): ReactElement {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
 
-  const { result, loading } = useInterval({
+  const { result, loading, reload } = useInterval({
     interval: 30, // 30 seconds
     callback: async () => {
       if (publicKey == null) {
@@ -37,8 +39,8 @@ export default function TokensProvider(props: PropsWithChildren): ReactElement {
   const tokenAccounts = result ?? [];
 
   const context = useMemo(() => {
-    return { tokenAccounts, loading };
-  }, [tokenAccounts, loading]);
+    return { tokenAccounts, loading, reload };
+  }, [tokenAccounts, loading, reload]);
 
   return (
     <TokensContext.Provider value={context}>

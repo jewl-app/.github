@@ -10,6 +10,7 @@ type TokenMetadataType = Mint | Account | PublicKey | string;
 
 export interface UseMetadata {
   loading: boolean;
+  reload: () => void;
   symbol: (mint: TokenMetadataType) => string | null;
   name: (mint: TokenMetadataType) => string | null;
 }
@@ -30,7 +31,7 @@ export function useTokenMetadata(mints: Array<TokenMetadataType>): UseMetadata {
   const { connection } = useConnection();
   const mappedMints = useMemo(() => mints.map(metadataKey), [mints]);
 
-  const { loading, result: metadataMap } = useInterval({
+  const { loading, result: metadataMap, reload } = useInterval({
     interval: 60 * 5, // 5 minutes
     callback: async () => memCache({
       key: "token-metadata",
@@ -47,6 +48,6 @@ export function useTokenMetadata(mints: Array<TokenMetadataType>): UseMetadata {
     return metadataMap?.get(metadataKey(mint))?.symbol ?? null;
   }, [metadataMap]);
 
-  return { loading, name, symbol };
+  return { loading, name, symbol, reload };
 }
 

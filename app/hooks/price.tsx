@@ -9,6 +9,7 @@ type TokenPriceType = Mint | Account | PublicKey | string;
 
 export interface UsePrices {
   loading: boolean;
+  reload: () => void;
   price: (mint: TokenPriceType) => number | null;
 }
 
@@ -27,7 +28,7 @@ function priceKey(mint: TokenPriceType): string {
 export function useTokenPrices(mints: Array<TokenPriceType>): UsePrices {
   const mappedMints = useMemo(() => mints.map(priceKey), [mints]);
 
-  const { loading, result: priceMap } = useInterval({
+  const { loading, result: priceMap, reload } = useInterval({
     interval: 60 * 5, // 5 minutes
     callback: async () => memCache({
       key: "token-prices",
@@ -39,6 +40,6 @@ export function useTokenPrices(mints: Array<TokenPriceType>): UsePrices {
     return priceMap?.get(priceKey(mint)) ?? null;
   }, [priceMap]);
 
-  return { loading, price };
+  return { loading, price, reload };
 }
 
