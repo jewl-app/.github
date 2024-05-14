@@ -16,7 +16,7 @@ export const FeeConfigContext = createContext<UseFeeConfig>({
   feeAuthority: null,
   feeWithdrawAuthority: null,
   feeBps: 0,
-  reload: () => { throw new Error("No provider");},
+  reload: () => { throw new Error("No provider"); },
 });
 
 export function useFeeConfig(): UseFeeConfig {
