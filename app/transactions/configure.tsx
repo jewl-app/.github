@@ -10,6 +10,7 @@ import type { FormFieldMeta } from "@/app/form/field";
 import { shortAddress } from "@/core/address";
 import { createInitializeFeeInstruction } from "@/core/instruction";
 import { useTransaction } from "@/app/hooks/transaction";
+import { useAnalytics } from "@/app/hooks/analytics";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -17,6 +18,7 @@ const Form = dynamic(async () => import("@/app/form"));
 export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec {
   const { publicKey } = useWallet();
   const { feeAuthority, feeWithdrawAuthority, feeBps } = useFeeConfig();
+  const { logEvent } = useAnalytics();
   const { openPopup } = usePopup();
   const { sendTransaction } = useTransaction();
   const { reload } = useFeeConfig();
@@ -25,6 +27,7 @@ export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec 
     if (publicKey == null) {
       throw new Error("No wallet");
     }
+    logEvent("configure.completed");
     const newWithdrawAuthority = fields[1].value as PublicKey;
     const newFeeBps = fields[2].value as number;
     const instruction = createInitializeFeeInstruction({
@@ -35,7 +38,7 @@ export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec 
     const hash = await sendTransaction([instruction]);
     reload();
     return hash;
-  }, [publicKey, sendTransaction, reload]);
+  }, [publicKey, sendTransaction, reload, logEvent]);
 
   const openForm = useCallback(() => {
     const fields: Array<FormFieldMeta> = [
@@ -43,6 +46,7 @@ export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec 
       { type: "pubkey", title: "Fee Withdraw Authority", value: feeWithdrawAuthority ?? undefined, placeholder: PublicKey.default, required: true },
       { type: "number", title: "Fee Basis Points", value: feeBps, placeholder: 100, min: 0, max: 10000, suffix: "bps", required: true },
     ];
+    logEvent("configure.opened");
     openPopup(
       <Form
         title="Configure fees"
@@ -52,7 +56,7 @@ export function useConfigureFeesButton(_ctx: TreasuryButtonContext): ButtonSpec 
         onComplete={formCompletion}
       />,
     );
-  }, [feeAuthority, feeWithdrawAuthority, feeBps, openPopup, formCompletion]);
+  }, [feeAuthority, feeWithdrawAuthority, feeBps, openPopup, formCompletion, logEvent]);
 
   const enabled = publicKey == null || publicKey.equals(feeAuthority ?? PublicKey.default);
 

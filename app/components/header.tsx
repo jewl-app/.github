@@ -1,6 +1,5 @@
 import type { ReactElement } from "react";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { useAnalytics } from "@/app/hooks/analytics";
 import { usePopup } from "@/app/hooks/popup";
 import { useCluster } from "@/app/hooks/cluster";
 import { useWallet } from "@/app/hooks/wallet";
@@ -17,7 +16,6 @@ export default function Header(): ReactElement {
   const { publicKey } = useWallet();
   const { balance } = useBalance();
   const { cluster } = useCluster();
-  const { logEvent } = useAnalytics();
   const { openPopup, closePopup } = usePopup();
   const { mode } = useWindowMode();
 
@@ -45,9 +43,8 @@ export default function Header(): ReactElement {
   }, [publicKey, closePopup]);
 
   const loginPressed = useCallback(() => {
-    logEvent("wallet.popup");
     openPopup(<Connect />);
-  }, [publicKey, openPopup, logEvent]);
+  }, [publicKey, openPopup]);
 
   return (
     <div className="relative w-full flex items-center justify-between">

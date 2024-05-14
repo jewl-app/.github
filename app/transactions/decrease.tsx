@@ -12,6 +12,7 @@ import { useTransaction } from "@/app/hooks/transaction";
 import { shortAddress } from "@/core/address";
 import { useTokenMetadata } from "@/app/hooks/meta";
 import { nonNull } from "@/core/array";
+import { useAnalytics } from "@/app/hooks/analytics";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -20,6 +21,7 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
   const { value: allocation, reload } = ctx;
   const { publicKey } = useWallet();
   const { openPopup } = usePopup();
+  const { logEvent } = useAnalytics();
   const { sendTransaction } = useTransaction();
 
   const amountMap = useMemo(() => {
@@ -62,6 +64,7 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
     if (publicKey == null || allocation == null) {
       throw new Error("No wallet");
     }
+    logEvent("decrease.completed");
     const tokenMint = fields[0].value as string;
     const amount = fields[1].value as bigint;
     const instruction = createDecreaseAllocationInstruction({
@@ -73,7 +76,7 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
     const hash = await sendTransaction([instruction]);
     reload();
     return hash;
-  }, [publicKey, allocation, sendTransaction, reload]);
+  }, [publicKey, allocation, sendTransaction, reload, logEvent]);
 
   const editForm = useCallback(async (fields: Array<FormFieldMeta>) => {
     const tokenMint = fields[0].value as string;
@@ -97,6 +100,7 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
       { type: "choice", title: "Token", options: options, required: true },
       { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
     ];
+    logEvent("decrease.opened");
     openPopup(
       <Form
         title="Decrease allocation"
@@ -107,7 +111,7 @@ export function useDecreaseAllocationButton(ctx: AllocationButtonContext): Butto
         onComplete={formCompletion}
       />,
     );
-  }, [tokenMap, openPopup, editForm, formCompletion]);
+  }, [tokenMap, openPopup, editForm, formCompletion, logEvent]);
 
 
   const correctPublicKey = publicKey == null || publicKey.equals(allocation?.decreaseAuthority ?? PublicKey.default);

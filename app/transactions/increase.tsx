@@ -15,6 +15,7 @@ import { useConnection } from "@/app/hooks/connection";
 import { nonNull } from "@/core/array";
 import { useTokenMetadata } from "@/app/hooks/meta";
 import { shortAddress } from "@/core/address";
+import { useAnalytics } from "@/app/hooks/analytics";
 
 const Connect = dynamic(async () => import("@/app/components/connect"));
 const Form = dynamic(async () => import("@/app/form"));
@@ -24,6 +25,7 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
   const { publicKey } = useWallet();
   const { connection } = useConnection();
   const { openPopup } = usePopup();
+  const { logEvent } = useAnalytics();
   const { feeBps } = useFeeConfig();
   const { sendTransaction } = useTransaction();
 
@@ -62,6 +64,7 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
     if (publicKey == null || allocation == null) {
       throw new Error("No wallet");
     }
+    logEvent("increase.completed");
     const tokenMint = fields[0].value as string;
     const amount = fields[1].value as bigint;
     const instruction = createDecreaseAllocationInstruction({
@@ -73,7 +76,7 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
     const hash = await sendTransaction([instruction]);
     reload();
     return hash;
-  }, [publicKey, allocation, sendTransaction, reload]);
+  }, [publicKey, allocation, sendTransaction, reload, logEvent]);
 
   const editForm = useCallback(async (fields: Array<FormFieldMeta>) => {
     const tokenMint = fields[0].value as string;
@@ -102,6 +105,7 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
       { type: "bigint", title: "Amount", placeholder: 0n, min: 0n, required: true },
       { type: "info", title: "Fee", value: "0" },
     ];
+    logEvent("increase.opened");
     openPopup(
       <Form
         title="Increase allocation"
@@ -112,7 +116,7 @@ export function useIncreaseAllocationButton(ctx: AllocationButtonContext): Butto
         onComplete={formCompletion}
       />,
     );
-  }, [tokenMap, openPopup, editForm, formCompletion]);
+  }, [tokenMap, openPopup, editForm, formCompletion, logEvent, feeBps]);
 
   return {
     icon: faPlus,
