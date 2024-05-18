@@ -5,28 +5,56 @@ interface Cache {
   timestamp: number;
 }
 
-const cache = new Map<string, Cache>();
+interface CacheStore {
+  get: (key: string) => Cache | null | undefined;
+  set: (key: string, value: Cache) => void;
+  delete: (key: string) => void;
+  clear: () => void;
+}
 
-interface MemCacheOptions<T> {
+export const memoryCache: CacheStore = new Map<string, Cache>();
+export const localStorageCache: CacheStore = {
+  get: (key: string) => {
+    const item = localStorage.getItem(key);
+    if (item == null) {
+      return null;
+    }
+    return JSON.parse(item) as Cache;
+  },
+  set: (key: string, value: Cache) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
+  delete: (key: string) => {
+    localStorage.removeItem(key);
+  },
+  clear: () => {
+    localStorage.clear();
+  },
+};
+
+interface cachedOptions<T> {
   key: string;
   handler: () => Promise<T>;
   ttl?: number;
+  cache?: CacheStore;
 }
 
-export async function memCache<T>(opts: MemCacheOptions<T>): Promise<T> {
-  // FIXME: cache key collision
-  const cached = cache.get(opts.key);
+// FIXME: cache key collision
+
+export async function cached<T>(opts: cachedOptions<T>): Promise<T> {
+  const cache = opts.cache ?? memoryCache;
+  const cachedValue = cache.get(opts.key);
   const now = unix();
   const ttl = opts.ttl ?? 30;
-  if (cached != null && cached.timestamp + ttl > now) {
-    return Promise.resolve(cached.body as T);
+  if (cachedValue != null && cachedValue.timestamp + ttl > now) {
+    return Promise.resolve(cachedValue.body as T);
   }
   const body = await opts.handler();
   cache.set(opts.key, { body, timestamp: now });
   return body;
 }
 
-export function invalidateCache(key?: string): void {
+export function invalidateCache(key?: string, cache = memoryCache): void {
   if (key == null) {
     cache.clear();
   } else {
@@ -34,8 +62,8 @@ export function invalidateCache(key?: string): void {
   }
 }
 
-export async function memCacheFetch(url: string, ttl = 30): Promise<unknown> {
-  return memCache({
+export async function cachedFetch(url: string, ttl = 30): Promise<unknown> {
+  return cached({
     key: url,
     handler: async () => fetch(url).then(async res => res.json()),
     ttl,

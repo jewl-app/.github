@@ -4,7 +4,7 @@ import { useInterval } from "@/app/hooks/interval";
 import { useCallback, useMemo } from "react";
 import { getTokenMetadata } from "@/core/meta";
 import { useConnection } from "@/app/hooks/connection";
-import { memCache } from "@/core/cache";
+import { cached } from "@/core/cache";
 
 type TokenMetadataType = Mint | Account | PublicKey | string;
 
@@ -33,7 +33,7 @@ export function useTokenMetadata(mints: Array<TokenMetadataType>): UseMetadata {
 
   const { loading, result: metadataMap, reload } = useInterval({
     interval: 60 * 5, // 5 minutes
-    callback: async () => memCache({
+    callback: async () => cached({
       key: "token-metadata",
       handler: async () => getTokenMetadata(connection, mappedMints),
       ttl: 60 * 60, // 1 hour

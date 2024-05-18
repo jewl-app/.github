@@ -17,3 +17,21 @@ export function nonNull<T>(value: T | null | undefined): value is T {
   }
   return true;
 }
+
+
+type MapCallback<T, U> = (value: NonNullable<T>, index: number, array: Array<T>) => U;
+
+declare global {
+  interface Array<T> {
+    mapNonNull: <U>(callback: MapCallback<T, U>) => Array<U | null>;
+  }
+}
+
+Array.prototype.mapNonNull = function<T, U>(this: Array<T>, callback: MapCallback<T, U>): Array<U | null> {
+  return this.map((value, index, array) => {
+    if (value == null) {
+      return null;
+    }
+    return callback(value, index, array);
+  });
+};

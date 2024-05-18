@@ -152,7 +152,13 @@ const prerenderedAttributes = {
 };
 
 export function generateStaticParams(): Array<IconProps["params"]> {
-  return prerenderedAttributes.size.flatMap(size => prerenderedAttributes.color.flatMap(color => prerenderedAttributes.corner.map(corner => ({ props: [size, color, corner].filter(nonNull) }))));
+  return prerenderedAttributes.size.flatMap(size => {
+    return prerenderedAttributes.color.flatMap(color => {
+      return prerenderedAttributes.corner.map(corner => {
+        return { props: [size, color, corner].filter(nonNull) };
+      });
+    });
+  });
 }
 
 export function GET(_request: NextRequest, props: IconProps): ImageResponse {

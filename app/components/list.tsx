@@ -35,8 +35,7 @@ export default function AllocationList(props: AllocationListProps): ReactElement
           "w-5 h-5 text-white",
         )} />
       </Button>
-      List
-      {props.allocations.map(allocation => allocation.address.toBase58())}
+      {props.allocations.map(x => x.mint.toBase58()).map(x => <div key={x}>{x}</div>)}
     </div>
   );
 }

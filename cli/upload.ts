@@ -12,7 +12,7 @@ export default async function uploadNftMetadata(): Promise<void> {
   const connection = new Connection(rpcUrl);
   const symbol = await promptText("What is the token symbol?", "jewl allocation");
   const name = await promptText("What is the token name?", "jewl");
-  const description = await promptText("What is the token description?", "Tax-efficient on-chain renumeration.");
+  const description = await promptText("What is the token description?", "Wrap fungible tokens in NFTs.");
   const imagePath = await promptText("What is the token image?", "~/Downloads/jewl.png");
 
   const provider: IrysWalletProvider = {

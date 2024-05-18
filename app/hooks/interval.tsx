@@ -26,10 +26,10 @@ export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyL
     return props.interval * 1000;
   }, [props.interval]);
 
-  const handler = useCallback(() => {
+  const handler = useCallback((initial = false) => {
     const maybePromise = props.callback();
     if (maybePromise instanceof Promise) {
-      setLoading(true);
+      setLoading(initial);
       maybePromise
         .then(setResult)
         .catch(logError)
@@ -42,7 +42,7 @@ export function useInterval<T>(props: UseIntervalPropsBase<T>, deps: DependencyL
   useEffect(() => {
     const id = setInterval(handler, interval ?? 1000);
     setResult(null);
-    handler();
+    handler(true);
     return () => { clearInterval(id); };
   }, [interval, handler, setResult, logError]);
 

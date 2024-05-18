@@ -3,7 +3,7 @@ import type { PublicKey } from "@solana/web3.js";
 import { useInterval } from "@/app/hooks/interval";
 import { getTokenPrices } from "@/core/price";
 import { useCallback, useMemo } from "react";
-import { memCache } from "@/core/cache";
+import { cached } from "@/core/cache";
 
 type TokenPriceType = Mint | Account | PublicKey | string;
 
@@ -30,7 +30,7 @@ export function useTokenPrices(mints: Array<TokenPriceType>): UsePrices {
 
   const { loading, result: priceMap, reload } = useInterval({
     interval: 60 * 5, // 5 minutes
-    callback: async () => memCache({
+    callback: async () => cached({
       key: "token-prices",
       handler: async () => getTokenPrices(mappedMints),
     }),

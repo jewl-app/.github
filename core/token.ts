@@ -3,7 +3,7 @@ import { unpackAccount, unpackMint } from "@solana/spl-token";
 import type { Connection, PublicKey } from "@solana/web3.js";
 import { getAccountsBatched } from "@/core/account";
 import { tokenProgramId } from "@/core/address";
-import { nonNull } from "@/core/array";
+import { interval } from "@/core/array";
 
 export type TokenAccount = Account & Mint;
 
@@ -20,18 +20,18 @@ export async function getTokenAccount(connection: Connection, accountAddress: Pu
 export async function getTokenAccounts(connection: Connection, accountAddresses: Array<PublicKey>, programId = tokenProgramId): Promise<Array<TokenAccount | null>> {
   const accountInfos = await getAccountsBatched(connection, accountAddresses);
   const tokenAccounts = accountInfos
-    .filter(nonNull)
-    .map((x, i) => unpackAccount(accountAddresses[i], x, programId));
-  const mintAddresses = tokenAccounts.map(x => x.mint);
+    .mapNonNull((x, i) => unpackAccount(accountAddresses[i], x, programId));
+  const mintAddresses = tokenAccounts
+    .mapNonNull(x => x.mint);
   const mintInfos = await getAccountsBatched(connection, mintAddresses);
-  const accounts: Array<TokenAccount | null> = [];
-  for (let i = 0; i < accountAddresses.length; i++) {
+  return interval(accountAddresses.length).map(i => {
     const mintInfo = mintInfos[i];
-    if (mintInfo == null) { continue; }
-    const mint = unpackMint(accountAddresses[i], mintInfo);
-    accounts.push({ ...tokenAccounts[i], ...mint });
-  }
-  return accounts;
+    const mintAddress = mintAddresses[i];
+    const tokenAccount = tokenAccounts[i];
+    if (mintInfo == null || mintAddress == null || tokenAccount == null) { return null; }
+    const mint = unpackMint(mintAddress, mintInfo, programId);
+    return { ...tokenAccount, ...mint };
+  });
 }
 
 export async function getTokenAccountsForOwner(connection: Connection, owner: PublicKey, programId = tokenProgramId): Promise<Array<TokenAccount>> {
@@ -42,7 +42,7 @@ export async function getTokenAccountsForOwner(connection: Connection, owner: Pu
   for (let i = 0; i < tokenAccounts.length; i++) {
     const mintInfo = mints[i];
     if (mintInfo == null) { continue; }
-    const mint = unpackMint(tokenAccounts[i].mint, mintInfo);
+    const mint = unpackMint(tokenAccounts[i].mint, mintInfo, programId);
     accounts.push({ ...tokenAccounts[i], ...mint });
   }
   return accounts;
