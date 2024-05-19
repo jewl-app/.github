@@ -14,12 +14,13 @@ import BalanceProvider from "@/app/hooks/balance";
 import TokensProvider from "@/app/hooks/tokens";
 import Content from "@/app/components/content";
 import FeeConfigProvider from "@/app/hooks/fee";
+import AllocationProvider from "@/app/hooks/allocations";
 
 const providers = [
   AnalyticsProvider, ConnectionProvider,
   ClusterProvider, WalletProvider, BalanceProvider,
-  FeeConfigProvider, TokensProvider, TransactionProvider,
-  PopupProvider,
+  FeeConfigProvider, AllocationProvider, TokensProvider,
+  TransactionProvider, PopupProvider,
 ];
 
 export default function Page(): ReactElement {

@@ -1,4 +1,4 @@
-import type { TransactionInstruction } from "@solana/web3.js";
+import type { Signer, TransactionInstruction } from "@solana/web3.js";
 import { VersionedTransaction } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
 import type { PropsWithChildren, ReactElement } from "react";
@@ -16,7 +16,7 @@ export interface TransactionState {
 
 export interface UseTransaction {
   readonly state: TransactionState;
-  sendTransaction: (instructions: Array<TransactionInstruction>) => Promise<string | null>;
+  sendTransaction: (instructions: Array<TransactionInstruction>, signers?: Array<Signer>) => Promise<string | null>;
 }
 
 export const TransactionContext = createContext<UseTransaction>({
@@ -34,7 +34,7 @@ export default function TransactionProvider(props: PropsWithChildren): ReactElem
   const { logEvent } = useAnalytics();
   const [transactionState, setTransactionState] = useState<TransactionState>({ step: "ready", expiry: 0 });
 
-  const sendTransaction = useCallback(async (instructions: Array<TransactionInstruction>) => {
+  const sendTransaction = useCallback(async (instructions: Array<TransactionInstruction>, signers: Array<Signer> = []) => {
     if (wallet == null) { return null; }
     if (account == null) { return null; }
     try {
@@ -44,6 +44,7 @@ export default function TransactionProvider(props: PropsWithChildren): ReactElem
         instructions,
         payer: new PublicKey(account.publicKey),
         signTransaction: async (transaction: VersionedTransaction) => {
+          transaction.sign(signers);
           const [{ signedTransaction }] = await wallet.features["solana:signTransaction"].signTransaction({
             transaction: transaction.serialize(),
             account,

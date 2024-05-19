@@ -41,4 +41,11 @@ describe("array", () => {
     const expected = [0, 1, 2, 3];
     assert.deepStrictEqual(actual, expected);
   });
+
+  it("MapNonNull should skip over null values from array and transform the non-nul values", () => {
+    const actual = [0, 1, null, 2, null, 3]
+      .mapNonNull(x => x + 1);
+    const expected = [1, 2, null, 3, null, 4];
+    assert.deepStrictEqual(actual, expected);
+  });
 });

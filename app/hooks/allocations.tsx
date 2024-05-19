@@ -10,12 +10,14 @@ import type { PublicKey } from "@solana/web3.js";
 export interface UseAllocations {
   readonly allocations: Array<Allocation>;
   readonly loading: boolean;
+  reload: () => void;
   getAllocation: (nftMint: PublicKey) => Promise<Allocation | null>;
 }
 
 export const AllocationContext = createContext<UseAllocations>({
   allocations: [],
   loading: false,
+  reload: () => { throw new Error("No provider"); },
   getAllocation: async () => Promise.reject(new Error("No provider")),
 });
 
@@ -27,7 +29,7 @@ export default function AllocationProvider(props: PropsWithChildren): ReactEleme
   const { connection } = useConnection();
   const { publicKey } = useWallet();
 
-  const { loading, result } = useInterval({
+  const { loading, result, reload } = useInterval({
     interval: 30, // 30 seconds
     callback: async () => {
       if (publicKey == null) {
@@ -48,8 +50,8 @@ export default function AllocationProvider(props: PropsWithChildren): ReactEleme
   }, [result]);
 
   const context = useMemo(() => {
-    return { allocations, getAllocation, loading };
-  }, [allocations, getAllocation, loading]);
+    return { allocations, getAllocation, loading, reload };
+  }, [allocations, getAllocation, loading, reload]);
 
   return (
     <AllocationContext.Provider value={context}>

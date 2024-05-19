@@ -163,8 +163,8 @@ export async function getTokenMetadata(connection: Connection, mints: Array<stri
   const addresses = mints.map(mint => metadataAddress(new PublicKey(mint)));
   const accountInfos = await getAccountsBatched(connection, addresses);
   const metadatas = accountInfos
-    .map((x, i) => x ? unpackMetadata(addresses[i], x) : null)
-    .filter(nonNull);
+    .filter(nonNull)
+    .map((x, i) => unpackMetadata(addresses[i], x));
   const result = new Map<string, Metadata>();
   for (const metadata of metadatas) {
     result.set(metadata.mint.toBase58(), metadata);

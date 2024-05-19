@@ -1,15 +1,31 @@
 import type { ReactElement } from "react";
 import React, { useMemo } from "react";
 import clsx from "clsx";
+import type { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import { faCheckCircle, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
-import { faHourglass3 } from "@fortawesome/free-solid-svg-icons";
+import { faCircleNotch, faHourglass3 } from "@fortawesome/free-solid-svg-icons";
 import FontIcon from "@/app/components/font";
 
 interface SpinnerProps {
   readonly state?: "loading" | "success" | "failure";
   readonly size?: "nano" | "mini" | "small" | "medium" | "large" | "huge";
+  readonly type?: "hourglass" | "circle";
   readonly message?: string;
   readonly className?: string;
+}
+
+function animationForType(type: SpinnerProps["type"]): string {
+  switch (type) {
+    case "hourglass": return "animate-hourglass";
+    default: return "animate-spin";
+  }
+}
+
+function iconForType(type: SpinnerProps["type"]): IconDefinition {
+  switch (type) {
+    case "hourglass": return faHourglass3;
+    default: return faCircleNotch;
+  }
 }
 
 export default function Spinner(props: SpinnerProps): ReactElement {
@@ -26,18 +42,18 @@ export default function Spinner(props: SpinnerProps): ReactElement {
   }, [props.size]);
 
   const animation = useMemo(() => {
-    if (props.state == null) { return "animate-hourglass"; }
-    if (props.state === "loading") { return "animate-hourglass"; }
+    if (props.state == null) { return animationForType(props.type); }
+    if (props.state === "loading") { return animationForType(props.type); }
     return "";
-  }, [props.state]);
+  }, [props.type, props.state]);
 
   const icon = useMemo(() => {
     switch (props.state) {
       case "success": return faCheckCircle;
       case "failure": return faCircleXmark;
-      default: return faHourglass3;
+      default: return iconForType(props.type);
     }
-  }, [props.state]);
+  }, [props.state, props.type]);
 
   return (
     <div role="status" className={clsx("flex flex-col items-center gap-1", props.className)}>

@@ -12,7 +12,7 @@ export default function Root(props: PropsWithChildren): ReactElement {
       <head>
         <title>jewl</title>
         <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Tax-efficient on-chain renumeration." />
+        <meta name="description" content="Wrap fungible tokens in NFTs." />
         <meta name="theme-color" content="#e8eaed" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#3d4043" media="(prefers-color-scheme: dark)" />
         <meta name="robots" content={robots} />
@@ -24,12 +24,12 @@ export default function Root(props: PropsWithChildren): ReactElement {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://jewl.app/" />
         <meta property="og:title" content="jewl" />
-        <meta property="og:description" content="Tax-efficient on-chain renumeration." />
+        <meta property="og:description" content="Wrap fungible tokens in NFTs." />
         <meta property="og:image" content="/image/preview" />
         <meta property="twitter:card" content="summary" />
         <meta property="twitter:title" content="jewl" />
         <meta property="twitter:image" content="/image/preview" />
-        <meta property="twitter:description" content="Tax-efficient on-chain renumeration." />
+        <meta property="twitter:description" content="Wrap fungible tokens in NFTs." />
         <meta property="rpc-url" content={rpcUrl} />
       </head>
       <body className={clsx(

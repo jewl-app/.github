@@ -3,7 +3,7 @@ import assert from "assert";
 import type { SinonFakeTimers, SinonStub } from "sinon";
 import { stub, useFakeTimers } from "sinon";
 import { invalidateCache } from "@/core/cache";
-import { memCacheFetch } from "@/core/cache";
+import { cachedFetch } from "@/core/cache";
 
 describe("cache", () => {
   let clock = { } as SinonFakeTimers;
@@ -16,7 +16,7 @@ describe("cache", () => {
     fetchStub = stub(global, "fetch");
     fetchStub.onCall(0).returns(res("1"));
     fetchStub.onCall(1).returns(res("2"));
-    await memCacheFetch("https://example.com");
+    await cachedFetch("https://example.com");
   });
 
   afterEach(() => {
@@ -26,24 +26,24 @@ describe("cache", () => {
   });
 
   it("Should return cached response", async () => {
-    const actual = await memCacheFetch("https://example.com", 30) as string;
+    const actual = await cachedFetch("https://example.com", 30) as string;
     assert.strictEqual(actual, "1");
   });
 
   it("Should return new response after ttl", async () => {
     clock.tick(31 * 1000);
-    const actual = await memCacheFetch("https://example.com", 30) as string;
+    const actual = await cachedFetch("https://example.com", 30) as string;
     assert.strictEqual(actual, "2");
   });
 
   it("Should return old response after longer ttl", async () => {
     clock.tick(31 * 1000);
-    const actual = await memCacheFetch("https://example.com", 60) as string;
+    const actual = await cachedFetch("https://example.com", 60) as string;
     assert.strictEqual(actual, "1");
   });
 
   it("Should return new response with different url", async () => {
-    const actual = await memCacheFetch("https://example.com/2", 30) as string;
+    const actual = await cachedFetch("https://example.com/2", 30) as string;
     assert.strictEqual(actual, "2");
   });
 
